@@ -4,21 +4,6 @@ Docstring for crossover.PMX
 
 # ----------------------------------------------------------------------------------------------- #
 
-def element_in_list(element, lst):
-    """
-    Check if an element is present in a list.
-
-    Args:
-        element: The element to check.
-        lst (list): The list to search in.
-    """
-    for item in lst:
-        if item == element:
-            return True
-    return False
-
-# ----------------------------------------------------------------------------------------------- #
-
 def crossover_pmx(parent1, parent2):
     """
     Perform Partially Mapped Crossover (PMX) between two parent permutations.
@@ -89,10 +74,18 @@ def crossover_pmx(parent1, parent2):
                     current_position = index_in_parent1   
     
     # Then the rest of the elements
-    for gene_p1 in parent2:
-        if gene_p1 not in offspring1:
-            for gene_off1 in offspring1:
-                if gene_off1 is None:
-                    gene_off1 = gene_p2 
+    for gene_p1 in parent1:
+        if gene_p1 not in offspring2:
+            for gene_off2 in offspring2:
+                if gene_off2 is None:
+                    gene_off2 = gene_p1 
+                    break
+
+    return offspring1, offspring2
 
 # ----------------------------------------------------------------------------------------------- #
+
+p1 = [1,2,3,4,5,6,7,8,9]
+p2 = [9,3,7,8,2,6,5,1,4]
+
+crossover_pmx(p1, p2)
