@@ -4,7 +4,7 @@ Docstring for survivors.replace_worst
 
 # ----------------------------------------------------------------------------------------------- #
 
-def replace_worst(actual_population, new_individuals, number_to_replace, fitness_function):
+def replace_worst(actual_population, new_individuals, number_to_replace, fitness_function, cost_matrix):
     """
     Replace the worst-performing individuals in the actual_population with the best-performing individuals
     in new_individuals.
@@ -19,11 +19,11 @@ def replace_worst(actual_population, new_individuals, number_to_replace, fitness
         list: Updated population after replacement.
     """
     # Sort actual population by fitness
-    actual_population_fitness_scores = [(ind, fitness_function(ind)) for ind in actual_population]
+    actual_population_fitness_scores = [(ind, fitness_function(ind, cost_matrix)) for ind in actual_population]
     actual_population_fitness_scores.sort(reverse=True, key=lambda ind: ind[1])
 
     # Sort new possible individuals by fitness
-    new_individuals_fitness_socres = [(ind, fitness_function(ind)) for ind in new_individuals]
+    new_individuals_fitness_socres = [(ind, fitness_function(ind, cost_matrix)) for ind in new_individuals]
     new_individuals_fitness_socres.sort(reverse=True, key=lambda ind: ind[1])
 
     # Select individuals to keep and to add

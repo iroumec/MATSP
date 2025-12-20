@@ -5,7 +5,7 @@ import random
 
 # ----------------------------------------------------------------------------------------------- #
 
-def scramble(permutation, probability):
+def scramble_individual(invididual, probability):
 
     """
     Docstring for scramble
@@ -15,22 +15,36 @@ def scramble(permutation, probability):
     """
 
     p = random.random()
+    
+    mutated_individual = invididual.copy()
 
     if p < probability:
 
-        number_of_elements = len(permutation)
+        number_of_elements = len(mutated_individual)
 
         start_index = random.randint(0, number_of_elements - 1)
         end_index = random.randint(start_index, number_of_elements - 1)
 
-        sub_permutation = permutation[start_index:end_index]
+        sub_permutation = mutated_individual[start_index:end_index]
         random.shuffle(sub_permutation)
-        permutation[start_index:end_index] = sub_permutation
+        mutated_individual[start_index:end_index] = sub_permutation
+        
+    return mutated_individual
 
 # ----------------------------------------------------------------------------------------------- #
 
-array = [1, 2, 3, 4, 5, 6, 7]
-print(array)
-
-scramble(array, 0.99)
-print(array)
+def scramble(children, probability):
+    
+    """
+    Docstring for scramble
+    
+    :param children: Description
+    :param probability: Description
+    """
+    
+    mutated_children = []
+    
+    for child in children:
+        mutated_children.append(scramble_individual(child, probability))
+        
+    return mutated_children
