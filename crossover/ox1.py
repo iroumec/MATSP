@@ -1,6 +1,7 @@
 """
 Docstring for crossover.OX1
 """
+import random
 
 # ----------------------------------------------------------------------------------------------- #
 
@@ -21,7 +22,6 @@ def crossover_ox1(parent1, parent2):
     offspring2 = [None] * size
 
     # Select two random crossover points
-    import random
     point1 = random.randint(0, size - 1)
     point2 = random.randint(0, size - 1)
 
@@ -31,21 +31,27 @@ def crossover_ox1(parent1, parent2):
     # Copy the segment from parent1 to offspring1
     offspring1[point1:point2 + 1] = parent1[point1:point2 + 1]
     # Fill the remaining positions in offspring1 with genes from parent2
-    current_pos = (point2 + 1) % size
-    for gene in parent2: # CREO QUE DEBO ARRANCAR DESDE EL POINT2 + 1 TMB EN EL PARENT2
+    current_pos_offspring = (point2 + 1) % size
+    current_pos_parent= (point2 + 1) % size
+    for _ in range(size):
+        gene = parent2[current_pos_parent]
         if gene not in offspring1:
-            offspring1[current_pos] = gene
-            current_pos = (current_pos + 1) % size
+            offspring1[current_pos_offspring] = gene
+            current_pos_offspring = (current_pos_offspring + 1) % size
+        current_pos_parent = (current_pos_parent + 1) % size
 
     # Copy the segment from parent2 to offspring2
     offspring2[point1:point2 + 1] = parent2[point1:point2 + 1]
     # Fill the remaining positions in offspring2 with genes from parent1
-    current_pos = (point2 + 1) % size
-    for gene in parent1:
+    current_pos_offspring = (point2 + 1) % size
+    current_pos_parent= (point2 + 1) % size
+    for _ in range(size):
+        gene = parent1[current_pos_parent]
         if gene not in offspring2:
-            offspring2[current_pos] = gene
-            current_pos = (current_pos + 1) % size
+            offspring2[current_pos_offspring] = gene
+            current_pos_offspring = (current_pos_offspring + 1) % size
+        current_pos_parent = (current_pos_parent + 1) % size
 
-    return offspring1, offspring2
+    return [offspring1, offspring2]
 
 # ----------------------------------------------------------------------------------------------- #

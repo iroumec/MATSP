@@ -2,6 +2,8 @@
 Docstring for crossover.PMX
 """
 
+import random
+
 # ----------------------------------------------------------------------------------------------- #
 
 def crossover_pmx(parent1, parent2):
@@ -22,7 +24,6 @@ def crossover_pmx(parent1, parent2):
     offspring2 = [None] * size
 
     # Select two random crossover points
-    import random
     point1 = random.randint(0, size - 1)
     point2 = random.randint(0, size - 1)
 
@@ -50,9 +51,10 @@ def crossover_pmx(parent1, parent2):
     # Then the rest of the elements
     for gene_p2 in parent2:
         if gene_p2 not in offspring1:
-            for gene_off1 in offspring1:
-                if gene_off1 is None:
-                    gene_off1 = gene_p2 
+            for i in range(size):
+                if offspring1[i] is None:
+                    offspring1[i] = gene_p2 
+                    break
 
 
     # Copy the segment from parent2 to offspring2
@@ -76,16 +78,11 @@ def crossover_pmx(parent1, parent2):
     # Then the rest of the elements
     for gene_p1 in parent1:
         if gene_p1 not in offspring2:
-            for gene_off2 in offspring2:
-                if gene_off2 is None:
-                    gene_off2 = gene_p1 
+            for i in range(size):
+                if offspring2[i] is None:
+                    offspring2[i] = gene_p1 
                     break
 
-    return offspring1, offspring2
+    return [offspring1, offspring2]
 
 # ----------------------------------------------------------------------------------------------- #
-
-p1 = [1,2,3,4,5,6,7,8,9]
-p2 = [9,3,7,8,2,6,5,1,4]
-
-crossover_pmx(p1, p2)

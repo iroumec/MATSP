@@ -15,8 +15,10 @@ def is_candidate(city, individual, current_nearest_neighbour, cost_matrix):
     :param current_nearest_neighbour: Description
     :param cost_matrix: Description
     """
+    
+    last_element_of_individual = individual[len(individual) - 1]
 
-    return city not in individual and (current_nearest_neighbour is None or cost_matrix[individual.last][city] < cost_matrix[individual.last][current_nearest_neighbour])
+    return city not in individual and (current_nearest_neighbour is None or cost_matrix[last_element_of_individual][city] < cost_matrix[last_element_of_individual][current_nearest_neighbour])
 
 # ----------------------------------------------------------------------------------------------- #
 

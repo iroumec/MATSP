@@ -8,20 +8,20 @@ import random
 
 # ----------------------------------------------------------------------------------------------- #
 
-def roulette_selection(population, fitness_function, num_selections):
+def roulette_selection(population, fitness_function, num_selections, cost_matrix):
     """
     Perform roulette wheel selection on a population.
 
     Args:
         population (list): A list of individuals in the population.
-        fitness_function (callable): A function that takes an individual and returns its fitness score.
+        fitness_function (callable): A function that takes an individual and the cost matrix and returns its fitness score.
         num_selections (int): The number of individuals to select.
 
     Returns:
         list: A list of selected individuals.
     """
     # Calculate fitness scores
-    fitness_scores = [fitness_function(ind) for ind in population]
+    fitness_scores = [fitness_function(ind, cost_matrix) for ind in population]
 
     # Calculate total fitness
     total_fitness = sum(fitness_scores)
