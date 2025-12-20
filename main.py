@@ -12,12 +12,13 @@ import mutation.swap as swap
 import mutation.scramble as scramble
 import local_search.invertion as invertion
 import survivors.replace_worst as replace_worst
+import data_loader as data_loader
 
 # ----------------------------------------------------------------------------------------------- #
 # Definición de constantes
 # ----------------------------------------------------------------------------------------------- #
 
-POPULATION_SIZE = 10
+POPULATION_SIZE = 40
 
 PERCENTAGE_OF_RANDOM_GENERATED_INDIVIDUALS = 0.8
 
@@ -25,9 +26,7 @@ MAX_NUMBER_OF_GENERATIONS = 1000
 
 NUMBER_OF_INVIDUALS_SELECTED = 10
 
-TOURNAMENT_SIZE = 2
-
-NUMBER_OF_SURVIVORS = 10
+TOURNAMENT_SIZE = 3
 
 SELECTION_ALGORITHM = tournament_selection
 
@@ -37,13 +36,13 @@ CROSSOVER_FUNCTION = pmx
 
 CROSSOVER_PROBABILITY = 0.9
 
-MUTATION_ALGORITHM = swap
+MUTATION_ALGORITHM = scramble
 
-MUTATION_PROBABILITY = 0.7
+MUTATION_PROBABILITY = 1/POPULATION_SIZE
 
 LOCAL_SEARCH_ALGORITHM = invertion
 
-LOCAL_SEARCH_PROBABILITY = 0.7
+LOCAL_SEARCH_PROBABILITY = 0.8
 
 SURVIVORS_SELECTION_ALGORITHM = replace_worst
 
@@ -55,12 +54,7 @@ NUMBER_OF_INDIVIDUALS_TO_REPLACE = 10
 
 population = []
 
-cost_matrix = [
-    [0.3, 4.5, 6.7, 8.9],
-    [1.4, 6.7, 5.3, 2.1],
-    [1.4, 6.7, 5.3, 2.1],
-    [1.4, 6.7, 5.3, 2.1]
-]
+cost_matrix = data_loader.load_matrix("p43.txt")
 
 # ----------------------------------------------------------------------------------------------- #
 # Generación de la población inicial
@@ -82,15 +76,16 @@ population += heuristically_init.initialize(number_of_heuristically_generated_in
 
 current_generation = 0
 
-while current_generation < 1:
+while current_generation < MAX_NUMBER_OF_GENERATIONS:
     
     # ------------------------------------------------------------------------------------------- #
     # Parents Selection
     # ------------------------------------------------------------------------------------------- #
     
     parents = SELECTION_ALGORITHM.tournament_selection(population, FITNESS_FUNCTION, NUMBER_OF_INVIDUALS_SELECTED, cost_matrix, TOURNAMENT_SIZE)
+    #parents = SELECTION_ALGORITHM.roulette_selection(population, FITNESS_FUNCTION, NUMBER_OF_INVIDUALS_SELECTED, cost_matrix)
     
-    print(parents)
+    #print(parents)
     
     # ------------------------------------------------------------------------------------------- #
     # Crossover
@@ -102,15 +97,16 @@ while current_generation < 1:
         # iría una probabilidad de cruce?
         children += CROSSOVER_FUNCTION.crossover_pmx(parents[i], parents[i+1])
         
-    print(children)
+    #print(children)
     
     # ------------------------------------------------------------------------------------------- #
     # Mutation
     # ------------------------------------------------------------------------------------------- #
     
-    children = MUTATION_ALGORITHM.swap(children, MUTATION_PROBABILITY)
+    #children = MUTATION_ALGORITHM.swap(children, MUTATION_PROBABILITY)
+    children = MUTATION_ALGORITHM.scramble(children, MUTATION_PROBABILITY)
     
-    print(children)
+    #print(children)
     
     # ------------------------------------------------------------------------------------------- #
     # Local search
@@ -118,19 +114,44 @@ while current_generation < 1:
     
     children = LOCAL_SEARCH_ALGORITHM.invert(children, LOCAL_SEARCH_PROBABILITY)
     
-    print(children)
+    #print(children)
     
     # ------------------------------------------------------------------------------------------- #
     # Survivors selection
     # ------------------------------------------------------------------------------------------- #
 
-    print("\n")
-    print(population)
+    #print("\n")
+    #print(population)
     population = replace_worst.replace_worst(population, children, NUMBER_OF_INDIVIDUALS_TO_REPLACE, FITNESS_FUNCTION, cost_matrix)
-    print(population)
+    #print(population)
 
     # ------------------------------------------------------------------------------------------- #
     # Increase of generation
     # ------------------------------------------------------------------------------------------- #
     
     current_generation += 1
+    
+def calculate_cost(individual, cost_matrix):
+
+    """
+    Docstring for calculate
+    
+    :param individual: Description
+    :param cost_matrix: Description
+    """
+
+    number_of_cities = len(individual)
+
+    travel_cost = 0
+
+    for city in range(number_of_cities - 1):
+
+        travel_cost += cost_matrix[individual[city]][individual[city+1]]
+        
+    travel_cost += cost_matrix[individual[number_of_cities - 1]][individual[0]]
+
+    return travel_cost
+    
+for individual in population:
+    
+    print(calculate_cost(individual, cost_matrix))
