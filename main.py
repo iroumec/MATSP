@@ -4,18 +4,16 @@ Docstring for main
 import initialization.randomization as random_init
 import initialization.nearest_neighbour as heuristically_init
 import selection.tournament as tournament_selection
-import selection.roulette as roulette_selection
 import fitness.fitness as fitness
-import crossover.pmx as pmx
-import crossover.ox1 as ox1
-import mutation.swap as swap
-import mutation.scramble as scramble
-import local_search.invertion as invertion
 import survivors.replace_worst as replace_worst
-import data_loader as data_loader
+import data_loader
+from crossover.common import cross_parents
+from crossover.loader import load_crossover_operator
+from mutation.common import mutate_population
+from mutation.loader import load_mutation_operator
 
 # ----------------------------------------------------------------------------------------------- #
-# Definición de constantes
+# Definition of Parameters (only this can be changed)
 # ----------------------------------------------------------------------------------------------- #
 
 POPULATION_SIZE = 40
@@ -32,21 +30,32 @@ SELECTION_ALGORITHM = tournament_selection
 
 FITNESS_FUNCTION = fitness.calculate
 
-CROSSOVER_FUNCTION = pmx
+CROSSOVER_OPERATOR= "pmx"
 
 CROSSOVER_PROBABILITY = 0.9
 
-MUTATION_ALGORITHM = scramble
+MUTATION_OPERATOR = "swap"
 
 MUTATION_PROBABILITY = 1/POPULATION_SIZE
 
-LOCAL_SEARCH_ALGORITHM = invertion
+LOCAL_SEARCH_OPERATOR = "invertion"
 
 LOCAL_SEARCH_PROBABILITY = 0.8
 
 SURVIVORS_SELECTION_ALGORITHM = replace_worst
 
 NUMBER_OF_INDIVIDUALS_TO_REPLACE = 10
+
+# ----------------------------------------------------------------------------------------------- #
+# Load of Algorithms
+# ----------------------------------------------------------------------------------------------- #
+
+CROSSOVER_ALGORITHM = load_crossover_operator(CROSSOVER_OPERATOR)
+
+MUTATION_ALGORITHM = load_mutation_operator(MUTATION_OPERATOR)
+
+LOCAL_SEARCH_ALGORITHM = load_mutation_operator(LOCAL_SEARCH_OPERATOR)
+
 
 # ----------------------------------------------------------------------------------------------- #
 # Definición de variables
@@ -95,7 +104,7 @@ while current_generation < MAX_NUMBER_OF_GENERATIONS:
 
     for i in range(0, len(parents) - 1, 2):
         # iría una probabilidad de cruce?
-        children += CROSSOVER_FUNCTION.crossover_pmx(parents[i], parents[i+1])
+        children += cross_parents(parents[i], parents[i+1], CROSSOVER_PROBABILITY, CROSSOVER_ALGORITHM)
         
     #print(children)
     
@@ -104,7 +113,7 @@ while current_generation < MAX_NUMBER_OF_GENERATIONS:
     # ------------------------------------------------------------------------------------------- #
     
     #children = MUTATION_ALGORITHM.swap(children, MUTATION_PROBABILITY)
-    children = MUTATION_ALGORITHM.scramble(children, MUTATION_PROBABILITY)
+    children = mutate_population(children, MUTATION_PROBABILITY, MUTATION_ALGORITHM)
     
     #print(children)
     
@@ -112,7 +121,7 @@ while current_generation < MAX_NUMBER_OF_GENERATIONS:
     # Local search
     # ------------------------------------------------------------------------------------------- #
     
-    children = LOCAL_SEARCH_ALGORITHM.invert(children, LOCAL_SEARCH_PROBABILITY)
+    children = mutate_population(children, LOCAL_SEARCH_PROBABILITY, LOCAL_SEARCH_ALGORITHM)
     
     #print(children)
     

@@ -5,7 +5,7 @@ import random
 
 # ----------------------------------------------------------------------------------------------- #
 
-def crossover_ox1(parent1, parent2):
+def ox1(parent1, parent2, probability):
     """
     Perform Order Crossover 1 (OX1) between two parent permutations.
 

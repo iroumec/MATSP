@@ -6,7 +6,7 @@ import random
 
 # ----------------------------------------------------------------------------------------------- #
 
-def crossover_pmx(parent1, parent2):
+def pmx(parent1, parent2, probability):
     """
     Perform Partially Mapped Crossover (PMX) between two parent permutations.
 
