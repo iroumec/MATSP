@@ -10,7 +10,8 @@ class CrossoverOperator(Protocol):
     """
     def __call__(
         self,
-        individual: List[int],
+        first_parent: List[int],
+        second_parent: List[int],
         probability: float
     ) -> List[int]:
         ...

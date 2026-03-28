@@ -5,7 +5,7 @@ import random
 
 # ----------------------------------------------------------------------------------------------- #
 
-def initialize(number_of_inviduals_to_generate, cost_matrix):
+def randomization(number_of_inviduals_to_generate, cost_matrix):
 
     """
     Docstring for initialize

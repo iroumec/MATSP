@@ -22,7 +22,7 @@ def is_candidate(city, individual, current_nearest_neighbour, cost_matrix):
 
 # ----------------------------------------------------------------------------------------------- #
 
-def initialize(number_of_inviduals_to_generate, cost_matrix):
+def nearest_neighbour(number_of_inviduals_to_generate, cost_matrix):
 
     """
     Docstring for initialize

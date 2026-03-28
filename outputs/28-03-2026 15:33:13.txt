@@ -1,0 +1,28 @@
+==================================================
+GENETIC ALGORITHM PARAMETERS
+==================================================
+Population size: 40
+Percentage of random generated individual: 0.8
+Max numbers of generations: 1000
+Number of individuals selected: 10
+Torunament size: 3
+Selection operator: TOURNAMENT
+Crossover operator: PMX
+Crossover probability: 0.9
+Mutation operator: SWAP
+Mutation probability: 0.025
+Local search operator: insertion
+Local search probability: 0.8
+Survivors selection algorithm: replace_worst
+Number of individuals to replace: 10
+
+==================================================
+BEST SOLUTION
+==================================================
+Best solution [36, 3, 1, 2, 27, 28, 30, 5, 6, 7, 8, 9, 10, 11, 31, 32, 29, 33, 34, 12, 13, 14, 15, 16, 17, 18, 19, 20, 26, 24, 21, 22, 23, 25, 37, 35, 0, 4, 38, 39, 40, 41, 42]
+Fitness value 5650
+
+==================================================
+EXECUTION TIME
+==================================================
+Execution time: 0.7737166881561279

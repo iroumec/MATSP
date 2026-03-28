@@ -23,12 +23,12 @@ def replace_worst(actual_population, new_individuals, number_to_replace, fitness
     actual_population_fitness_scores.sort(reverse=True, key=lambda ind: ind[1])
 
     # Sort new possible individuals by fitness
-    new_individuals_fitness_socres = [(ind, fitness_function(ind, cost_matrix)) for ind in new_individuals]
-    new_individuals_fitness_socres.sort(reverse=True, key=lambda ind: ind[1])
+    new_individuals_fitness_scores = [(ind, fitness_function(ind, cost_matrix)) for ind in new_individuals]
+    new_individuals_fitness_scores.sort(reverse=True, key=lambda ind: ind[1])
 
     # Select individuals to keep and to add
     individuals_to_keep = [ind for ind, fitness in actual_population_fitness_scores[:-number_to_replace]]
-    individuals_to_add = [ind for ind, fitness in new_individuals_fitness_socres[:number_to_replace]]
+    individuals_to_add = [ind for ind, fitness in new_individuals_fitness_scores[:number_to_replace]]
     updated_population = individuals_to_keep + individuals_to_add
 
     return updated_population
