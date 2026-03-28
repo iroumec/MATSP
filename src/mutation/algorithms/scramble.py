@@ -3,7 +3,7 @@ Docstring for mutation.scramble
 """
 import random
 
-def scramble(individual, probability):
+def scramble(individual, probability: float):
 
     """
     Docstring for scramble

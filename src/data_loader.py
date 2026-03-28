@@ -2,7 +2,9 @@
 Docstring for data_loader
 """
 
-def load_matrix(file_path):
+file_path = "resources/atsp-instances/cleaned-instances/"
+
+def load_matrix(instance):
 
     """
     Docstring for load_matrix
@@ -12,7 +14,7 @@ def load_matrix(file_path):
 
     matrix = []
 
-    with open(file_path, "r", encoding="UTF-8") as matrix_file:
+    with open(file_path + instance + ".atsp", "r", encoding="UTF-8") as matrix_file:
         for line in matrix_file:
             row = list(map(int, line.split()))
             matrix.append(row)

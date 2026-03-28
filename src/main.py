@@ -6,11 +6,12 @@ import initialization.nearest_neighbour as heuristically_init
 import selection.tournament as tournament_selection
 import fitness.fitness as fitness
 import survivors.replace_worst as replace_worst
-import data_loader
+import data_loader as data_loader
+import data_saver as data_saver
 from crossover.common import cross_parents
 from crossover.loader import load_crossover_operator
 from mutation.common import mutate_population
-from mutation.loader import load_mutation_operator
+from mutation.registry import get_mutation_operator, MutationStrategy
 
 # ----------------------------------------------------------------------------------------------- #
 # Definition of Parameters (only this can be changed)
@@ -34,11 +35,11 @@ CROSSOVER_OPERATOR= "pmx"
 
 CROSSOVER_PROBABILITY = 0.9
 
-MUTATION_OPERATOR = "swap"
+MUTATION_OPERATOR = MutationStrategy.SWAP
 
 MUTATION_PROBABILITY = 1/POPULATION_SIZE
 
-LOCAL_SEARCH_OPERATOR = "invertion"
+LOCAL_SEARCH_OPERATOR = MutationStrategy.INVERTION
 
 LOCAL_SEARCH_PROBABILITY = 0.8
 
@@ -52,9 +53,9 @@ NUMBER_OF_INDIVIDUALS_TO_REPLACE = 10
 
 CROSSOVER_ALGORITHM = load_crossover_operator(CROSSOVER_OPERATOR)
 
-MUTATION_ALGORITHM = load_mutation_operator(MUTATION_OPERATOR)
+MUTATION_ALGORITHM = get_mutation_operator(MUTATION_OPERATOR)
 
-LOCAL_SEARCH_ALGORITHM = load_mutation_operator(LOCAL_SEARCH_OPERATOR)
+LOCAL_SEARCH_ALGORITHM = get_mutation_operator(LOCAL_SEARCH_OPERATOR)
 
 
 # ----------------------------------------------------------------------------------------------- #
@@ -63,7 +64,7 @@ LOCAL_SEARCH_ALGORITHM = load_mutation_operator(LOCAL_SEARCH_OPERATOR)
 
 population = []
 
-cost_matrix = data_loader.load_matrix("p43.txt")
+cost_matrix = data_loader.load_matrix("p43")
 
 # ----------------------------------------------------------------------------------------------- #
 # Generación de la población inicial
@@ -161,6 +162,26 @@ def calculate_cost(individual, cost_matrix):
 
     return travel_cost
     
+result = []
+    
 for individual in population:
     
-    print(calculate_cost(individual, cost_matrix))
+    # print(calculate_cost(individual, cost_matrix))
+    result.append(calculate_cost(individual, cost_matrix))
+
+print(result)
+
+data_saver.save_output(result)
+
+import customtkinter
+
+def button_callback():
+    print("button clicked")
+
+app = customtkinter.CTk()
+app.geometry("400x150")
+
+button = customtkinter.CTkButton(app, text="my button", command=button_callback)
+button.pack(padx=20, pady=20)
+
+app.mainloop()
