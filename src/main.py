@@ -3,13 +3,13 @@ Docstring for main
 """
 import initialization.randomization as random_init
 import initialization.nearest_neighbour as heuristically_init
-import selection.tournament as tournament_selection
 import fitness.fitness as fitness
 import survivors.replace_worst as replace_worst
 import data_loader as data_loader
 import data_saver as data_saver
 from crossover.common import cross_parents
-from crossover.loader import load_crossover_operator
+from crossover.registry import get_crossover_operator, CrossoverStrategy
+from selection.registry import get_operator, SelectionStrategy
 from mutation.common import mutate_population
 from mutation.registry import get_mutation_operator, MutationStrategy
 
@@ -27,11 +27,11 @@ NUMBER_OF_INVIDUALS_SELECTED = 10
 
 TOURNAMENT_SIZE = 3
 
-SELECTION_ALGORITHM = tournament_selection
+SELECTION_OPERATOR = SelectionStrategy.TOURNAMENT
 
 FITNESS_FUNCTION = fitness.calculate
 
-CROSSOVER_OPERATOR= "pmx"
+CROSSOVER_OPERATOR= CrossoverStrategy.PMX
 
 CROSSOVER_PROBABILITY = 0.9
 
@@ -51,12 +51,13 @@ NUMBER_OF_INDIVIDUALS_TO_REPLACE = 10
 # Load of Algorithms
 # ----------------------------------------------------------------------------------------------- #
 
-CROSSOVER_ALGORITHM = load_crossover_operator(CROSSOVER_OPERATOR)
+SELECTION_ALGORITHM = get_operator(SELECTION_OPERATOR)
+
+CROSSOVER_ALGORITHM = get_crossover_operator(CROSSOVER_OPERATOR)
 
 MUTATION_ALGORITHM = get_mutation_operator(MUTATION_OPERATOR)
 
 LOCAL_SEARCH_ALGORITHM = get_mutation_operator(LOCAL_SEARCH_OPERATOR)
-
 
 # ----------------------------------------------------------------------------------------------- #
 # Definición de variables
@@ -92,7 +93,15 @@ while current_generation < MAX_NUMBER_OF_GENERATIONS:
     # Parents Selection
     # ------------------------------------------------------------------------------------------- #
     
-    parents = SELECTION_ALGORITHM.tournament_selection(population, FITNESS_FUNCTION, NUMBER_OF_INVIDUALS_SELECTED, cost_matrix, TOURNAMENT_SIZE)
+    parents = SELECTION_ALGORITHM(
+        population=population,
+        fitness_function=FITNESS_FUNCTION,
+        num_selections=NUMBER_OF_INVIDUALS_SELECTED,
+        cost_matrix=cost_matrix,
+        tournament_size=TOURNAMENT_SIZE, # Only used if the selection algorithm is tournament.
+    )
+    
+    #parents = SELECTION_ALGORITHM.tournament_selection(population, FITNESS_FUNCTION, NUMBER_OF_INVIDUALS_SELECTED, cost_matrix, TOURNAMENT_SIZE)
     #parents = SELECTION_ALGORITHM.roulette_selection(population, FITNESS_FUNCTION, NUMBER_OF_INVIDUALS_SELECTED, cost_matrix)
     
     #print(parents)
@@ -113,7 +122,6 @@ while current_generation < MAX_NUMBER_OF_GENERATIONS:
     # Mutation
     # ------------------------------------------------------------------------------------------- #
     
-    #children = MUTATION_ALGORITHM.swap(children, MUTATION_PROBABILITY)
     children = mutate_population(children, MUTATION_PROBABILITY, MUTATION_ALGORITHM)
     
     #print(children)
@@ -184,4 +192,4 @@ app.geometry("400x150")
 button = customtkinter.CTkButton(app, text="my button", command=button_callback)
 button.pack(padx=20, pady=20)
 
-app.mainloop()
+#app.mainloop()

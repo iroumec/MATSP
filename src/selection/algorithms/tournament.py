@@ -8,7 +8,7 @@ import random
 
 # ----------------------------------------------------------------------------------------------- #
 
-def tournament_selection(population, fitness_function, num_selections, cost_matrix, tournament_size = 2):
+def tournament(population, fitness_function, num_selections, cost_matrix, tournament_size = 2, **kwargs):
     """
     Perform tournament selection on a population.
 

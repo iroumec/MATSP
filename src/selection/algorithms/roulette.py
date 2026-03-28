@@ -8,7 +8,7 @@ import random
 
 # ----------------------------------------------------------------------------------------------- #
 
-def roulette_selection(population, fitness_function, num_selections, cost_matrix):
+def roulette(population, fitness_function, num_selections, cost_matrix, **kwargs):
     """
     Perform roulette wheel selection on a population.
 
