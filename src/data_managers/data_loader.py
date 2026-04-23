@@ -2,6 +2,8 @@
 Docstring for data_loader
 """
 
+import yaml
+
 file_path = "resources/atsp-instances/cleaned-instances/"
 
 def load_matrix(instance):
@@ -20,3 +22,16 @@ def load_matrix(instance):
             matrix.append(row)
 
     return matrix
+
+def load_config(path: str):
+    
+    """
+    Docstring.
+    """
+    
+    with open(path, "r", encoding="utf-8") as stream:
+        try:
+            return yaml.safe_load(stream)
+        except yaml.YAMLError as exc:
+            print(f"An error ocurred while reading the YAML configuration: {exc}")
+            return None

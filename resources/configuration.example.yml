@@ -1,0 +1,37 @@
+execution:
+  population_size: 40
+  percentage_of_random_generated_individuals: 0.8
+  max_generations: 100
+
+selection:
+  # Options: ["TOURNAMENT", "ROULETTE"]
+  operator: "TOURNAMENT"
+  selected_individuals: 100
+  tournament_size: 3 # Ommited if the operator is not tournament.
+
+crossover:
+  # Options: ["OX1", "PMX"]
+  operator: "PMX"
+  probability: 0.9
+
+#FITNESS_FUNCTION = fitness.calculate
+
+mutation:
+  # Options: ["INVERTION", "SCRAMBLE", "SWAP"]
+  operator: "SWAP"
+  # Options: ["Default" (1/population_size), float number]
+  probability: "Default"
+
+improvement:
+  # Options: ["INSERTION"]
+  operator: "INSERTION"
+  probability: 0.8
+
+survivors:
+  # Options: ["REPLACE_WORST"]
+  operator: "REPLACE_WORST"
+  individuals_to_replace: 10
+
+files:
+  # Select one from resources/atsp-instances/cleaned-instances.
+  instance: "br17"

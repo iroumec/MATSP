@@ -2,9 +2,18 @@
 Docstring for data_loader
 """
 
+from typing import List
 from datetime import datetime
 
-def save_output(results):
+from configuration.structures import Config
+
+def save_output(
+    config: Config,
+    fitness_function,
+    result, cost_matrix: List[List[int]],
+    execution_time: float,
+    best_fitness_through_time: List[float]
+):
 
     """
     Docstring for load_matrix
@@ -15,49 +24,47 @@ def save_output(results):
     # Get the current local date and time as a datetime object.
     now = datetime.now()
 
-    # Format the datetime object as a string (e.g., "YYYY-MM-DD HH:MM:SS")
+    # Format the datetime object as a string (e.g., "DD-MM-YYYY HH:MM:SS").
     time_string = now.strftime("%d-%m-%Y %H:%M:%S")
     
     file_path = "outputs/" + time_string + ".txt"
 
     with open(file_path, "w", encoding="UTF-8") as output_file:
-        output_file.write('\n'.join(str(item) for item in results))
+        output_file.write("=" * 50 + "\n")
+        output_file.write("GENETIC ALGORITHM PARAMETERS\n")
+        output_file.write("=" * 50 + "\n")
+        output_file.write(f"Population size: {config.execution.population_size}\n")
+        output_file.write(f"Percentage of random generated individual: {config.execution.random_percentage}\n")
+        output_file.write(f"Max numbers of generations: {config.execution.max_generations}\n")
+        output_file.write(f"Number of individuals selected: {config.selection.selected_individuals}\n")
+        output_file.write(f"Selection operator: {config.selection.operator.__name__.upper()}\n")
+        if (config.selection.operator.__name__.upper() == "TOURNAMENT"):
+            output_file.write(f"Torunament size: {config.selection.tournament_size}\n")
+        output_file.write(f"Crossover operator: {config.crossover.operator.__name__.upper()}\n")
+        output_file.write(f"Crossover probability: {config.crossover.probability}\n")
+        output_file.write(f"Mutation operator: {config.mutation.operator.__name__.upper()}\n")
+        output_file.write(f"Mutation probability: {config.mutation.probability}\n")
+        output_file.write(f"Local search operator: {config.improvement.operator.__name__.upper()}\n")
+        output_file.write(f"Local search probability: {config.improvement.probability}\n")
+        output_file.write(f"Survivors selection operator: {config.survivors.operator.__name__.upper()}\n")
+        output_file.write(f"Number of individuals to replace: {config.survivors.individuals_to_replace}\n")
 
-# def generate_output_file():
-#     # Get the current local date and time as a datetime object.
-#     now = datetime.now()
+        output_file.write("\n")
+        output_file.write("=" * 50 + "\n")
+        output_file.write("BEST SOLUTION\n")
+        output_file.write("=" * 50 + "\n")
+        output_file.write(f"Best solution {result[0]["individual"]}\n")
+        output_file.write(f"Fitness value {fitness_function(result[0]["individual"], cost_matrix)}\n")
 
-#     # Format the datetime object as a string (e.g., "YYYY-MM-DD HH:MM:SS")
-#     time_string = now.strftime("%d-%m-%Y %H:%M:%S")
-    
-#     file_path = "outputs/" + time_string + ".txt"
+        output_file.write("\n")
+        output_file.write("=" * 50 + "\n")
+        output_file.write("EXECUTION TIME\n")
+        output_file.write("=" * 50 + "\n")
+        output_file.write(f"Execution time: {execution_time}\n")
 
-#     with open(file_path, "w", encoding="UTF-8") as output_file:
-#         output_file.write("=" * 50 + "\n")
-#         output_file.write("GENETIC ALGORITHM PARAMETERS\n")
-#         output_file.write("=" * 50 + "\n")
-#         output_file.write(f"Population size: {POPULATION_SIZE}\n")
-#         output_file.write(f"Percentage of random generated individual: {PERCENTAGE_OF_RANDOM_GENERATED_INDIVIDUALS}\n")
-#         output_file.write(f"Max numbers of generations: {MAX_NUMBER_OF_GENERATIONS}\n")
-#         output_file.write(f"Number of individuals selected: {NUMBER_OF_INVIDUALS_SELECTED}\n")
-#         output_file.write(f"Torunament size: {TOURNAMENT_SIZE}\n")
-#         output_file.write(f"Selection operator: {SELECTION_OPERATOR}\n")
-#         output_file.write(f"Crossover operator: {CROSSOVER_OPERATOR}\n")
-#         output_file.write(f"Crossover probability: {CROSSOVER_PROBABILITY}\n")
-#         output_file.write(f"Mutation operator: {MUTATION_OPERATOR}\n")
-#         output_file.write(f"Mutation probability: {MUTATION_PROBABILITY}\n")
-#         output_file.write(f"Local search operator: {LOCAL_SEARCH_OPERATOR}\n")
-#         output_file.write(f"Local search probability: {LOCAL_SEARCH_PROBABILITY}\n")
-#         output_file.write(f"Survivors selection algorithm: {SURVIVORS_SELECTION_ALGORITHM}\n")
-#         output_file.write(f"Number of individuals to replace: {NUMBER_OF_INDIVIDUALS_TO_REPLACE}\n")
-
-#         output_file.write("\n=" * 50 + "\n")
-#         output_file.write("BEST SOLUTION\n")
-#         output_file.write("=" * 50 + "\n")
-#         output_file.write(f"Best solution {result[0]["individual"]}")
-#         output_file.write(f"Fitness value {result[0]["fitness"]}")
-
-#         output_file.write("\n=" * 50 + "\n")
-#         output_file.write("EXECUTION TIME\n")
-#         output_file.write("=" * 50 + "\n")
-#         output_file.write(f"Execution time: {execution_time}")
+        output_file.write("\n")
+        output_file.write("=" * 50 + "\n")
+        output_file.write("BEST FITNESS THROUGH TIME\n")
+        for i, fitness_value in enumerate(best_fitness_through_time):
+            output_file.write(f"Generation {i+1}: {round(fitness_value, 7)}\n")
+        output_file.write("=" * 50 + "\n")

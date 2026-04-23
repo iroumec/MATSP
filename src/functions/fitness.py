@@ -2,7 +2,7 @@
 Docstring
 """
 
-def calculate(individual, cost_matrix):
+def calculate_fitness(individual, cost_matrix):
 
     """
     Docstring for calculate

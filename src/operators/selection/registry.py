@@ -23,15 +23,24 @@ class SelectionOperator(Protocol):
         ...
 
 class SelectionStrategy(Enum):
-    ROULETTE: SelectionOperator = roulette
-    TOURNAMENT: SelectionOperator = tournament
-    
+    """
+    Dcostring
+    """
+    ROULETTE = roulette
+    TOURNAMENT = tournament
+
     def __call__(
         self,
-        population: List[List[int]],
-        fitness_function: Callable,
-        num_selections: int,
-        cost_matrix: List[List[int]],
-        **kwargs: Any
-    ) -> List[int]:
-        self.value(population, fitness_function, num_selections, cost_matrix, kwargs)
+        population,
+        fitness_function,
+        num_selections,
+        cost_matrix,
+        **kwargs
+    ):
+        return self.value(
+            population,
+            fitness_function,
+            num_selections,
+            cost_matrix,
+            **kwargs
+        )

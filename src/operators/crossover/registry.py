@@ -30,4 +30,4 @@ class CrossoverStrategy(Enum):
         second_parent: List[int],
         probability: float
     ) -> List[int]:
-        self.value(first_parent, second_parent, probability)
+        return self.value(first_parent, second_parent, probability)
