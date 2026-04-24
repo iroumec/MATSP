@@ -1,7 +1,7 @@
 """
 Docstring for mutation.types
 """
-from enum import Enum
+from enum import Enum, member
 
 from typing import List
 from typing_extensions import Protocol
@@ -21,12 +21,12 @@ class InitializationOperator(Protocol):
         ...
 
 class InitializationStrategy(Enum):
-    RANDOMIZATION: InitializationOperator = randomization
-    NEAREST_NEIGHBOUR: InitializationOperator = nearest_neighbour
+    RANDOMIZATION = member(randomization)
+    NEAREST_NEIGHBOUR = member(nearest_neighbour)
     
     def __call__(
         self,
         number_of_inidivuals_to_generate: int,
         cost_matrix: List[List[int]]
     ) -> List[int]:
-        return self.value(number_of_inidivuals_to_generate, cost_matrix, cost_matrix)
+        return self.value(number_of_inidivuals_to_generate, cost_matrix)

@@ -3,7 +3,7 @@ Docstring for mutation.swap
 """
 import random
 
-def swap(individual, probability):
+def swap(individual, probability: float):
 
     """
     Docstring for swap

@@ -1,10 +1,9 @@
 """
 Docstring for mutation.types
 """
-from enum import Enum
+from enum import Enum, member
 from typing import List, Callable, Any
 from typing_extensions import Protocol
-
 from .algorithms.roulette import roulette
 from .algorithms.tournament import tournament
 
@@ -26,8 +25,8 @@ class SelectionStrategy(Enum):
     """
     Dcostring
     """
-    ROULETTE = roulette
-    TOURNAMENT = tournament
+    ROULETTE: SelectionOperator = member(roulette)
+    TOURNAMENT: SelectionOperator = member(tournament)
 
     def __call__(
         self,

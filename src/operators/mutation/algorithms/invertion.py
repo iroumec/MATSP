@@ -3,7 +3,7 @@ Docstring for mutation.invertion
 """
 import random
 
-def invertion(individual, probability):
+def invertion(individual, probability: float):
 
     """
     Docstring for invert

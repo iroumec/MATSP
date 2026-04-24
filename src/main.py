@@ -27,8 +27,6 @@ from operators import (
 
 config = build_config(load_config("resources/configuration.example.yml"))
 
-FITNESS_FUNCTION = calculate_fitness
-
 # ------------------------------------------------------------------------------------------------ #
 # Definición de variables
 # ------------------------------------------------------------------------------------------------ #
@@ -43,7 +41,7 @@ cost_matrix = load_matrix("ft53")
 # Timer initialization
 # ------------------------------------------------------------------------------------------------ #
 
-start_time = time.time()
+start_time: float = time.time()
 
 # ------------------------------------------------------------------------------------------------ #
 # Generación de la población inicial
@@ -71,7 +69,7 @@ population += InitializationStrategy.NEAREST_NEIGHBOUR(
 # Algorithm
 # ------------------------------------------------------------------------------------------------ #
 
-current_generation = 0
+current_generation: int = 0
 
 while current_generation < config.execution.max_generations:
 
@@ -81,7 +79,7 @@ while current_generation < config.execution.max_generations:
 
     parents = config.selection.operator(
         population=population,
-        fitness_function=FITNESS_FUNCTION,
+        fitness_function=calculate_fitness,
         num_selections=config.selection.selected_individuals,
         cost_matrix=cost_matrix,
         tournament_size=config.selection.tournament_size,
@@ -115,7 +113,7 @@ while current_generation < config.execution.max_generations:
     children = [config.improvement.operator(
         child,
         config.improvement.probability,
-        FITNESS_FUNCTION,
+        calculate_fitness,
         cost_matrix
     ) for child in children]
 
@@ -127,7 +125,7 @@ while current_generation < config.execution.max_generations:
         population,
         children,
         config.survivors.individuals_to_replace,
-        FITNESS_FUNCTION,
+        calculate_fitness,
         cost_matrix
     )
 
@@ -138,7 +136,7 @@ while current_generation < config.execution.max_generations:
     best_fitness_through_time.append(
         select_best_individual(
             population,
-            FITNESS_FUNCTION,
+            calculate_fitness,
             cost_matrix
         )
     )
@@ -166,13 +164,15 @@ for individual in population:
 # Timer finalization
 # ----------------------------------------------------------------------------------------------- #
 
-end_time = time.time()
-execution_time = end_time - start_time
+end_time: float = time.time()
+execution_time: float = end_time - start_time
 
-save_output(
+output_path = save_output(
     config,
     calculate_fitness,
     result, cost_matrix,
     execution_time,
     best_fitness_through_time
 )
+
+print(f"Results saved in {output_path}!")

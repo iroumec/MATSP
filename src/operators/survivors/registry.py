@@ -1,12 +1,12 @@
 """
 Docstring for mutation.types
 """
-from enum import Enum
+from enum import Enum, member
 
 from typing import List, Callable
 from typing_extensions import Protocol
 
-from .algorithms.replace_worst import replace_worst
+from .algorithms import replace_worst
 
 class SurvivorsOperator(Protocol):
     """
@@ -23,8 +23,12 @@ class SurvivorsOperator(Protocol):
         ...
 
 class SurvivorsStrategy(Enum):
-    REPLACE_WORST: SurvivorsOperator = replace_worst
-    
+    """
+    Enumerate that the defines the survivor strategies.
+    """
+
+    REPLACE_WORST: SurvivorsOperator = member(replace_worst)
+
     def __call__(
         self,
         actual_population: List[List[int]],

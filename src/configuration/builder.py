@@ -2,7 +2,6 @@
 Docstring
 """
 
-from .parser import parse_enum
 from .structures import (
     Config,
     CrossoverConfig,
@@ -30,13 +29,13 @@ def build_config(raw: dict) -> Config:
     )
 
     sel_cfg = SelectionConfig(
-        operator=parse_enum(SelectionStrategy, raw["selection"]["operator"]),
+        operator=SelectionStrategy[raw["selection"]["operator"]],
         selected_individuals=raw["selection"]["selected_individuals"],
         tournament_size=raw["selection"]["tournament_size"],
     )
 
     cross_cfg = CrossoverConfig(
-        operator=parse_enum(CrossoverStrategy, raw["crossover"]["operator"]),
+        operator=CrossoverStrategy[raw["crossover"]["operator"]],
         probability=raw["crossover"]["probability"],
     )
 
@@ -45,17 +44,17 @@ def build_config(raw: dict) -> Config:
         mut_prob = 1 / exec_cfg.population_size
 
     mut_cfg = MutationConfig(
-        operator=parse_enum(MutationStrategy, raw["mutation"]["operator"]),
+        operator=MutationStrategy[raw["mutation"]["operator"]],
         probability=mut_prob,
     )
 
     imp_cfg = ImprovementConfig(
-        operator=parse_enum(ImprovementStrategy, raw["improvement"]["operator"]),
+        operator=ImprovementStrategy[raw["improvement"]["operator"]],
         probability=raw["improvement"]["probability"],
     )
 
     surv_cfg = SurvivorsConfig(
-        operator=parse_enum(SurvivorsStrategy, raw["survivors"]["operator"]),
+        operator=SurvivorsStrategy[raw["survivors"]["operator"]],
         individuals_to_replace=raw["survivors"]["individuals_to_replace"],
     )
 

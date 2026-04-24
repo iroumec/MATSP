@@ -1,7 +1,7 @@
 """
 Docstring for mutation.types
 """
-from enum import Enum
+from enum import Enum, member
 from typing import List
 from typing_extensions import Protocol
 
@@ -21,9 +21,9 @@ class MutationOperator(Protocol):
         ...
 
 class MutationStrategy(Enum):
-    SWAP: MutationOperator = swap
-    SCRAMBLE: MutationOperator = scramble
-    INVERTION: MutationOperator = invertion
+    SWAP: MutationOperator = member(swap)
+    SCRAMBLE: MutationOperator = member(scramble)
+    INVERTION: MutationOperator = member(invertion)
     
     def __call__(
         self,

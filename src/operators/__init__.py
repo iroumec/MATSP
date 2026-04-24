@@ -1,3 +1,7 @@
+"""
+Docstirng
+"""
+
 from .survivors.registry import SurvivorsStrategy
 from .initialization.registry import InitializationStrategy
 from .crossover.registry import CrossoverStrategy

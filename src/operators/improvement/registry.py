@@ -1,7 +1,7 @@
 """
 Docstring for mutation.types
 """
-from enum import Enum
+from enum import Enum, member
 
 from typing import List, Callable
 from typing_extensions import Protocol
@@ -22,7 +22,7 @@ class ImprovementOperator(Protocol):
         ...
 
 class ImprovementStrategy(Enum):
-    INSERTION: ImprovementOperator = insertion
+    INSERTION = member(insertion)
     
     def __call__(
         self,

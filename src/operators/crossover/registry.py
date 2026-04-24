@@ -1,7 +1,7 @@
 """
 Docstring for mutation.types
 """
-from enum import Enum
+from enum import Enum, member
 from typing import List
 from typing_extensions import Protocol
 
@@ -21,8 +21,8 @@ class CrossoverOperator(Protocol):
         ...
 
 class CrossoverStrategy(Enum):
-    OX1: CrossoverOperator = ox1
-    PMX: CrossoverOperator = pmx
+    OX1 = member(ox1)
+    PMX = member(pmx)
     
     def __call__(
         self,
