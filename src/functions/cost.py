@@ -1,14 +1,20 @@
 """
-Dcostring
+In this file, the function for calculating the cost of an individual is defined.
 """
 
-def calculate_cost(individual, cost_matrix):
+from typing import List
+
+def calculate_cost(individual: List[int], cost_matrix: List[List[int]]):
 
     """
-    Docstring for calculate
+    Calculates the cost of an individual based on a cost matrix.
     
-    :param individual: Description
-    :param cost_matrix: Description
+    Args:
+        individual (List[int]): Sequence of locations.
+        cost_matrix (List[List[int]]): Cost matrix.
+
+    Returns:
+        travel_cost (float): Travel cost.
     """
 
     number_of_cities = len(individual)

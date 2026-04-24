@@ -1,6 +1,11 @@
 """
-Docstring for main
+Entry point for the genetic algorithm implementation.
 """
+
+# ------------------------------------------------------------------------------------------------ #
+# Imports
+# ------------------------------------------------------------------------------------------------ #
+
 import time
 
 from configuration import build_config
@@ -22,13 +27,13 @@ from operators import (
 )
 
 # ------------------------------------------------------------------------------------------------ #
-# Parameters Loading
+# Config Loading
 # ------------------------------------------------------------------------------------------------ #
 
 config = build_config(load_config("resources/configuration.example.yml"))
 
 # ------------------------------------------------------------------------------------------------ #
-# Definición de variables
+# Variable definitions
 # ------------------------------------------------------------------------------------------------ #
 
 best_fitness_through_time = []
@@ -44,7 +49,7 @@ cost_matrix = load_matrix("ft53")
 start_time: float = time.time()
 
 # ------------------------------------------------------------------------------------------------ #
-# Generación de la población inicial
+# Initial population generation
 # ------------------------------------------------------------------------------------------------ #
 
 number_of_random_generated_individuals = int(
@@ -166,6 +171,10 @@ for individual in population:
 
 end_time: float = time.time()
 execution_time: float = end_time - start_time
+
+# ----------------------------------------------------------------------------------------------- #
+# Output saving
+# ----------------------------------------------------------------------------------------------- #
 
 output_path = save_output(
     config,

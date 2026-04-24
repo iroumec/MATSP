@@ -1,5 +1,5 @@
 """
-Docstring
+Declaration for package "functions".
 """
 
 from .cost import calculate_cost

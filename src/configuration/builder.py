@@ -2,18 +2,22 @@
 Docstring
 """
 
+from operators import (
+    SelectionStrategy,
+    CrossoverStrategy,
+    MutationStrategy,
+    ImprovementStrategy,
+    SurvivorsStrategy,
+)
+
 from .structures import (
     Config,
     CrossoverConfig,
-    CrossoverStrategy,
     ExecutionConfig,
     ImprovementConfig,
-    ImprovementStrategy,
-    MutationConfig, MutationStrategy,
+    MutationConfig,
     SelectionConfig,
-    SelectionStrategy,
     SurvivorsConfig,
-    SurvivorsStrategy
 )
 
 def build_config(raw: dict) -> Config:

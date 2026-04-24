@@ -1,12 +1,13 @@
 """
-Docstring for mutation.swap
+In this file the mutation operator "swap" is implemented.
 """
 import random
 
 def swap(individual, probability: float):
 
     """
-    Docstring for swap
+    Given an individual and a probability, it swaps two genes
+    from the individual's cromosome.
     
     :param individual: Description
     :param probability: Description

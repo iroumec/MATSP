@@ -3,10 +3,11 @@ Docstring for crossover.PMX
 """
 
 import random
+from typing import List
 
 # ----------------------------------------------------------------------------------------------- #
 
-def pmx(parent1, parent2, probability):
+def pmx(parent1: List[int], parent2: List[int], probability: float):
     """
     Perform Partially Mapped Crossover (PMX) between two parent permutations.
 

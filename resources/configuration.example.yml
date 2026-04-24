@@ -14,8 +14,6 @@ crossover:
   operator: "PMX"
   probability: 0.9
 
-#FITNESS_FUNCTION = fitness.calculate
-
 mutation:
   # Options: ["INVERTION", "SCRAMBLE", "SWAP"]
   operator: "SWAP"

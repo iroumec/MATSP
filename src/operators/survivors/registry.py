@@ -8,6 +8,10 @@ from typing_extensions import Protocol
 
 from .algorithms import replace_worst
 
+# =========================================================================== #
+# Operator
+# =========================================================================== #
+
 class SurvivorsOperator(Protocol):
     """
     Docstring for MutationOperator
@@ -21,6 +25,10 @@ class SurvivorsOperator(Protocol):
         cost_matrix: List[List[int]],
     ) -> List[List[int]]:
         ...
+
+# =========================================================================== #
+# Strategies
+# =========================================================================== #
 
 class SurvivorsStrategy(Enum):
     """

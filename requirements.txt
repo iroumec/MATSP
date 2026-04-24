@@ -5,4 +5,5 @@ nibabel==5.4.2
 numpy==2.4.3
 packaging==26.0
 pydicom==3.0.2
+PyYAML==6.0.3
 typing_extensions==4.15.0

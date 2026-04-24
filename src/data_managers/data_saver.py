@@ -77,7 +77,7 @@ def save_output(
         output_file.write("BEST FITNESS THROUGH TIME\n")
         output_file.write("=" * 50 + "\n")
         for i, fitness_value in enumerate(best_fitness_through_time):
-            output_file.write(f"Generation {i+1}: {round(fitness_value, 7)}\n")
+            output_file.write(f"Generation {i+1}: \t{round(fitness_value, 7)}\n")
         output_file.write("=" * 50 + "\n")
 
     return file_path

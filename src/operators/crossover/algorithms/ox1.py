@@ -1,11 +1,10 @@
 """
-Docstring for crossover.OX1
+In this file, the algorithm for the crossover operator "OX1" is defined.
 """
 import random
+from typing import List
 
-# ----------------------------------------------------------------------------------------------- #
-
-def ox1(parent1, parent2, probability):
+def ox1(parent1: List[int], parent2: List[int], probability: float):
     """
     Perform Order Crossover 1 (OX1) between two parent permutations.
 
@@ -16,6 +15,7 @@ def ox1(parent1, parent2, probability):
     Returns:
         tuple: Two offspring permutations resulting from the crossover.
     """
+
     size = len(parent1)
     # Initialize offspring with None
     offspring1 = [None] * size

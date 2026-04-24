@@ -6,7 +6,8 @@ import random
 def scramble(individual, probability: float):
 
     """
-    Docstring for scramble
+    Given an individual and a probability, it scrambles the genes
+    of the individual's cromosome.
     
     :param individual: Description
     :param probability: Description
