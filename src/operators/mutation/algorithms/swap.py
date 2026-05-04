@@ -1,5 +1,5 @@
 """
-In this file the mutation operator "swap" is implemented.
+Implementation of the "swap" mutation operator.
 """
 import random
 

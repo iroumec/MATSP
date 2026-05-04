@@ -1,5 +1,5 @@
 """
-Docstring for mutation.invertion
+Implementation of the "invertion" mutation operator.
 """
 import random
 
@@ -9,11 +9,9 @@ def invertion(individual, probability: float):
     Docstring for invert
     """
 
-    p = random.random()
-
     mutated_individual = individual.copy()
 
-    if p < probability:
+    if random.random() < probability:
 
         number_of_elements = len(mutated_individual)
 

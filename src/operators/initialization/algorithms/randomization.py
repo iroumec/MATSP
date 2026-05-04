@@ -1,5 +1,5 @@
 """
-Docstring for initialization.nearest_neighbour
+Implementation of the "randomization" initialization operator.
 """
 import random
 

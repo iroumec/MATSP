@@ -1,5 +1,5 @@
 """
-Docstring for mutation.scramble
+Implementation of the "scramble" mutation operator.
 """
 import random
 
@@ -12,14 +12,16 @@ def scramble(individual, probability: float):
     :param individual: Description
     :param probability: Description
     """
-    mutated = individual.copy()
+
+    mutated_individual = individual.copy()
 
     if random.random() < probability:
-        start = random.randint(0, len(mutated) - 1)
-        end = random.randint(start, len(mutated) - 1)
 
-        sub = mutated[start:end]
+        start = random.randint(0, len(mutated_individual) - 1)
+        end = random.randint(start, len(mutated_individual) - 1)
+
+        sub = mutated_individual[start:end]
         random.shuffle(sub)
-        mutated[start:end] = sub
+        mutated_individual[start:end] = sub
 
-    return mutated
+    return mutated_individual

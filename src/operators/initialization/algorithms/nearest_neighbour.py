@@ -1,5 +1,5 @@
 """
-Docstring for initialization.nearest_neighbour
+Implementation of the "nearest-neighbour" initialization operator.
 """
 import random
 
@@ -46,14 +46,14 @@ def nearest_neighbour(number_of_inviduals_to_generate, cost_matrix):
         # -1 due to the starting city being already determined.
         for _ in range(number_of_cities - 1):
 
-            nearest_neighbour = None
+            current_nearest_neighbour = None
 
             for city in range(number_of_cities):
 
                 if is_candidate(city, new_individual, nearest_neighbour, cost_matrix):
-                    nearest_neighbour = city
+                    current_nearest_neighbour = city
 
-            if nearest_neighbour is not None:
+            if current_nearest_neighbour is not None:
                 new_individual.append(nearest_neighbour)
             else:
                 print("Unexpected error")
