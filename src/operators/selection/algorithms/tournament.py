@@ -1,5 +1,5 @@
 """
-In this file, the algorithm for the selection operator "TOURNAMENT" is defined.
+"TOURNAMENT" selection operator implementation.
 """
 
 import random

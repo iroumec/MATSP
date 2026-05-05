@@ -1,5 +1,5 @@
 """
-In this files the function for calculating the fitness is defined.
+Fitness function implementation.
 """
 
 def calculate_fitness(individual, cost_matrix):

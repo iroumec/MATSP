@@ -99,11 +99,15 @@ while current_generation < config.execution.max_generations:
 
     for i in range(0, len(parents) - 1, 2):
 
-        children += config.crossover.operator(
-            parents[i],
-            parents[i+1],
-            config.crossover.probability
-        )
+        # The parents cannot be equals, so endogamy (which is translated to prematured convergence)
+        # is avoided and the population isn't filled with all equals individuals.
+        if parents[i] != parents[i+1]:
+
+            children += config.crossover.operator(
+                parents[i],
+                parents[i+1],
+                config.crossover.probability
+            )
 
     # ------------------------------------------------------------------------------------------- #
     # Mutation

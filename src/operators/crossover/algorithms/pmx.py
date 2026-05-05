@@ -18,7 +18,7 @@ def pmx(parent1: List[int], parent2: List[int], probability: float):
     Returns:
         tuple: Two offspring permutations resulting from the crossover.
     """
-    
+
     # No crossover.
     if random.random() > probability:
         return []

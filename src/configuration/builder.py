@@ -62,6 +62,12 @@ def build_config(raw: dict) -> Config:
         individuals_to_replace=raw["survivors"]["individuals_to_replace"],
     )
 
+    if exec_cfg.population_size < sel_cfg.selected_individuals:
+        raise ValueError("""\
+            Error: The number of selected individuals in the selection \
+            operator configuration cannot be higher than the population size.\
+        """)
+
     return Config(
         execution=exec_cfg,
         selection=sel_cfg,
