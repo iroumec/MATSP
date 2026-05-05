@@ -50,11 +50,11 @@ def nearest_neighbour(number_of_inviduals_to_generate, cost_matrix):
 
             for city in range(number_of_cities):
 
-                if is_candidate(city, new_individual, nearest_neighbour, cost_matrix):
+                if is_candidate(city, new_individual, current_nearest_neighbour, cost_matrix):
                     current_nearest_neighbour = city
 
             if current_nearest_neighbour is not None:
-                new_individual.append(nearest_neighbour)
+                new_individual.append(current_nearest_neighbour)
             else:
                 print("Unexpected error")
 

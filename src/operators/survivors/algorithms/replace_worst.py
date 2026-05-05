@@ -23,6 +23,19 @@ def replace_worst(
     Returns:
         list: Updated population after replacement.
     """
+    
+    number_to_replace = min(len(new_individuals), number_to_replace)
+
+    # Validations.
+    if number_to_replace == 0:
+        return actual_population
+
+    if number_to_replace > len(new_individuals):
+        raise ValueError(f"Cannot be replaced {number_to_replace} individuals because there aren't {len(new_individuals)} new individuals.")
+
+    if number_to_replace > len(actual_population):
+        raise ValueError("Cannot replace more individuals than the population size.")
+
     # Sort actual population by fitness
     actual_population_fitness_scores = [
         (ind, fitness_function(ind, cost_matrix)) for ind in actual_population

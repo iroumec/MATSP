@@ -16,9 +16,19 @@ class ExecutionConfig:
     """
     Docstring
     """
+    instance: str
     population_size: int
     random_percentage: float
+
+@dataclass
+class StopReasonsConfig:
+    """
+    Docstring
+    """
+    generations: bool
     max_generations: int
+    generations_without_improvements: bool
+    max_generations_without_improvements: int
 
 
 @dataclass
@@ -68,6 +78,7 @@ class Config:
     Docstring
     """
     execution: ExecutionConfig
+    stop_reasons: StopReasonsConfig
     selection: SelectionConfig
     crossover: CrossoverConfig
     mutation: MutationConfig

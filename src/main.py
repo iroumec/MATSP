@@ -13,7 +13,8 @@ from configuration import build_config
 from functions import (
     calculate_cost,
     calculate_fitness,
-    select_best_individual
+    select_best_individual,
+    must_stop
 )
 
 from data_managers import (
@@ -40,7 +41,7 @@ best_fitness_through_time = []
 
 population = []
 
-cost_matrix = load_matrix("ft53")
+cost_matrix = load_matrix(config.execution.instance)
 
 # ------------------------------------------------------------------------------------------------ #
 # Timer initialization
@@ -75,8 +76,10 @@ population += InitializationStrategy.NEAREST_NEIGHBOUR(
 # ------------------------------------------------------------------------------------------------ #
 
 current_generation: int = 0
+last_best_fitness: float = 0.0
+generations_without_improvements: int = 0
 
-while current_generation < config.execution.max_generations:
+while not must_stop(current_generation, generations_without_improvements, config):
 
     # ------------------------------------------------------------------------------------------- #
     # Parents Selection
@@ -142,13 +145,19 @@ while current_generation < config.execution.max_generations:
     # Selecting the best solution of the current generation
     # ------------------------------------------------------------------------------------------- #
 
-    best_fitness_through_time.append(
-        select_best_individual(
-            population,
-            calculate_fitness,
-            cost_matrix
-        )
+    current_best_fitness: float = select_best_individual(
+        population,
+        calculate_fitness,
+        cost_matrix
     )
+
+    best_fitness_through_time.append(current_best_fitness)
+
+    if last_best_fitness == current_best_fitness:
+        generations_without_improvements += 1
+    else:
+        generations_without_improvements = 0
+        last_best_fitness = current_best_fitness
 
     # ------------------------------------------------------------------------------------------- #
     # Increase of generation

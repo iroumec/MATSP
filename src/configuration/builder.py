@@ -14,6 +14,7 @@ from .structures import (
     Config,
     CrossoverConfig,
     ExecutionConfig,
+    StopReasonsConfig,
     ImprovementConfig,
     MutationConfig,
     SelectionConfig,
@@ -21,16 +22,26 @@ from .structures import (
 )
 
 def build_config(raw: dict) -> Config:
-    
+
     """
     Docstring
     """
-    
+
     exec_cfg = ExecutionConfig(
+        instance=raw["execution"]["instance"],
         population_size=raw["execution"]["population_size"],
         random_percentage=raw["execution"]["percentage_of_random_generated_individuals"],
-        max_generations=raw["execution"]["max_generations"],
     )
+    
+    stop_cfg = StopReasonsConfig(
+        generations=raw["stop-reasons"]["generations"],
+        max_generations=raw["stop-reasons"]["max_generations"],
+        generations_without_improvements=raw["stop-reasons"]["generations_without_improvements"],
+        max_generations_without_improvements=raw["stop-reasons"]["max_generations_without_improvements"],
+    )
+    
+    if not stop_cfg.generations and not stop_cfg.generations_without_improvements:
+        raise ValueError("Error: The algorithm needs at least a stop condition.")
 
     sel_cfg = SelectionConfig(
         operator=SelectionStrategy[raw["selection"]["operator"]],
@@ -62,14 +73,9 @@ def build_config(raw: dict) -> Config:
         individuals_to_replace=raw["survivors"]["individuals_to_replace"],
     )
 
-    if exec_cfg.population_size < sel_cfg.selected_individuals:
-        raise ValueError("""\
-            Error: The number of selected individuals in the selection \
-            operator configuration cannot be higher than the population size.\
-        """)
-
     return Config(
         execution=exec_cfg,
+        stop_reasons=stop_cfg,
         selection=sel_cfg,
         crossover=cross_cfg,
         mutation=mut_cfg,

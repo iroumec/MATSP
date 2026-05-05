@@ -2,7 +2,7 @@
 Docstring for survivors.select_best
 """
 
-def select_best_individual(actual_population, fitness_function, cost_matrix):
+def select_best_individual(actual_population, fitness_function, cost_matrix) -> float:
     """
     Select the best performing individual of the actual generation.
 
