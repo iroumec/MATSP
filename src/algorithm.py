@@ -2,18 +2,20 @@
 Genetic algorithm implementation.
 """
 
-# ------------------------------------------------------------------------------------------------ #
+# =============================================================================================== #
 # Imports
-# ------------------------------------------------------------------------------------------------ #
+# =============================================================================================== #
 
 import time
+import statistics
+from typing import List
 
 from configuration import Config
 from functions import (
-    calculate_cost,
     calculate_fitness,
     select_best_individual,
-    must_stop
+    must_stop,
+    calculate_average_best_fitness_through_time,
 )
 
 from data_managers import (
@@ -25,14 +27,61 @@ from operators import (
     InitializationStrategy,
 )
 
-# ------------------------------------------------------------------------------------------------ #
-# Algorithm
-# ------------------------------------------------------------------------------------------------ #
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
 
 def run_algorithm(config: Config) -> AlgorithmResult:
     """
-    Docstring
+    Given a configuration, uses its parameters to run a genetic algorithm
     """
+
+    # ------------------------------------------------------------------------------------------- #
+    # Variable declarations and initializations
+    # ------------------------------------------------------------------------------------------- #
+
+    fitness_function = calculate_fitness
+
+    best_fitness_through_time: List[float] = []
+
+    best_individuals: List[int] = []
+
+    execution_times: List[float] = []
+
+    cost_matrix: List[List[int]] = load_matrix(config.execution.instance)
+
+    # ------------------------------------------------------------------------------------------- #
+    # Algorithm execution
+    # ------------------------------------------------------------------------------------------- #
+
+    for _ in range(config.execution.executions):
+        current_best_individual, current_execution_time, current_best_fitness_through_time = (
+            _execute_algorithm(config, fitness_function, cost_matrix)
+        )
+        best_individuals.append(current_best_individual)
+        execution_times.append(current_execution_time)
+        best_fitness_through_time.append(current_best_fitness_through_time)
+
+    # ------------------------------------------------------------------------------------------- #
+    # Output saving
+    # ------------------------------------------------------------------------------------------- #
+
+    return AlgorithmResult(
+        config,
+        fitness_function,
+        select_best_individual(best_individuals, fitness_function, cost_matrix),
+        cost_matrix,
+        statistics.mean(execution_times),
+        calculate_average_best_fitness_through_time(best_fitness_through_time),
+    )
+
+# =============================================================================================== #
+
+def _execute_algorithm(
+    config: Config,
+    fitness_function,
+    cost_matrix: List[List[int]]
+):
 
     # ------------------------------------------------------------------------------------------- #
     # Variable definitions
@@ -41,8 +90,6 @@ def run_algorithm(config: Config) -> AlgorithmResult:
     best_fitness_through_time: list = []
 
     population: list = []
-
-    cost_matrix = load_matrix(config.execution.instance)
 
     # ------------------------------------------------------------------------------------------- #
     # Timer initialization
@@ -88,7 +135,7 @@ def run_algorithm(config: Config) -> AlgorithmResult:
 
         parents = config.selection.operator(
             population=population,
-            fitness_function=calculate_fitness,
+            fitness_function=fitness_function,
             num_selections=config.selection.selected_individuals,
             cost_matrix=cost_matrix,
             tournament_size=config.selection.tournament_size,
@@ -129,7 +176,7 @@ def run_algorithm(config: Config) -> AlgorithmResult:
         children = [config.improvement.operator(
             child,
             config.improvement.probability,
-            calculate_fitness,
+            fitness_function,
             cost_matrix
         ) for child in children]
 
@@ -141,7 +188,7 @@ def run_algorithm(config: Config) -> AlgorithmResult:
             population,
             children,
             config.survivors.individuals_to_replace,
-            calculate_fitness,
+            fitness_function,
             cost_matrix
         )
 
@@ -149,11 +196,13 @@ def run_algorithm(config: Config) -> AlgorithmResult:
         # Selecting the best solution of the current generation
         # --------------------------------------------------------------------------------------- #
 
-        current_best_fitness: float = select_best_individual(
+        current_best_individual: List[int] = select_best_individual(
             population,
-            calculate_fitness,
+            fitness_function,
             cost_matrix
         )
+
+        current_best_fitness: float = fitness_function(current_best_individual, cost_matrix)
 
         best_fitness_through_time.append(current_best_fitness)
 
@@ -170,19 +219,6 @@ def run_algorithm(config: Config) -> AlgorithmResult:
         current_generation += 1
 
     # ------------------------------------------------------------------------------------------- #
-    # Results creation
-    # ------------------------------------------------------------------------------------------- #
-
-    result = []
-
-    for individual in population:
-
-        result.append({
-            "individual": individual,
-            "cost": calculate_cost(individual, cost_matrix)
-        })
-
-    # ------------------------------------------------------------------------------------------- #
     # Timer finalization
     # ------------------------------------------------------------------------------------------- #
 
@@ -190,14 +226,13 @@ def run_algorithm(config: Config) -> AlgorithmResult:
     execution_time: float = end_time - start_time
 
     # ------------------------------------------------------------------------------------------- #
-    # Output saving
+    # Best individual selection
     # ------------------------------------------------------------------------------------------- #
 
-    return AlgorithmResult(
-        config,
-        calculate_fitness,
-        result,
-        cost_matrix,
-        execution_time,
-        best_fitness_through_time,
-    )
+    best_individual = select_best_individual(population, fitness_function, cost_matrix)
+
+    # ------------------------------------------------------------------------------------------- #
+    # Return
+    # ------------------------------------------------------------------------------------------- #
+
+    return best_individual, execution_time, best_fitness_through_time

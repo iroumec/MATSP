@@ -2,6 +2,10 @@
 Application's entry point.
 """
 
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 from pathlib import Path
 from algorithm import run_algorithm
 
@@ -13,23 +17,16 @@ from data_managers import (
     save_output,
     load_config,
 )
+from functions import assert_same_instance
 
-def process_config(config_path: Path):
-    """
-    Docstring.
-    """
-    config = build_config(load_config(str(config_path)))
-    return run_algorithm(config)
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
 
-def main():
+def parse_arguments() -> Path:
     """
     Docstring
     """
-
-    # ------------------------------------------------------------------------------------------- #
-    # Arguments Parsing
-    # ------------------------------------------------------------------------------------------- #
-
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--config",
@@ -39,12 +36,14 @@ def main():
     )
 
     args = parser.parse_args()
-    path = Path(args.config)
+    return Path(args.config)
 
-    # ------------------------------------------------------------------------------------------- #
-    # Config Building
-    # ------------------------------------------------------------------------------------------- #
+# =============================================================================================== #
 
+def build_configurations(path: Path) -> list:
+    """
+    Docstring
+    """
     configurations = []
 
     # Just one file.
@@ -68,21 +67,60 @@ def main():
     else:
         raise ValueError("Invalid path: not a file or directory")
 
+    return configurations
+
+# =============================================================================================== #
+
+def main():
+    """
+    Docstring
+    """
+
+    # ------------------------------------------------------------------------------------------- #
+    # Arguments Parsing
+    # ------------------------------------------------------------------------------------------- #
+
+    path = parse_arguments()
+
+    # ------------------------------------------------------------------------------------------- #
+    # Config Building
+    # ------------------------------------------------------------------------------------------- #
+
+    configurations = build_configurations(path)
+
+    # ------------------------------------------------------------------------------------------- #
+    # Validations
+    # ------------------------------------------------------------------------------------------- #
+
+    assert_same_instance(configurations)
+
     # ------------------------------------------------------------------------------------------- #
     # Algorithm Execution
     # ------------------------------------------------------------------------------------------- #
 
+    print("Executing configurations...")
+
     results = []
-    for configuration in configurations:
+    for index, configuration in enumerate(configurations):
+        print(f"\nExecuting configuration C{index+1}...")
         results.append(run_algorithm(configuration))
+        print(f"Configuration C{index+1} executed!")
+
+    print("\nAll configuration have been executed!")
 
     # ------------------------------------------------------------------------------------------- #
     # Output Saving
     # ------------------------------------------------------------------------------------------- #
 
+    print("\nPreparing summary...")
+
     output_path = save_output(results)
 
-    print(f"Results saved in folder {output_path}!")
+    print(f"\nResults saved in folder {output_path}!")
+
+# =============================================================================================== #
+# Entry Point
+# =============================================================================================== #
 
 if __name__ == "__main__":
     main()

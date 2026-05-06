@@ -1,16 +1,16 @@
 """
-Docstring for mutation.types
+Defines the protocol and enum for improvement operators.
 """
 from enum import Enum, member
 
 from typing import List, Callable
 from typing_extensions import Protocol
 
-from .algorithms.insertion import insertion
+from .algorithms import insertion
 
 class ImprovementOperator(Protocol):
     """
-    Docstring for MutationOperator
+    Class (protocol) for improvement operators.
     """
     def __call__(
         self,
@@ -23,7 +23,7 @@ class ImprovementOperator(Protocol):
 
 class ImprovementStrategy(Enum):
     """
-    Docstring
+    Enum for improvement strategies.
     """
     INSERTION = member(insertion)
 

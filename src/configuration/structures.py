@@ -1,5 +1,5 @@
 """
-Docstring
+Configuration dataclasses.
 """
 from dataclasses import dataclass
 
@@ -14,27 +14,27 @@ from operators import (
 @dataclass
 class ExecutionConfig:
     """
-    Docstring
+    Dataclass for execution configuration parameters.
     """
     instance: str
     population_size: int
     random_percentage: float
+    executions: int
 
 @dataclass
 class StopReasonsConfig:
     """
-    Docstring
+    Dataclass for stop reasons configuration parameters.
     """
     generations: bool
     max_generations: int
     generations_without_improvements: bool
     max_generations_without_improvements: int
 
-
 @dataclass
 class SelectionConfig:
     """
-    Docstring
+    Dataclass for selection configuration parameters.
     """
     operator: SelectionStrategy
     selected_individuals: int
@@ -43,7 +43,7 @@ class SelectionConfig:
 @dataclass
 class CrossoverConfig:
     """
-    Docstring
+    Dataclass for crossover configuration parameters.
     """
     operator: CrossoverStrategy
     probability: float
@@ -51,7 +51,7 @@ class CrossoverConfig:
 @dataclass
 class MutationConfig:
     """
-    Docstring
+    Dataclass for mutation configuration parameters.
     """
     operator: MutationStrategy
     probability: float
@@ -59,7 +59,7 @@ class MutationConfig:
 @dataclass
 class ImprovementConfig:
     """
-    Docstring
+    Dataclass for improvement configuration parameters.
     """
     operator: ImprovementStrategy
     probability: float
@@ -67,7 +67,7 @@ class ImprovementConfig:
 @dataclass
 class SurvivorsConfig:
     """
-    Docstring
+    Dataclass for survivors configuration parameters.
     """
     operator: SurvivorsStrategy
     individuals_to_replace: int
@@ -75,7 +75,7 @@ class SurvivorsConfig:
 @dataclass
 class Config:
     """
-    Docstring
+    Dataclass for all configuration parameters.
     """
     execution: ExecutionConfig
     stop_reasons: StopReasonsConfig

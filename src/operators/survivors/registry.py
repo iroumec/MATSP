@@ -1,5 +1,5 @@
 """
-Docstring for mutation.types
+Defines the protocol and enum for survivors operators.
 """
 from enum import Enum, member
 
@@ -14,7 +14,7 @@ from .algorithms import replace_worst
 
 class SurvivorsOperator(Protocol):
     """
-    Docstring for MutationOperator
+    Class (protocol) for survivors operators.
     """
     def __call__(
         self,
@@ -32,7 +32,7 @@ class SurvivorsOperator(Protocol):
 
 class SurvivorsStrategy(Enum):
     """
-    Enumerate that the defines the survivor strategies.
+    Enum for survivors strategies.
     """
 
     REPLACE_WORST: SurvivorsOperator = member(replace_worst)

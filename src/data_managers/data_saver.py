@@ -2,6 +2,10 @@
 Docstring
 """
 
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 import os
 from typing import List
 from datetime import datetime
@@ -11,9 +15,15 @@ from dataclasses import dataclass
 from functions import calculate_cost
 from configuration.structures import Config
 
-# ------------------------------------------------------------------------------------------------ #
+# =============================================================================================== #
+# Constants
+# =============================================================================================== #
+
+SEPARATOR_LENGTH = 100
+
+# =============================================================================================== #
 # Dataclass
-# ------------------------------------------------------------------------------------------------ #
+# =============================================================================================== #
 
 @dataclass
 class AlgorithmResult:
@@ -22,14 +32,14 @@ class AlgorithmResult:
     """
     configuration: Config
     fitness_function: callable
-    result: list
+    best_individual: List[int]
     cost_matrix: List[List[int]]
-    execution_time: float
-    best_fitness_through_time: List[float]
+    average_execution_time: float
+    average_best_fitness_through_time: List[float]
 
-# ------------------------------------------------------------------------------------------------ #
-# Function
-# ------------------------------------------------------------------------------------------------ #
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
 
 def save_output(algorithm_results: List[AlgorithmResult]):
     """
@@ -60,25 +70,28 @@ def save_output(algorithm_results: List[AlgorithmResult]):
         # Result variables extraction.
         config = algorithm_result.configuration
         cost_matrix = algorithm_result.cost_matrix
-        execution_time = algorithm_result.execution_time
+        execution_time = algorithm_result.average_execution_time
         fitness_function = algorithm_result.fitness_function
-        best_fitness_through_time = algorithm_result.best_fitness_through_time
+        best_fitness_through_time = algorithm_result.average_best_fitness_through_time
 
         # Precalculation of values to keep f-strings clean.
-        best_individual = algorithm_result.result[0]['individual']
+        best_individual = algorithm_result.best_individual
         best_fitness = fitness_function(best_individual, cost_matrix)
         best_cost = calculate_cost(best_individual, cost_matrix)
 
         # Writes the TXT file.
         with open(file_path, "w", encoding="UTF-8") as output_file:
-            output_file.write("=" * 50 + "\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
             output_file.write("GENETIC ALGORITHM PARAMETERS\n")
-            output_file.write("=" * 50 + "\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
             output_file.write(f"Instance:                   {config.execution.instance}\n")
             output_file.write(f"Population size:            {config.execution.population_size}\n")
             output_file.write(f"Random percentage:          {config.execution.random_percentage}\n")
             if config.stop_reasons.generations:
-                output_file.write(f"Max generations:            {config.stop_reasons.max_generations}\n")
+                output_file.write(
+                    "Max generations:            "
+                    f"{config.stop_reasons.max_generations}\n"
+                )
             if config.stop_reasons.generations_without_improvements:
                 output_file.write(f"Max gens. no improvements:  {config.stop_reasons.max_generations_without_improvements}\n")
             output_file.write(f"Selection operator:         {config.selection.operator.name.upper()}\n")
@@ -95,54 +108,109 @@ def save_output(algorithm_results: List[AlgorithmResult]):
             output_file.write(f"Individuals to replace:     {config.survivors.individuals_to_replace}\n")
 
             output_file.write("\n")
-            output_file.write("=" * 50 + "\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
             output_file.write("BEST SOLUTION\n")
-            output_file.write("=" * 50 + "\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
             output_file.write(f"Best solution:  {best_individual}\n")
             output_file.write(f"Fitness value:  {best_fitness}\n")
             output_file.write(f"Cost:           {best_cost}\n")
 
             output_file.write("\n")
-            output_file.write("=" * 50 + "\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
             output_file.write("EXECUTION TIME\n")
-            output_file.write("=" * 50 + "\n")
-            output_file.write(f"Execution time: {execution_time} seconds\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
+            output_file.write(
+                "Average execution time: "
+                f"{execution_time} seconds\n"
+            )
 
             output_file.write("\n")
-            output_file.write("=" * 50 + "\n")
-            output_file.write("BEST FITNESS THROUGH TIME\n")
-            output_file.write("=" * 50 + "\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
+            output_file.write("AVERAGE BEST FITNESS THROUGH TIME\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
+
             for i, fitness_value in enumerate(best_fitness_through_time):
                 output_file.write(f"{'Generation':<12}{i+1:>4d}: {fitness_value:12.7f}\n")
-            output_file.write("=" * 50 + "\n")
+            output_file.write("=" * SEPARATOR_LENGTH + "\n")
 
-    # Generates and saved a plot.
-    plt.figure(figsize=(10, 6))
-
-    for idx, algorithm_result in enumerate(algorithm_results):
-        # X axis (generations), Y axis (fitness).
-        best_fitness_through_time = algorithm_result.best_fitness_through_time
-        generations = list(range(1, len(best_fitness_through_time) + 1))
-
-        label = f"Config {idx+1}"
-        plt.plot(generations, best_fitness_through_time, linewidth=2, label=label)
-
-    # Graphic style.
-    plt.title(
-        "Convergence Curves Comparison",
-        fontsize=14,
-        fontweight='bold'
-    )
-    plt.xlabel("Generation", fontsize=12)
-    plt.ylabel("Best Fitness", fontsize=12)
-    plt.grid(True, linestyle='--', alpha=0.7)
-    plt.legend()
-
-    # Margins adjustment.
-    plt.tight_layout()
-
-    # Save and close.
-    plt.savefig(plot_path, dpi=300) # dpi=300 for high resolution.
-    plt.close()
+    generate_plot(algorithm_results, plot_path)
 
     return run_dir
+
+# =============================================================================================== #
+
+def generate_plot(algorithm_results: List[AlgorithmResult], path: str):
+    """
+    Docstring
+    """
+
+    fig = plt.figure(figsize=(12, 10))
+    gs = fig.add_gridspec(2, 2)
+    colours = []
+
+    # ------------------------------------------------------------------------------------------- #
+    # Top: Convergence
+    # ------------------------------------------------------------------------------------------- #
+
+    ax1 = fig.add_subplot(gs[0, :])
+
+    for idx, algorithm_result in enumerate(algorithm_results):
+        best_fitness_through_time = algorithm_result.average_best_fitness_through_time
+        generations = list(range(1, len(best_fitness_through_time) + 1))
+
+        line, = ax1.plot(generations, best_fitness_through_time, linewidth=2, label=f"C{idx+1}")
+        colours.append(line.get_color())
+
+    ax1.set_title(
+        f"Convergence - {algorithm_results[0].configuration.execution.instance}"
+    )
+    ax1.set_xlabel("Generation")
+    ax1.set_ylabel("Average Best Fitness")
+    ax1.grid(True, linestyle='--', alpha=0.7)
+    ax1.legend()
+
+    # ------------------------------------------------------------------------------------------- #
+    # Bottom left: Best cost
+    # ------------------------------------------------------------------------------------------- #
+
+    ax2 = fig.add_subplot(gs[1, 0])
+
+    labels = []
+    costs = []
+
+    for idx, result in enumerate(algorithm_results):
+        labels.append(f"C{idx+1}")
+        best_cost = calculate_cost(result.best_individual, result.cost_matrix)
+        costs.append(best_cost)
+
+    x = list(range(len(labels)))
+
+    ax2.bar(x, costs, color=colours)
+    ax2.set_xticks(x)
+    ax2.set_xticklabels(labels)
+    ax2.set_title("Best Cost per Configuration")
+    ax2.bar_label(ax2.containers[0])
+    ax2.grid(True, linestyle='--', alpha=0.7)
+
+    # ------------------------------------------------------------------------------------------- #
+    # Bottom right: Average execution time
+    # ------------------------------------------------------------------------------------------- #
+
+    ax3 = fig.add_subplot(gs[1, 1])
+
+    times = [result.average_execution_time for result in algorithm_results]
+
+    ax3.bar(x, times, color=colours)
+    ax3.set_xticks(x)
+    ax3.set_xticklabels(labels)
+    ax3.set_title("Average Execution Time (Seconds)")
+    ax3.bar_label(ax3.containers[0], fmt="%.2f")
+    ax3.grid(True, linestyle='--', alpha=0.7)
+
+    # ------------------------------------------------------------------------------------------- #
+    # Save
+    # ------------------------------------------------------------------------------------------- #
+
+    plt.tight_layout()
+    plt.savefig(path, dpi=300)
+    plt.close()

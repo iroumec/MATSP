@@ -1,15 +1,17 @@
 """
-Docstring for mutation.types
+Defines the protocol and enum for selection operators.
 """
 from enum import Enum, member
 from typing import List, Callable, Any
 from typing_extensions import Protocol
-from .algorithms.roulette import roulette
-from .algorithms.tournament import tournament
+from .algorithms import (
+    roulette,
+    tournament
+)
 
 class SelectionOperator(Protocol):
     """
-    Docstring for MutationOperator
+    Class (protocol) for selection operators.
     """
     def __call__(
         self,
@@ -23,7 +25,7 @@ class SelectionOperator(Protocol):
 
 class SelectionStrategy(Enum):
     """
-    Dcostring
+    Enum for selection strategies.
     """
     ROULETTE: SelectionOperator = member(roulette)
     TOURNAMENT: SelectionOperator = member(tournament)

@@ -1,4 +1,4 @@
-# By default, the shell is "/bin/sh" which doesn't implement `source`.
+# By default, the shell is "/bin/sh" which doesn't implement `source`, so it is changed.
 # https://stackoverflow.com/questions/7507810/how-to-source-a-script-in-a-makefile
 SHELL := /bin/bash
 

@@ -3,17 +3,20 @@ execution:
   # Select one from resources/atsp-instances/cleaned-instances.
   # Some instances: br17, ft53, p43.
   instance: "br17"
+  executions: 30
   population_size: 40
+  # Porcentage of random generated individuals.
   # It is recommended to use a value of 0.8.
   # The rest of the individuals will be generated using an heuristic.
-  percentage_of_random_generated_individuals: 0.8
+  random_percentage: 0.8
 
 stop-reasons:
   generations: true
   # It is recommended to use a value greater or equal than 1000.
   # Ignored if the previous field is `false`.
   max_generations: 1000
-  generations_without_improvements: true
+  # Recommended value: false.
+  generations_without_improvements: false
   # Ignored if the previous field is `false`.
   max_generations_without_improvements: 100
 

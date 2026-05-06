@@ -14,14 +14,12 @@ def insertion(
 ) -> List[int]:
 
     """
-    Docstring for insertion
+    Dcostring.
     """
-
-    p = random.random()
 
     best_individual = list(individual)
 
-    if p < probability:
+    if random.random() < probability:
 
         best_fitness = fitness_function(best_individual, cost_matrix)
 

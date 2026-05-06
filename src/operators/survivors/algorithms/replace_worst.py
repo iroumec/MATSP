@@ -18,7 +18,7 @@ def replace_worst(
         new_individuals (list): List of new individuals to be added to the population.
         number_to_replace (int): Number of worst individuals to replace.
         fitness_function (function): A function that takes an individual and returns its fitness
-        score.
+            score.
 
     Returns:
         list: Updated population after replacement.
@@ -31,7 +31,10 @@ def replace_worst(
         return actual_population
 
     if number_to_replace > len(new_individuals):
-        raise ValueError(f"Cannot be replaced {number_to_replace} individuals because there aren't {len(new_individuals)} new individuals.")
+        raise ValueError(
+            f"Cannot replace {number_to_replace} individuals "
+            f"because there are only {len(new_individuals)} new individuals."
+        )
 
     if number_to_replace > len(actual_population):
         raise ValueError("Cannot replace more individuals than the population size.")

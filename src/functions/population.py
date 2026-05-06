@@ -2,7 +2,9 @@
 Docstring for survivors.select_best
 """
 
-def select_best_individual(actual_population, fitness_function, cost_matrix) -> float:
+from typing import List
+
+def select_best_individual(actual_population, fitness_function, cost_matrix) -> List[int]:
     """
     Select the best performing individual of the actual generation.
 
@@ -21,4 +23,4 @@ def select_best_individual(actual_population, fitness_function, cost_matrix) -> 
     ]
     actual_population_fitness_scores.sort(reverse=True, key=lambda x: x[1])
 
-    return actual_population_fitness_scores[0][1]
+    return actual_population_fitness_scores[0][0]

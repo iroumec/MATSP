@@ -1,5 +1,5 @@
 """
-Defines the protocol and enum of mutation operators.
+Defines the protocol and enum for mutation operators.
 """
 from enum import Enum, member
 from typing import List

@@ -1,5 +1,5 @@
 """
-Docstirng
+Package declaration for operator strategies.
 """
 
 from .survivors.registry import SurvivorsStrategy
