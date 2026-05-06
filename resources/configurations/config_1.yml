@@ -3,8 +3,8 @@ execution:
   # Select one from resources/atsp-instances/cleaned-instances.
   # Some instances: br17, ft53, p43.
   instance: "p43"
-  executions: 30
-  population_size: 20
+  executions: 10
+  population_size: 100
   # Porcentage of random generated individuals.
   # It is recommended to use a value of 0.8.
   # The rest of the individuals will be generated using an heuristic.
@@ -28,7 +28,7 @@ selection:
 
 crossover:
   # Options: ["OX1", "PMX"]
-  operator: "PMX"
+  operator: "OX1"
   probability: 0.9
 
 mutation:

@@ -1,6 +1,10 @@
 """
-Docstring
+Configuration building implementation.
 """
+
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
 
 from operators import (
     SelectionStrategy,
@@ -21,9 +25,19 @@ from .structures import (
     SurvivorsConfig,
 )
 
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
+
 def build_config(raw: dict) -> Config:
     """
     Given a dict of paramaters, builds a configuration.
+    
+    Args:
+        raw (dict): Raw list of parameters.
+    
+    Returns:
+        configuration (Config): Algorithm configuration.
     """
 
     exec_cfg = ExecutionConfig(
@@ -82,10 +96,22 @@ def build_config(raw: dict) -> Config:
         probability=raw["improvement"]["probability"],
     )
 
+    if imp_cfg.probability < 0 or imp_cfg.probability > 1:
+        raise ValueError(
+            "ERROR: The improvement (local search) probability cannot be "
+            "smaller than 0 nor greater than 1."
+        )
+
     surv_cfg = SurvivorsConfig(
         operator=SurvivorsStrategy[raw["survivors"]["operator"]],
         individuals_to_replace=raw["survivors"]["individuals_to_replace"],
     )
+
+    if surv_cfg.individuals_to_replace > exec_cfg.population_size:
+        raise ValueError(
+            "ERROR: The individuals to replace in the survivors selection "
+            "cannot be greater than the population size"
+        )
 
     return Config(
         execution=exec_cfg,
@@ -96,3 +122,5 @@ def build_config(raw: dict) -> Config:
         improvement=imp_cfg,
         survivors=surv_cfg,
     )
+
+# =============================================================================================== #

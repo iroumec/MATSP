@@ -1,29 +1,18 @@
 """
-Implementation of the "nearest-neighbour" initialization operator.
+"NEAREST_NEIGHBOUR" initialization operator implementation.
 """
+
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 import random
 
-# ----------------------------------------------------------------------------------------------- #
-
-def is_candidate(city, individual, current_nearest_neighbour, cost_matrix):
-
-    """
-    Docstring for is_candidate
-    
-    :param city: Description
-    :param individual: Description
-    :param current_nearest_neighbour: Description
-    :param cost_matrix: Description
-    """
-    
-    last_element_of_individual = individual[len(individual) - 1]
-
-    return city not in individual and (current_nearest_neighbour is None or cost_matrix[last_element_of_individual][city] < cost_matrix[last_element_of_individual][current_nearest_neighbour])
-
-# ----------------------------------------------------------------------------------------------- #
+# =============================================================================================== #
+# Public Functions
+# =============================================================================================== #
 
 def nearest_neighbour(number_of_inviduals_to_generate, cost_matrix):
-
     """
     Docstring for initialize
     
@@ -50,7 +39,7 @@ def nearest_neighbour(number_of_inviduals_to_generate, cost_matrix):
 
             for city in range(number_of_cities):
 
-                if is_candidate(city, new_individual, current_nearest_neighbour, cost_matrix):
+                if _is_candidate(city, new_individual, current_nearest_neighbour, cost_matrix):
                     current_nearest_neighbour = city
 
             if current_nearest_neighbour is not None:
@@ -63,3 +52,19 @@ def nearest_neighbour(number_of_inviduals_to_generate, cost_matrix):
     return individuals
 
 # ----------------------------------------------------------------------------------------------- #
+
+# =============================================================================================== #
+# Private Functions
+# =============================================================================================== #
+
+def _is_candidate(city, individual, current_nearest_neighbour, cost_matrix):
+
+    last_element_of_individual = individual[len(individual) - 1]
+
+    return city not in individual and (
+        current_nearest_neighbour is None or
+        cost_matrix[last_element_of_individual][city] <
+            cost_matrix[last_element_of_individual][current_nearest_neighbour]
+    )
+
+# =============================================================================================== #

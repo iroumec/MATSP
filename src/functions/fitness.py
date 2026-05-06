@@ -2,8 +2,9 @@
 Fitness function implementation.
 """
 
-from typing import List
+from typing import List, Tuple
 
+from functions import select_best_individual
 
 def calculate_fitness(individual: tuple, cost_matrix):
     """
@@ -37,9 +38,26 @@ def calculate_fitness(individual: tuple, cost_matrix):
 
     return 1/travel_cost
 
+def get_best_fitness(
+    population: List[int],
+    fitness_function: callable,
+    cost_matrix: List[List[int]]
+) -> float:
+    """
+    Docstring.
+    """
+
+    current_best_individual: List[int] = select_best_individual(
+        population,
+        fitness_function,
+        cost_matrix
+    )
+
+    return fitness_function(current_best_individual, cost_matrix)
+
 def calculate_average_best_fitness_through_time(
     best_fitness_through_time: List[List[float]]
-) -> List[float]:
+) -> Tuple[List[float], List[float]]:
     """
     
     The `best_fitness_through_time` saves, for each execution, the best fitness for
@@ -54,21 +72,28 @@ def calculate_average_best_fitness_through_time(
     """
 
     if not best_fitness_through_time:
-        return []
+        return [], []
 
     max_generations = max(len(exec_) for exec_ in best_fitness_through_time)
 
     sums = [0.0] * max_generations
+    sums_sq = [0.0] * max_generations
 
     for execution in best_fitness_through_time:
         last_value = execution[-1]
 
         for i in range(max_generations):
-            if i < len(execution):
-                sums[i] += execution[i]
-            else:
-                sums[i] += last_value  # Padding.
+            value = execution[i] if i < len(execution) else last_value
+            sums[i] += value
+            sums_sq[i] += value * value
 
     n_runs = len(best_fitness_through_time)
 
-    return [s / n_runs for s in sums]
+    means = [s / n_runs for s in sums]
+
+    stds = [
+        max(0.0, (sums_sq[i] / n_runs) - (means[i] ** 2)) ** 0.5
+        for i in range(max_generations)
+    ]
+
+    return means, stds

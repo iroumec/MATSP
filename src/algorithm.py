@@ -12,10 +12,12 @@ from typing import List
 
 from configuration import Config
 from functions import (
+    must_stop,
+    get_best_fitness,
     calculate_fitness,
     select_best_individual,
-    must_stop,
     calculate_average_best_fitness_through_time,
+    generate_initial_population,
 )
 
 from data_managers import (
@@ -23,17 +25,19 @@ from data_managers import (
     AlgorithmResult,
 )
 
-from operators import (
-    InitializationStrategy,
-)
-
 # =============================================================================================== #
-# Functions
+# Public Functions
 # =============================================================================================== #
 
 def run_algorithm(config: Config) -> AlgorithmResult:
     """
-    Given a configuration, uses its parameters to run a genetic algorithm
+    Given a configuration, uses its parameters to run a genetic algorithm.
+    
+    Args:
+        config (Config): Algorithm configuration.
+
+    Returns:
+        result (AlgorithmResult): Algorithm results.
     """
 
     # ------------------------------------------------------------------------------------------- #
@@ -66,15 +70,20 @@ def run_algorithm(config: Config) -> AlgorithmResult:
     # Output saving
     # ------------------------------------------------------------------------------------------- #
 
+    mean, std = calculate_average_best_fitness_through_time(best_fitness_through_time)
+
     return AlgorithmResult(
         config,
         fitness_function,
         select_best_individual(best_individuals, fitness_function, cost_matrix),
         cost_matrix,
         statistics.mean(execution_times),
-        calculate_average_best_fitness_through_time(best_fitness_through_time),
+        mean,
+        std,
     )
 
+# =============================================================================================== #
+# Private Functions
 # =============================================================================================== #
 
 def _execute_algorithm(
@@ -84,12 +93,19 @@ def _execute_algorithm(
 ):
 
     # ------------------------------------------------------------------------------------------- #
-    # Variable definitions
+    # Variable declaration and initializations
     # ------------------------------------------------------------------------------------------- #
 
+    current_generation: int = 0
+    last_best_fitness: float = 0.0
     best_fitness_through_time: list = []
+    generations_without_improvements: int = 0
 
-    population: list = []
+    # ------------------------------------------------------------------------------------------- #
+    # Initial population generation
+    # ------------------------------------------------------------------------------------------- #
+
+    population: List[int] = generate_initial_population(config, cost_matrix)
 
     # ------------------------------------------------------------------------------------------- #
     # Timer initialization
@@ -98,34 +114,8 @@ def _execute_algorithm(
     start_time: float = time.time()
 
     # ------------------------------------------------------------------------------------------- #
-    # Initial population generation
-    # ------------------------------------------------------------------------------------------- #
-
-    number_of_random_generated_individuals = int(
-        config.execution.random_percentage * config.execution.population_size
-    )
-
-    population += InitializationStrategy.RANDOMIZATION(
-        number_of_random_generated_individuals,
-        cost_matrix
-    )
-
-    number_of_heuristically_generated_individuals = (
-        config.execution.population_size - number_of_random_generated_individuals
-    )
-
-    population += InitializationStrategy.NEAREST_NEIGHBOUR(
-        number_of_heuristically_generated_individuals,
-        cost_matrix
-    )
-
-    # ------------------------------------------------------------------------------------------- #
     # Algorithm
     # ------------------------------------------------------------------------------------------- #
-
-    current_generation: int = 0
-    last_best_fitness: float = 0.0
-    generations_without_improvements: int = 0
 
     while not must_stop(current_generation, generations_without_improvements, config):
 
@@ -196,13 +186,7 @@ def _execute_algorithm(
         # Selecting the best solution of the current generation
         # --------------------------------------------------------------------------------------- #
 
-        current_best_individual: List[int] = select_best_individual(
-            population,
-            fitness_function,
-            cost_matrix
-        )
-
-        current_best_fitness: float = fitness_function(current_best_individual, cost_matrix)
+        current_best_fitness: float = get_best_fitness(population, fitness_function, cost_matrix)
 
         best_fitness_through_time.append(current_best_fitness)
 
@@ -236,3 +220,5 @@ def _execute_algorithm(
     # ------------------------------------------------------------------------------------------- #
 
     return best_individual, execution_time, best_fitness_through_time
+
+# =============================================================================================== #

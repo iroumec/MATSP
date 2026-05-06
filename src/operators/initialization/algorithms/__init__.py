@@ -6,14 +6,16 @@ Package declaration for improvement (local search) operators implementations.
 # Imports
 # =============================================================================================== #
 
-from .insertion import insertion
+from .randomization import randomization
+from .nearest_neighbour import nearest_neighbour
 
 # =============================================================================================== #
 # Declarations
 # =============================================================================================== #
 
 __all__ = [
-    "insertion"
+    "randomization",
+    "nearest_neighbour",
 ]
 
 # =============================================================================================== #

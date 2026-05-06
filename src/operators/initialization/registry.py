@@ -1,15 +1,23 @@
 """
 Defines the protocol and enum for initialization operators.
 """
+
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 from enum import Enum, member
 
 from typing import List
 from typing_extensions import Protocol
 
-from .algorithms.randomization import randomization
-from .algorithms.nearest_neighbour import nearest_neighbour
+from .algorithms import randomization, nearest_neighbour
 
-class InitializationOperator(Protocol):
+# =============================================================================================== #
+# Protocol
+# =============================================================================================== #
+
+class InitializationOperator(Protocol): # pylint: disable=too-few-public-methods
     """
     Class (protocol) for initialization operators.
     """
@@ -19,6 +27,10 @@ class InitializationOperator(Protocol):
         cost_matrix: List[List[int]]
     ) -> List[int]:
         ...
+
+# =============================================================================================== #
+# Strategies
+# =============================================================================================== #
 
 class InitializationStrategy(Enum):
     """
@@ -34,3 +46,5 @@ class InitializationStrategy(Enum):
         cost_matrix: List[List[int]]
     ) -> List[int]:
         return self.value(number_of_inidivuals_to_generate, cost_matrix)
+
+# =============================================================================================== #

@@ -1,19 +1,28 @@
 """
-In this file, the algorithm for the crossover operator "OX1" is defined.
+"OX1" crossover operator implementation.
 """
-import random
-from typing import List
 
-def ox1(parent1: List[int], parent2: List[int], probability: float):
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
+import random
+from typing import List, Tuple
+
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
+
+def ox1(parent1: List[int], parent2: List[int], probability: float) -> Tuple[List[int]]:
     """
     Perform Order Crossover 1 (OX1) between two parent permutations.
 
     Args:
-        parent1 (list): The first parent permutation.
-        parent2 (list): The second parent permutation.
+        parent1 (List[int]): The first parent permutation.
+        parent2 (List[int]): The second parent permutation.
 
     Returns:
-        tuple: Two offspring permutations resulting from the crossover.
+        offsprings (Tuple[List[int]]): Two offspring permutations resulting from the crossover.
     """
 
     # No crossover.
@@ -58,4 +67,4 @@ def ox1(parent1: List[int], parent2: List[int], probability: float):
 
     return [offspring1, offspring2]
 
-# ----------------------------------------------------------------------------------------------- #
+# =============================================================================================== #

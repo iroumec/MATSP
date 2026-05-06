@@ -1,22 +1,28 @@
 """
-Docstring for crossover.PMX
+"OX1" crossover operator implementation.
 """
 
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 import random
-from typing import List
+from typing import List, Tuple
 
-# ----------------------------------------------------------------------------------------------- #
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
 
-def pmx(parent1: List[int], parent2: List[int], probability: float):
+def pmx(parent1: List[int], parent2: List[int], probability: float) -> Tuple[List[int]]:
     """
     Perform Partially Mapped Crossover (PMX) between two parent permutations.
 
     Args:
-        parent1 (list): The first parent permutation.
-        parent2 (list): The second parent permutation.
+        parent1 (List[int]): The first parent permutation.
+        parent2 (List[int]): The second parent permutation.
 
     Returns:
-        tuple: Two offspring permutations resulting from the crossover.
+        offsprings (Tuple[List[int]]): Two offspring permutations resulting from the crossover.
     """
 
     # No crossover.
@@ -79,7 +85,7 @@ def pmx(parent1: List[int], parent2: List[int], probability: float):
                     break
                 else:
                     current_position = index_in_parent1   
-    
+
     # Then the rest of the elements
     for gene_p1 in parent1:
         if gene_p1 not in offspring2:
@@ -90,4 +96,4 @@ def pmx(parent1: List[int], parent2: List[int], probability: float):
 
     return [offspring1, offspring2]
 
-# ----------------------------------------------------------------------------------------------- #
+# =============================================================================================== #

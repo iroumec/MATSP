@@ -1,16 +1,25 @@
 """
-Docstring for mutation.types
+Defines the protocol and enum for crossover operators.
 """
-from enum import Enum, member
+
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 from typing import List
+from enum import Enum, member
 from typing_extensions import Protocol
 
 from .algorithms.ox1 import ox1
 from .algorithms.pmx import pmx
 
-class CrossoverOperator(Protocol):
+# =============================================================================================== #
+# Protocol
+# =============================================================================================== #
+
+class CrossoverOperator(Protocol): # pylint: disable=too-few-public-methods
     """
-    Docstring for MutationOperator
+    Class (protocol) for initialization operators.
     """
     def __call__(
         self,
@@ -20,10 +29,18 @@ class CrossoverOperator(Protocol):
     ) -> List[int]:
         ...
 
+# =============================================================================================== #
+# Strategies
+# =============================================================================================== #
+
 class CrossoverStrategy(Enum):
+    """
+    Enum for initialization strategies.
+    """
+
     OX1 = member(ox1)
     PMX = member(pmx)
-    
+
     def __call__(
         self,
         first_parent: List[int],
@@ -31,3 +48,5 @@ class CrossoverStrategy(Enum):
         probability: float
     ) -> List[int]:
         return self.value(first_parent, second_parent, probability)
+
+# =============================================================================================== #

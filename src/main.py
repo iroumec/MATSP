@@ -98,15 +98,25 @@ def main():
     # Algorithm Execution
     # ------------------------------------------------------------------------------------------- #
 
-    print("Executing configurations...")
+    various_configurations: bool = len(configurations) > 1
+
+    if various_configurations:
+        print("Executing configurations...")
 
     results = []
     for index, configuration in enumerate(configurations):
-        print(f"\nExecuting configuration C{index+1}...")
+        if various_configurations:
+            print(f"\nExecuting configuration C{index+1}...")
+        else:
+            print("Executing configuration...")
         results.append(run_algorithm(configuration))
-        print(f"Configuration C{index+1} executed!")
+        if various_configurations:
+            print(f"Configuration C{index+1} executed!")
+        else:
+            print("Configuration executed!")
 
-    print("\nAll configuration have been executed!")
+    if various_configurations:
+        print("\nAll configuration have been executed!")
 
     # ------------------------------------------------------------------------------------------- #
     # Output Saving
@@ -124,3 +134,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# =============================================================================================== #
