@@ -37,6 +37,16 @@ Parses and executes all configuration YAML files in the indicated folder.
 
 The output consisten on a configuration markdown summary and an individual convergence graph for each configuration, and a combined convergence graphs, costs and average execution times comparison plot.
 
+## AI Usage
+
+Artificial Intelligence (AI) was used in this project with the following objectives:
+
+- During the project development:
+  - to evaluate different solutions;
+  - to learn about some standard solutions for faced problems, like Protocol (PEP 544); and
+  - to solve bugs whose solution was unknown.
+- Once finished the project, it was used to apply minor optimizations to the algorithms.
+
 ## Credits
 
 - González, Joaquín Tesoro.

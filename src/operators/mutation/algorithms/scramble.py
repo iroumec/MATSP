@@ -1,27 +1,55 @@
 """
-Implementation of the "scramble" mutation operator.
+"SCRAMBLE" mutation operator implemention.
 """
+
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 import random
+from typing import List
 
-def scramble(individual, probability: float):
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
+
+def scramble(individual: List[int], probability: float) -> List[int]:
 
     """
-    Given an individual and a probability, it scrambles the genes
-    of the individual's cromosome.
+    Randomly, scrambles the genes of an individual's cromosome.
     
-    :param individual: Description
-    :param probability: Description
+    Args:
+        individual (List[int]): Individual whose genes will be inverted.
+        probability (float): Probability required to apply the invertion.
+
+    Returns:
+        mutated_individual (List[int]): Mutated individual.
     """
 
+    # Applies the mutation with the given probability.
+    if random.random() >= probability:
+        return individual.copy()
+
+    # Creates a copy to avoid modifying the original individual.
     mutated_individual = individual.copy()
 
-    if random.random() < probability:
+    n = len(mutated_individual)
 
-        start = random.randint(0, len(mutated_individual) - 1)
-        end = random.randint(start, len(mutated_individual) - 1)
+    # Selects a random start index.
+    start = random.randint(0, n - 1)
 
-        sub = mutated_individual[start:end]
-        random.shuffle(sub)
-        mutated_individual[start:end] = sub
+    # Selects a random end index greater than or equal to the start index.
+    end = random.randint(start, n)
+
+    # Extracts the subsegment to be shuffled.
+    sub = mutated_individual[start:end]
+
+    # Shuffles the selected subsegment in place.
+    random.shuffle(sub)
+
+    # Assigns the shuffled subsegment back to the individual.
+    mutated_individual[start:end] = sub
 
     return mutated_individual
+
+# =============================================================================================== #

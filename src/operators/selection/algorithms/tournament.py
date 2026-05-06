@@ -34,14 +34,17 @@ def tournament(
         The individual with the highest fitness score from the tournament.
     """
 
+    # Precomputes fitness for all individuals.
+    fitness_map = {id(ind): fitness_function(ind, cost_matrix) for ind in population}
+
     selected_individuals = []
 
     for _ in range(num_selections):
-        #Randomly selects individuals for the tournament.
+        # Randomly selects individuals for the tournament.
         tournament_result = random.sample(population, tournament_size)
 
-        #Selects the best individual from the tournament.
-        winner = max(tournament_result, key=lambda ind: fitness_function(ind, cost_matrix))
+        # Selects the best individual from the tournament.
+        winner = max(tournament_result, key=lambda ind: fitness_map[id(ind)])
         selected_individuals.append(winner)
 
     return selected_individuals

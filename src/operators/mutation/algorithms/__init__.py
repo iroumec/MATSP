@@ -1,21 +1,23 @@
 """
-Docstring
+Package declaration for mutation operators implementations.
 """
 
 # =============================================================================================== #
 # Imports
 # =============================================================================================== #
 
-from .roulette import roulette
-from .tournament import tournament
+from .swap import swap
+from .scramble import scramble
+from .invertion import invertion
 
 # =============================================================================================== #
 # Declarations
 # =============================================================================================== #
 
 __all__ = [
-    "roulette",
-    "tournament",
+    "swap",
+    "scramble",
+    "invertion",
 ]
 
 # =============================================================================================== #

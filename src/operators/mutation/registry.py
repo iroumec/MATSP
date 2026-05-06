@@ -1,13 +1,20 @@
 """
 Defines the protocol and enum for mutation operators.
 """
+
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 from enum import Enum, member
 from typing import List
 from typing_extensions import Protocol
 
-from .algorithms.swap import swap
-from .algorithms.scramble import scramble
-from .algorithms.invertion import invertion
+from .algorithms import swap, scramble, invertion
+
+# =============================================================================================== #
+# Protocol
+# =============================================================================================== #
 
 class MutationOperator(Protocol):
     """
@@ -20,7 +27,11 @@ class MutationOperator(Protocol):
     ) -> List[int]:
         ...
 
-class MutationStrategy(Enum):
+# =============================================================================================== #
+# Strategies
+# =============================================================================================== #
+
+class MutationStrategy(Enum): # pylint: disable=too-few-public-methods
     """
     Enum for mutation strategies.
     """
@@ -34,3 +45,5 @@ class MutationStrategy(Enum):
         probability: float
     ) -> List[int]:
         return self.value(individual, probability)
+
+# =============================================================================================== #
