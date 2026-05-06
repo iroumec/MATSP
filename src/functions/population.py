@@ -52,3 +52,5 @@ def generate_initial_population(config: Config, cost_matrix: List[List[int]]) ->
         number_of_heuristically_generated_individuals,
         cost_matrix
     )
+    
+    return population

@@ -30,69 +30,61 @@ def pmx(parent1: List[int], parent2: List[int], probability: float) -> Tuple[Lis
         return []
 
     size = len(parent1)
-    # Initialize offspring with None
+
+    # Initializes offsprings with None.
     offspring1 = [None] * size
     offspring2 = [None] * size
 
-    # Select two random crossover points
-    point1 = random.randint(0, size - 1)
-    point2 = random.randint(0, size - 1)
+    # Precomputes index maps for O(1) lookup.
+    index_p1 = {gene: i for i, gene in enumerate(parent1)}
+    index_p2 = {gene: i for i, gene in enumerate(parent2)}
 
-    if point1 > point2:
-        point1, point2 = point2, point1
+    # Selects two random crossover points.
+    point1, point2 = sorted(random.sample(range(size), 2))
 
-    # Copy the segment from parent1 to offspring1
-    offspring1[point1:point2 + 1] = parent1[point1:point2 + 1]
+    def build_offspring(p_base, p_fill, index_fill):
+        # Initializes offsprings with None.
+        offspring = [None] * size
 
-    # Fill the remaining positions in offspring1 with genes from parent2
-    # First the elements in the crossover segment
-    current_position = point1
-    for i in range(point1, point2 + 1):
-        element = parent2[i]
-        current_position = i
-        if element not in offspring1:
-            while True:
-                mapped_element = parent1[current_position]
-                index_in_parent2 = parent2.index(mapped_element)
-                if offspring1[index_in_parent2] is None:
-                    offspring1[index_in_parent2] = element
-                    break
-                else:
-                    current_position = index_in_parent2        
-    # Then the rest of the elements
-    for gene_p2 in parent2:
-        if gene_p2 not in offspring1:
-            for i in range(size):
-                if offspring1[i] is None:
-                    offspring1[i] = gene_p2 
-                    break
+        # Copies the segment from base parent.
+        offspring[point1:point2 + 1] = p_base[point1:point2 + 1]
+
+        # Tracks used genes.
+        used = set(offspring[point1:point2 + 1])
+
+        # Fills the remaining positions.
+        # First the elements in the crossover segment.
+        for i in range(point1, point2 + 1):
+            element = p_fill[i]
+
+            if element not in used:
+                current_position = i
+
+                while True:
+                    mapped_element = p_base[current_position]
+                    index_in_fill = index_fill[mapped_element]
+
+                    if offspring[index_in_fill] is None:
+                        offspring[index_in_fill] = element
+                        used.add(element)
+                        break
+
+                    current_position = index_in_fill
+
+        # Then the rest of the elements.
+        for gene in p_fill:
+            if gene not in used:
+                for i in range(size):
+                    if offspring[i] is None:
+                        offspring[i] = gene
+                        used.add(gene)
+                        break
+
+        return offspring
 
 
-    # Copy the segment from parent2 to offspring2
-    offspring2[point1:point2 + 1] = parent2[point1:point2 + 1]
-
-    # Fill the remaining positions in offspring2 with genes from parent1
-    current_position = point1
-    for i in range(point1, point2 + 1):
-        element = parent1[i]
-        current_position = i
-        if element not in offspring2:
-            while True:
-                mapped_element = parent2[current_position]
-                index_in_parent1 = parent1.index(mapped_element)
-                if offspring2[index_in_parent1] is None:
-                    offspring2[index_in_parent1] = element
-                    break
-                else:
-                    current_position = index_in_parent1   
-
-    # Then the rest of the elements
-    for gene_p1 in parent1:
-        if gene_p1 not in offspring2:
-            for i in range(size):
-                if offspring2[i] is None:
-                    offspring2[i] = gene_p1 
-                    break
+    offspring1 = build_offspring(parent1, parent2, index_p2)
+    offspring2 = build_offspring(parent2, parent1, index_p1)
 
     return [offspring1, offspring2]
 

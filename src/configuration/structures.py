@@ -1,6 +1,11 @@
 """
 Configuration dataclasses.
 """
+
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 from dataclasses import dataclass
 
 from operators import (
@@ -10,6 +15,10 @@ from operators import (
     ImprovementStrategy,
     SurvivorsStrategy,
 )
+
+# =============================================================================================== #
+# Dataclasses
+# =============================================================================================== #
 
 @dataclass
 class ExecutionConfig:
@@ -21,6 +30,8 @@ class ExecutionConfig:
     random_percentage: float
     executions: int
 
+# =============================================================================================== #
+
 @dataclass
 class StopReasonsConfig:
     """
@@ -31,6 +42,8 @@ class StopReasonsConfig:
     generations_without_improvements: bool
     max_generations_without_improvements: int
 
+# =============================================================================================== #
+
 @dataclass
 class SelectionConfig:
     """
@@ -40,6 +53,8 @@ class SelectionConfig:
     selected_individuals: int
     tournament_size: int
 
+# =============================================================================================== #
+
 @dataclass
 class CrossoverConfig:
     """
@@ -47,6 +62,8 @@ class CrossoverConfig:
     """
     operator: CrossoverStrategy
     probability: float
+
+# =============================================================================================== #
 
 @dataclass
 class MutationConfig:
@@ -56,6 +73,8 @@ class MutationConfig:
     operator: MutationStrategy
     probability: float
 
+# =============================================================================================== #
+
 @dataclass
 class ImprovementConfig:
     """
@@ -64,6 +83,8 @@ class ImprovementConfig:
     operator: ImprovementStrategy
     probability: float
 
+# =============================================================================================== #
+
 @dataclass
 class SurvivorsConfig:
     """
@@ -71,6 +92,8 @@ class SurvivorsConfig:
     """
     operator: SurvivorsStrategy
     individuals_to_replace: int
+
+# =============================================================================================== #
 
 @dataclass
 class Config:
@@ -84,3 +107,5 @@ class Config:
     mutation: MutationConfig
     improvement: ImprovementConfig
     survivors: SurvivorsConfig
+
+# =============================================================================================== #

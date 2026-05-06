@@ -2,7 +2,15 @@
 "TOURNAMENT" selection operator implementation.
 """
 
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 import random
+
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
 
 def tournament(
     population,
@@ -29,11 +37,13 @@ def tournament(
     selected_individuals = []
 
     for _ in range(num_selections):
-        #Randomly select individuals for the tournament
+        #Randomly selects individuals for the tournament.
         tournament_result = random.sample(population, tournament_size)
 
-        #Select the best individual from the tournament
+        #Selects the best individual from the tournament.
         winner = max(tournament_result, key=lambda ind: fitness_function(ind, cost_matrix))
         selected_individuals.append(winner)
 
     return selected_individuals
+
+# =============================================================================================== #
