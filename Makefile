@@ -2,8 +2,10 @@
 # https://stackoverflow.com/questions/7507810/how-to-source-a-script-in-a-makefile
 SHELL := /bin/bash
 
-run:
-	@source venv/bin/activate && python3 -u src/main.py
+CONFIG ?= resources/configuration.example.yml
+
+run: ## Use examples: make run CONFIG="resources/configurations/".
+	@source venv/bin/activate && python3 -u src/main.py --config $(CONFIG)
 
 extract-matrices:
 	@chmod +x ./resources/scripts/extract-matrices.sh

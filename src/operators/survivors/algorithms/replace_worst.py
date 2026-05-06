@@ -23,7 +23,7 @@ def replace_worst(
     Returns:
         list: Updated population after replacement.
     """
-    
+
     number_to_replace = min(len(new_individuals), number_to_replace)
 
     # Validations.

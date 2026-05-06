@@ -32,14 +32,16 @@ def build_config(raw: dict) -> Config:
         population_size=raw["execution"]["population_size"],
         random_percentage=raw["execution"]["percentage_of_random_generated_individuals"],
     )
-    
+
     stop_cfg = StopReasonsConfig(
         generations=raw["stop-reasons"]["generations"],
         max_generations=raw["stop-reasons"]["max_generations"],
         generations_without_improvements=raw["stop-reasons"]["generations_without_improvements"],
-        max_generations_without_improvements=raw["stop-reasons"]["max_generations_without_improvements"],
+        max_generations_without_improvements=(
+            raw["stop-reasons"]["max_generations_without_improvements"]
+        ),
     )
-    
+
     if not stop_cfg.generations and not stop_cfg.generations_without_improvements:
         raise ValueError("Error: The algorithm needs at least a stop condition.")
 

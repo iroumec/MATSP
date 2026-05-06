@@ -1,200 +1,88 @@
 """
-Entry point for the genetic algorithm implementation.
+Application's entry point.
 """
 
-# ------------------------------------------------------------------------------------------------ #
-# Imports
-# ------------------------------------------------------------------------------------------------ #
+from pathlib import Path
+from algorithm import run_algorithm
 
-import time
+import argparse
 
 from configuration import build_config
 
-from functions import (
-    calculate_cost,
-    calculate_fitness,
-    select_best_individual,
-    must_stop
-)
-
 from data_managers import (
-    load_matrix,
-    load_config,
     save_output,
+    load_config,
 )
 
-from operators import (
-    InitializationStrategy,
-)
+def process_config(config_path: Path):
+    """
+    Docstring.
+    """
+    config = build_config(load_config(str(config_path)))
+    return run_algorithm(config)
 
-# ------------------------------------------------------------------------------------------------ #
-# Config Loading
-# ------------------------------------------------------------------------------------------------ #
-
-config = build_config(load_config("resources/configuration.example.yml"))
-
-# ------------------------------------------------------------------------------------------------ #
-# Variable definitions
-# ------------------------------------------------------------------------------------------------ #
-
-best_fitness_through_time = []
-
-population = []
-
-cost_matrix = load_matrix(config.execution.instance)
-
-# ------------------------------------------------------------------------------------------------ #
-# Timer initialization
-# ------------------------------------------------------------------------------------------------ #
-
-start_time: float = time.time()
-
-# ------------------------------------------------------------------------------------------------ #
-# Initial population generation
-# ------------------------------------------------------------------------------------------------ #
-
-number_of_random_generated_individuals = int(
-    config.execution.random_percentage * config.execution.population_size
-)
-
-population += InitializationStrategy.RANDOMIZATION(
-    number_of_random_generated_individuals,
-    cost_matrix
-)
-
-number_of_heuristically_generated_individuals = (
-    config.execution.population_size - number_of_random_generated_individuals
-)
-
-population += InitializationStrategy.NEAREST_NEIGHBOUR(
-    number_of_heuristically_generated_individuals,
-    cost_matrix
-)
-
-# ------------------------------------------------------------------------------------------------ #
-# Algorithm
-# ------------------------------------------------------------------------------------------------ #
-
-current_generation: int = 0
-last_best_fitness: float = 0.0
-generations_without_improvements: int = 0
-
-while not must_stop(current_generation, generations_without_improvements, config):
+def main():
+    """
+    Docstring
+    """
 
     # ------------------------------------------------------------------------------------------- #
-    # Parents Selection
+    # Arguments Parsing
     # ------------------------------------------------------------------------------------------- #
 
-    parents = config.selection.operator(
-        population=population,
-        fitness_function=calculate_fitness,
-        num_selections=config.selection.selected_individuals,
-        cost_matrix=cost_matrix,
-        tournament_size=config.selection.tournament_size,
-        # Only used if the selection algorithm is tournament.
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--config",
+        type=str,
+        required=True,
+        help="Path to a .yml file or a directory containing .yml files"
     )
 
-    # ------------------------------------------------------------------------------------------- #
-    # Crossover
-    # ------------------------------------------------------------------------------------------- #
-
-    children = []
-
-    for i in range(0, len(parents) - 1, 2):
-
-        # The parents cannot be equals, so endogamy (which is translated to prematured convergence)
-        # is avoided and the population isn't filled with all equals individuals.
-        if parents[i] != parents[i+1]:
-
-            children += config.crossover.operator(
-                parents[i],
-                parents[i+1],
-                config.crossover.probability
-            )
+    args = parser.parse_args()
+    path = Path(args.config)
 
     # ------------------------------------------------------------------------------------------- #
-    # Mutation
+    # Config Building
     # ------------------------------------------------------------------------------------------- #
 
-    children = [config.mutation.operator(child, config.mutation.probability) for child in children]
+    configurations = []
 
-    # ------------------------------------------------------------------------------------------- #
-    # Local search
-    # ------------------------------------------------------------------------------------------- #
+    # Just one file.
+    if path.is_file():
+        configurations.append(build_config(load_config(str(path))))
 
-    children = [config.improvement.operator(
-        child,
-        config.improvement.probability,
-        calculate_fitness,
-        cost_matrix
-    ) for child in children]
+    # A directory with one or more paths.
+    elif path.is_dir():
+        # Only .yml and .yaml files.
+        files = sorted([
+            p for p in path.iterdir()
+            if p.suffix in (".yml", ".yaml")
+        ])
 
-    # ------------------------------------------------------------------------------------------- #
-    # Survivors selection
-    # ------------------------------------------------------------------------------------------- #
+        if not files:
+            raise ValueError("No .yml or .yaml files found in directory")
 
-    population = config.survivors.operator(
-        population,
-        children,
-        config.survivors.individuals_to_replace,
-        calculate_fitness,
-        cost_matrix
-    )
+        for file in files:
+            configurations.append(build_config(load_config(str(file))))
 
-    # ------------------------------------------------------------------------------------------- #
-    # Selecting the best solution of the current generation
-    # ------------------------------------------------------------------------------------------- #
-
-    current_best_fitness: float = select_best_individual(
-        population,
-        calculate_fitness,
-        cost_matrix
-    )
-
-    best_fitness_through_time.append(current_best_fitness)
-
-    if last_best_fitness == current_best_fitness:
-        generations_without_improvements += 1
     else:
-        generations_without_improvements = 0
-        last_best_fitness = current_best_fitness
+        raise ValueError("Invalid path: not a file or directory")
 
     # ------------------------------------------------------------------------------------------- #
-    # Increase of generation
+    # Algorithm Execution
     # ------------------------------------------------------------------------------------------- #
 
-    current_generation += 1
+    results = []
+    for configuration in configurations:
+        results.append(run_algorithm(configuration))
 
-# ----------------------------------------------------------------------------------------------- #
-# Results creation
-# ----------------------------------------------------------------------------------------------- #
+    # ------------------------------------------------------------------------------------------- #
+    # Output Saving
+    # ------------------------------------------------------------------------------------------- #
 
-result = []
+    output_path = save_output(results)
 
-for individual in population:
+    print(f"Results saved in folder {output_path}!")
 
-    result.append({
-        "individual": individual,
-        "cost": calculate_cost(individual, cost_matrix)
-    })
-
-# ----------------------------------------------------------------------------------------------- #
-# Timer finalization
-# ----------------------------------------------------------------------------------------------- #
-
-end_time: float = time.time()
-execution_time: float = end_time - start_time
-
-# ----------------------------------------------------------------------------------------------- #
-# Output saving
-# ----------------------------------------------------------------------------------------------- #
-
-output_path = save_output(
-    config,
-    calculate_fitness,
-    result, cost_matrix,
-    execution_time,
-    best_fitness_through_time
-)
-
-print(f"Results saved in {output_path}!")
+if __name__ == "__main__":
+    main()

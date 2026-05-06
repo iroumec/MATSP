@@ -1,5 +1,5 @@
 """
-In this file, the improvement (local search) algorithm "INSERTION" is defined.
+"INSERTION" improvement (local search) operator implementation.
 """
 
 import random

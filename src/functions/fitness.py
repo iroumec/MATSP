@@ -2,7 +2,7 @@
 Fitness function implementation.
 """
 
-def calculate_fitness(individual, cost_matrix):
+def calculate_fitness(individual: tuple, cost_matrix):
     """
     Given an individual (sequence of n locations), calculates
     it fitness, which is defined as 1/travel_cost, where the travel cost
