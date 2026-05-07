@@ -1,6 +1,6 @@
 # What is this?
 
-Quinki is an ATSP instances solver that uses an evolutive computing approach.
+MATSP is an ATSP instances solver that uses a memetic algorithm (MA) approach.
 
 ## TO DO
 
