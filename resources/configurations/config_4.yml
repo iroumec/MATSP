@@ -33,7 +33,7 @@ crossover:
 
 mutation:
   # Options: ["INVERTION", "SCRAMBLE", "SWAP"]
-  operator: "SWAP"
+  operator: "SCRAMBLE"
   # Options: ["Default" (1/population_size), float number]
   #probability: "Default"
   probability: 0.9

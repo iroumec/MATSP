@@ -3,7 +3,6 @@ execution:
   # Select one from resources/atsp-instances/cleaned-instances.
   # Some instances: br17, ft53, p43.
   instance: "p43"
-  # Recommeneded: between 20 and 30.
   executions: 10
   population_size: 100
   # Porcentage of random generated individuals.
@@ -22,14 +21,14 @@ stop-reasons:
 
 selection:
   # Options: ["TOURNAMENT", "ROULETTE"]
-  operator: "TOURNAMENT"
+  operator: "ROULETTE"
   # Cannot be higher than the population size!
   selected_individuals: 10
   tournament_size: 3 # Ommited if the operator is not tournament.
 
 crossover:
   # Options: ["OX1", "PMX"]
-  operator: "PMX"
+  operator: "OX1"
   probability: 0.9
 
 mutation:

@@ -32,6 +32,8 @@ SEPARATOR_LENGTH: int = 100
 
 DRAW_STD_LINES: bool = True
 FILL_STD_LINES: bool = True
+CONVERGENCE_PLOT_X_AXIS_LABEL: str = "Generation"
+CONVERGENCE_PLOT_Y_AXIS_LABEL: str = "Average Best Fitness"
 
 # =============================================================================================== #
 # Dataclass
@@ -72,137 +74,165 @@ def save_output(algorithm_results: List[AlgorithmResult]):
     run_dir = os.path.join(output_dir, f"{time_string}")
     os.makedirs(run_dir, exist_ok=True)
 
+    unique_file = len(algorithm_results) == 1
+
+    if unique_file:
+        _generate_individual_plot(algorithm_results[0], run_dir)
+    elif algorithm_results:
+        plot_path = os.path.join(run_dir, "comparison.png")
+        _generate_combined_and_individuals_plots(algorithm_results, plot_path)
+
     # Generates TXT per configuration.
     for idx, algorithm_result in enumerate(algorithm_results):
 
-        if len(algorithm_results) > 1:
-            file_path = os.path.join(run_dir, f"configuration_C{idx+1}.md")
-        else:
-            file_path = os.path.join(run_dir, "configuration.md")
-
-        # Result variables extraction.
-        config = algorithm_result.configuration
-        cost_matrix = algorithm_result.cost_matrix
-        execution_time = algorithm_result.average_execution_time
-        fitness_function = algorithm_result.fitness_function
-        best_fitness_through_time = algorithm_result.average_best_fitness_through_time
-
-        # Precalculation of values to keep f-strings clean.
-        best_individual = algorithm_result.best_individual
-        best_fitness = fitness_function(best_individual, cost_matrix)
-        best_cost = calculate_cost(best_individual, cost_matrix)
-
-        # Writes the TXT file.
-        with open(file_path, "w", encoding="UTF-8") as output_file:
-            if len(algorithm_results) > 1:
-                output_file.write(f"# Configuration C{idx+1} Summary\n\n")
-            else:
-                output_file.write("# Configuration Summary\n\n")
-
-            # -------------------------
-            # PARAMETERS
-            # -------------------------
-            output_file.write("## GENETIC ALGORITHM PARAMETERS\n\n")
-            output_file.write("| Parameter | Value |\n")
-            output_file.write("| :---------: | :-----: |\n")
-
-            output_file.write(f"| Instance | {config.execution.instance} |\n")
-            output_file.write(f"| Population Size | {config.execution.population_size} |\n")
-            output_file.write(f"| Random Percentage | {config.execution.random_percentage} |\n")
-
-            if config.stop_reasons.generations:
-                output_file.write(f"| Max Generations | {config.stop_reasons.max_generations} |\n")
-
-            if config.stop_reasons.generations_without_improvements:
-                output_file.write(
-                    "| Max Generations without Improvements | "
-                    f"{config.stop_reasons.max_generations_without_improvements} |\n"
-                )
-
-            output_file.write(
-                "| Selection Operator | "
-                f"{config.selection.operator.name.upper()} |\n"
-            )
-            output_file.write(
-                "| Selected Individuals | "
-                f"{config.selection.selected_individuals} |\n"
-            )
-
-            if config.selection.operator.name.upper() == "TOURNAMENT":
-                output_file.write(f"| Tournament Size | {config.selection.tournament_size} |\n")
-
-            output_file.write(
-                "| Crossover Operator | "
-                f"{config.crossover.operator.name.upper()} |\n"
-            )
-            output_file.write(
-                "| Crossover Probability | "
-                f"{config.crossover.probability} |\n"
-            )
-            output_file.write(
-                "| Mutation Operator | "
-                f"{config.mutation.operator.name.upper()} |\n"
-            )
-            output_file.write(
-                "| Mutation Probability | "
-                f"{config.mutation.probability} |\n"
-            )
-            output_file.write(
-                "| Local Search Operator | "
-                f"{config.improvement.operator.name.upper()} |\n"
-            )
-            output_file.write(
-                "| Local Search Probability | "
-                f"{config.improvement.probability} |\n"
-            )
-            output_file.write(
-                "| Survivors Operator | "
-                f"{config.survivors.operator.name.upper()} |\n"
-            )
-            output_file.write(
-                "| Individuals to Replace | "
-                f"{config.survivors.individuals_to_replace} |\n"
-            )
-
-            # -------------------------
-            # BEST SOLUTION
-            # -------------------------
-            output_file.write("\n## BEST SOLUTION\n\n")
-            output_file.write("| Metric | Value |\n")
-            output_file.write("| :------: | :-----: |\n")
-            output_file.write(f"| Best Solution | {best_individual} |\n")
-            output_file.write(f"| Fitness Value | {best_fitness} |\n")
-            output_file.write(f"| Cost | {best_cost} |\n")
-
-            # -------------------------
-            # EXECUTION TIME
-            # -------------------------
-            output_file.write("\n## EXECUTION TIME\n\n")
-            output_file.write("| Metric | Value |\n")
-            output_file.write("| :------: | :-----: |\n")
-            output_file.write(f"| Average Execution Time (s) | {execution_time} |\n")
-
-            # -------------------------
-            # FITNESS THROUGH TIME
-            # -------------------------
-            output_file.write("\n## AVERAGE BEST FITNESS THROUGH TIME\n\n")
-            output_file.write("| Generation | Fitness |\n")
-            output_file.write("| :----------: | :-------: |\n")
-
-            for i, fitness_value in enumerate(best_fitness_through_time):
-                output_file.write(f"| {i+1} | {fitness_value:.7f} |\n")
-
-    if len(algorithm_results) > 1:
-        plot_path = os.path.join(run_dir, "comparison.png")
-        _generate_combined_and_individuals_plots(algorithm_results, plot_path)
-    elif algorithm_results:
-        _generate_individual_plot(algorithm_results[0], run_dir)
+        _generate_summary(
+            idx,
+            algorithm_result,
+            unique_file,
+            run_dir
+        )
 
     return run_dir
 
 # =============================================================================================== #
 
+def _generate_summary(
+    idx: int,
+    algorithm_result: AlgorithmResult,
+    unique_summary: bool,
+    base_path: str,
+):
+
+    if unique_summary:
+        file_path = os.path.join(base_path, "summary.md")
+    else:
+        file_path = os.path.join(base_path, f"C{idx+1}_summary.md")
+
+    # Result variables extraction.
+    config = algorithm_result.configuration
+    cost_matrix = algorithm_result.cost_matrix
+    execution_time = algorithm_result.average_execution_time
+    best_fitness_through_time = algorithm_result.average_best_fitness_through_time
+
+    # Precalculation of values to keep f-strings clean.
+    best_individual = algorithm_result.best_individual
+    best_fitness = (
+        algorithm_result
+            .fitness_function
+            .calculate_fitness(best_individual, cost_matrix)
+    )
+    best_cost = calculate_cost(best_individual, cost_matrix)
+
+    # Writes the markdown file.
+    with open(file_path, "w", encoding="UTF-8") as output_file:
+        if unique_summary:
+            output_file.write("# Configuration Summary\n\n")
+        else:
+            output_file.write(f"# Configuration C{idx+1} Summary\n\n")
+
+        # -------------------------
+        # PARAMETERS
+        # -------------------------
+        output_file.write("## GENETIC ALGORITHM PARAMETERS\n\n")
+        output_file.write("| Parameter | Value |\n")
+        output_file.write("| :---------: | :-----: |\n")
+
+        output_file.write(f"| Instance | {config.execution.instance} |\n")
+        output_file.write(f"| Population Size | {config.execution.population_size} |\n")
+        output_file.write(f"| Random Percentage | {config.execution.random_percentage} |\n")
+
+        if config.stop_reasons.generations:
+            output_file.write(f"| Max Generations | {config.stop_reasons.max_generations} |\n")
+
+        if config.stop_reasons.generations_without_improvements:
+            output_file.write(
+                "| Max Generations without Improvements | "
+                f"{config.stop_reasons.max_generations_without_improvements} |\n"
+            )
+
+        output_file.write(
+            "| Selection Operator | "
+            f"{config.selection.operator.name.upper()} |\n"
+        )
+        output_file.write(
+            "| Selected Individuals | "
+            f"{config.selection.selected_individuals} |\n"
+        )
+
+        if config.selection.operator.name.upper() == "TOURNAMENT":
+            output_file.write(f"| Tournament Size | {config.selection.tournament_size} |\n")
+
+        output_file.write(
+            "| Crossover Operator | "
+            f"{config.crossover.operator.name.upper()} |\n"
+        )
+        output_file.write(
+            "| Crossover Probability | "
+            f"{config.crossover.probability} |\n"
+        )
+        output_file.write(
+            "| Mutation Operator | "
+            f"{config.mutation.operator.name.upper()} |\n"
+        )
+        output_file.write(
+            "| Mutation Probability | "
+            f"{config.mutation.probability} |\n"
+        )
+        output_file.write(
+            "| Local Search Operator | "
+            f"{config.improvement.operator.name.upper()} |\n"
+        )
+        output_file.write(
+            "| Local Search Probability | "
+            f"{config.improvement.probability} |\n"
+        )
+        output_file.write(
+            "| Survivors Operator | "
+            f"{config.survivors.operator.name.upper().replace("_", " ")} |\n"
+        )
+        output_file.write(
+            "| Individuals to Replace | "
+            f"{config.survivors.individuals_to_replace} |\n"
+        )
+
+        # -------------------------
+        # BEST SOLUTION
+        # -------------------------
+        output_file.write("\n## BEST SOLUTION\n\n")
+        output_file.write("| Metric | Value |\n")
+        output_file.write("| :------: | :-----: |\n")
+        output_file.write(f"| Best Solution | {best_individual} |\n")
+        output_file.write(f"| Fitness Value | {best_fitness} |\n")
+        output_file.write(f"| Cost | {best_cost} |\n")
+
+        # -------------------------
+        # EXECUTION TIME
+        # -------------------------
+        output_file.write("\n## EXECUTION TIME\n\n")
+        output_file.write("| Metric | Value |\n")
+        output_file.write("| :------: | :-----: |\n")
+        output_file.write(f"| Average Execution Time (s) | {execution_time} |\n")
+
+        # -------------------------
+        # FITNESS THROUGH TIME
+        # -------------------------
+        output_file.write("\n## AVERAGE BEST FITNESS THROUGH TIME\n\n")
+
+        if unique_summary:
+            output_file.write("![convergence](./convergence.png)\n\n")
+        else:
+            output_file.write(f"![convergence](./C{idx+1}_convergence.png)\n\n")
+
+        output_file.write("| Generation | Fitness |\n")
+        output_file.write("| :----------: | :-------: |\n")
+
+        for i, fitness_value in enumerate(best_fitness_through_time):
+            output_file.write(f"| {i+1} | {fitness_value:.7f} |\n")
+
+# =============================================================================================== #
+
 def _generate_combined_and_individuals_plots(algorithm_results: List[AlgorithmResult], path: str):
+
     """
     Docstring
     """
@@ -257,8 +287,8 @@ def _generate_combined_and_individuals_plots(algorithm_results: List[AlgorithmRe
     ax1.set_title(
         f"Convergence Curves - {instance}"
     )
-    ax1.set_xlabel("Generation")
-    ax1.set_ylabel("Average Best Fitness")
+    ax1.set_xlabel(CONVERGENCE_PLOT_X_AXIS_LABEL)
+    ax1.set_ylabel(CONVERGENCE_PLOT_Y_AXIS_LABEL)
     ax1.grid(True, linestyle='--', alpha=0.7)
     ax1.legend()
 
@@ -339,8 +369,8 @@ def _generate_individual_plot(algorithm_result: AlgorithmResult, path: str):
         ax.plot(generations, upper, linestyle="--", linewidth=0.5, color=line.get_color())
 
     ax.set_title(f"Convergence - {instance}")
-    ax.set_xlabel("Generation")
-    ax.set_ylabel("Average Best Fitness")
+    ax.set_xlabel(CONVERGENCE_PLOT_X_AXIS_LABEL)
+    ax.set_ylabel(CONVERGENCE_PLOT_Y_AXIS_LABEL)
     ax.grid(True, linestyle='--', alpha=0.7)
 
     plt.tight_layout()
@@ -372,10 +402,12 @@ def _generate_individual_plot_optimized_for_combined_context(
         ax_i.plot(generations, upper, linestyle="--", linewidth=0.5, color=line.get_color())
 
     ax_i.set_title(f"Convergence C{idx+1} - {instance}")
-    ax_i.set_xlabel("Generation")
-    ax_i.set_ylabel("Average Best Fitness")
+    ax_i.set_xlabel(CONVERGENCE_PLOT_X_AXIS_LABEL)
+    ax_i.set_ylabel(CONVERGENCE_PLOT_Y_AXIS_LABEL)
     ax_i.grid(True, linestyle='--', alpha=0.7)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(path, f"config_{idx+1}_convergence.png"), dpi=300)
+    plt.savefig(os.path.join(path, f"C{idx+1}_convergence.png"), dpi=300)
     plt.close(fig_i)
+
+# =============================================================================================== #

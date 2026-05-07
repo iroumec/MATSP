@@ -28,12 +28,12 @@ selection:
 
 crossover:
   # Options: ["OX1", "PMX"]
-  operator: "PMX"
+  operator: "OX1"
   probability: 0.9
 
 mutation:
   # Options: ["INVERTION", "SCRAMBLE", "SWAP"]
-  operator: "INVERTION"
+  operator: "SWAP"
   # Options: ["Default" (1/population_size), float number]
   #probability: "Default"
   probability: 0.9

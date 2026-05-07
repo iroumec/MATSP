@@ -2,36 +2,65 @@
 Docstring for data_loader
 """
 
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
+from typing import List
+
 import yaml
 
-file_path = "resources/atsp-instances/cleaned-instances/"
+# =============================================================================================== #
+# Constants
+# =============================================================================================== #
 
-def load_matrix(instance):
+INSTANCES_PATH = "resources/atsp-instances/cleaned-instances/"
+
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
+
+def load_matrix(instance: str) -> List[List[int]]:
 
     """
-    Docstring for load_matrix
+    Loads an instance's matrix.
+
+    Args:
+        instance (str): Instance's name.
     
-    :param file_path: Description
+    Returns:
+        matrix (List[List[int]]): Instance's cost matrix.
     """
 
     matrix = []
 
-    with open(file_path + instance + ".atsp", "r", encoding="UTF-8") as matrix_file:
+    with open(INSTANCES_PATH + instance + ".atsp", "r", encoding="UTF-8") as matrix_file:
         for line in matrix_file:
             row = list(map(int, line.split()))
             matrix.append(row)
 
     return matrix
 
-def load_config(path: str):
-    
+# =============================================================================================== #
+
+def load_config(path: str) -> any:
+
     """
-    Docstring.
-    """
+    Loads a YAML configuration.
     
+    Args:
+        path (srt): Configuration path.
+
+    Returns:
+        stream (any): If the YAML file is valid, it returns its stream
+    """
+
     with open(path, "r", encoding="utf-8") as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as exc:
-            print(f"An error ocurred while reading the YAML configuration: {exc}")
-            return None
+            raise ValueError(
+                f"UNEXPECTED ERROR: Could not read the YAML configuration: {exc}."
+            ) from exc
+
+# =============================================================================================== #

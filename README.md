@@ -2,8 +2,6 @@
 
 Quinki is an ATSP instances solver that uses an evolutive computing approach.
 
-It has an educational purpose, so it's not expected to be used in real environments nor be extremely efficient. All operators habe been programmed by students.
-
 ## TO DO
 
 - Terminar el informe.
@@ -43,9 +41,17 @@ Artificial Intelligence (AI) was used in this project with the following objecti
 
 - During the project development:
   - to evaluate different solutions;
-  - to learn about some standard solutions for faced problems, like Protocol (PEP 544); and
-  - to solve bugs whose solution was unknown.
-- Once finished the project, it was used to apply minor optimizations to the algorithms.
+  - to solve bugs whose solution was unknown;
+  - to build the matrix extraction script algorithm; and
+  - to learn about some standard solutions for faced problems, like Protocol (PEP 544);
+
+- Once finished the project:
+  - to check for inconsistences and typos; and
+  - to apply minor optimizations to the algorithms.
+
+## Disclaimer
+
+Quinki has an educational purpose: it's not expected to be used in real environments nor be extremely efficient for real-scale problems.
 
 ## Credits
 

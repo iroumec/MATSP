@@ -44,13 +44,13 @@ def run_algorithm(config: Config) -> AlgorithmResult:
     # Variable declarations and initializations
     # ------------------------------------------------------------------------------------------- #
 
-    fitness_function = calculate_fitness
-
-    best_fitness_through_time: List[float] = []
-
     best_individuals: List[int] = []
 
     execution_times: List[float] = []
+
+    fitness_function = calculate_fitness
+    
+    best_fitness_through_time: List[float] = []
 
     cost_matrix: List[List[int]] = load_matrix(config.execution.instance)
 
@@ -62,8 +62,8 @@ def run_algorithm(config: Config) -> AlgorithmResult:
         current_best_individual, current_execution_time, current_best_fitness_through_time = (
             _execute_algorithm(config, fitness_function, cost_matrix)
         )
-        best_individuals.append(current_best_individual)
         execution_times.append(current_execution_time)
+        best_individuals.append(current_best_individual)
         best_fitness_through_time.append(current_best_fitness_through_time)
 
     # ------------------------------------------------------------------------------------------- #
@@ -73,13 +73,13 @@ def run_algorithm(config: Config) -> AlgorithmResult:
     mean, std = calculate_average_best_fitness_through_time(best_fitness_through_time)
 
     return AlgorithmResult(
-        config,
-        fitness_function,
-        select_best_individual(best_individuals, fitness_function, cost_matrix),
-        cost_matrix,
-        statistics.mean(execution_times),
-        mean,
-        std,
+        configuration=config,
+        cost_matrix=cost_matrix,
+        fitness_function=fitness_function,
+        std_best_fitness_through_time=std,
+        average_best_fitness_through_time=mean,
+        average_execution_time=statistics.mean(execution_times),
+        best_individual=select_best_individual(best_individuals, fitness_function, cost_matrix),
     )
 
 # =============================================================================================== #
@@ -125,11 +125,11 @@ def _execute_algorithm(
 
         parents = config.selection.operator(
             population=population,
-            fitness_function=fitness_function,
-            num_selections=config.selection.selected_individuals,
             cost_matrix=cost_matrix,
+            fitness_function=fitness_function,
             tournament_size=config.selection.tournament_size,
             # Only used if the selection algorithm is tournament.
+            num_selections=config.selection.selected_individuals,
         )
 
         # --------------------------------------------------------------------------------------- #

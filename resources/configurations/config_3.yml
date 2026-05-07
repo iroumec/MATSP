@@ -21,19 +21,19 @@ stop-reasons:
 
 selection:
   # Options: ["TOURNAMENT", "ROULETTE"]
-  operator: "ROULETTE"
+  operator: "TOURNAMENT"
   # Cannot be higher than the population size!
   selected_individuals: 10
   tournament_size: 3 # Ommited if the operator is not tournament.
 
 crossover:
   # Options: ["OX1", "PMX"]
-  operator: "OX1"
+  operator: "PMX"
   probability: 0.9
 
 mutation:
   # Options: ["INVERTION", "SCRAMBLE", "SWAP"]
-  operator: "SCRAMBLE"
+  operator: "INVERTION"
   # Options: ["Default" (1/population_size), float number]
   #probability: "Default"
   probability: 0.9

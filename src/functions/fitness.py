@@ -2,9 +2,17 @@
 Fitness function implementation.
 """
 
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 from typing import List, Tuple
 
 from functions import select_best_individual
+
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
 
 def calculate_fitness(individual: tuple, cost_matrix):
     """
@@ -38,6 +46,8 @@ def calculate_fitness(individual: tuple, cost_matrix):
 
     return 1/travel_cost
 
+# =============================================================================================== #
+
 def get_best_fitness(
     population: List[int],
     fitness_function: callable,
@@ -54,6 +64,8 @@ def get_best_fitness(
     )
 
     return fitness_function(current_best_individual, cost_matrix)
+
+# =============================================================================================== #
 
 def calculate_average_best_fitness_through_time(
     best_fitness_through_time: List[List[float]]
@@ -97,3 +109,5 @@ def calculate_average_best_fitness_through_time(
     ]
 
     return means, stds
+
+# =============================================================================================== #

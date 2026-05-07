@@ -1,17 +1,18 @@
 """
-Application entry point.
+Application's entry point.
 """
 
 # =============================================================================================== #
 # Imports
 # =============================================================================================== #
 
+from typing import List
 from pathlib import Path
 from algorithm import run_algorithm
 
 import argparse
 
-from configuration import build_config
+from configuration import Config, build_config
 
 from data_managers import (
     save_output,
@@ -24,8 +25,12 @@ from functions import assert_same_instance
 # =============================================================================================== #
 
 def parse_arguments() -> Path:
+    
     """
-    Docstring
+    Parses the application arguments.
+
+    Returns:
+        configurations_path (Path): Path where the configurations files reside.
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -40,11 +45,19 @@ def parse_arguments() -> Path:
 
 # =============================================================================================== #
 
-def build_configurations(path: Path) -> list:
+def build_configurations(path: Path) -> List[Config]:
+
     """
-    Docstring
+    Builds a list of valid configurations.
+
+    Args:
+        path (Path): Path with the YAML configuration files.
+
+    Returns:
+        configurations (List[Config]): Configuration objects.
     """
-    configurations = []
+
+    configurations: List[Config] = []
 
     # Just one file.
     if path.is_file():
@@ -72,8 +85,9 @@ def build_configurations(path: Path) -> list:
 # =============================================================================================== #
 
 def main():
+
     """
-    Docstring
+    Runs the application.
     """
 
     # ------------------------------------------------------------------------------------------- #
@@ -93,6 +107,9 @@ def main():
     # ------------------------------------------------------------------------------------------- #
 
     assert_same_instance(configurations)
+    
+    if len(configurations) == 0:
+        raise ValueError("ERROR: No configurations.")
 
     # ------------------------------------------------------------------------------------------- #
     # Algorithm Execution
@@ -116,7 +133,7 @@ def main():
             print("Configuration executed!")
 
     if various_configurations:
-        print("\nAll configuration have been executed!")
+        print("\nAll configurations have been executed!")
 
     # ------------------------------------------------------------------------------------------- #
     # Output Saving

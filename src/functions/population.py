@@ -1,11 +1,19 @@
 """
-Docstring for survivors.select_best
+Population general functions implementations.
 """
+
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
 
 from typing import List
 
 from configuration import Config
 from operators import InitializationStrategy
+
+# =============================================================================================== #
+# Functions
+# =============================================================================================== #
 
 def select_best_individual(actual_population, fitness_function, cost_matrix) -> List[int]:
     """
@@ -28,9 +36,18 @@ def select_best_individual(actual_population, fitness_function, cost_matrix) -> 
 
     return actual_population_fitness_scores[0][0]
 
+# =============================================================================================== #
+
 def generate_initial_population(config: Config, cost_matrix: List[List[int]]) -> List[int]:
     """
-    Docstring
+    Generates an initial population according to the configuration parameters.
+    
+    Args:
+        config (Config): Configuration parameters.
+        cost_matrix (List[List[int]]): Cost matrix.
+
+    Returns:
+        initial_population (List[int]): Initial population.
     """
 
     population: List[int] = []
@@ -52,5 +69,7 @@ def generate_initial_population(config: Config, cost_matrix: List[List[int]]) ->
         number_of_heuristically_generated_individuals,
         cost_matrix
     )
-    
+
     return population
+
+# =============================================================================================== #

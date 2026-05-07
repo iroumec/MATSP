@@ -7,22 +7,21 @@
 # =============================================================================================== #
 
 import random
-from typing import List, Tuple
 
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
-def ox1(parent1: List[int], parent2: List[int], probability: float) -> Tuple[List[int]]:
+def ox1(parent1: list[int], parent2: list[int], probability: float) -> list[list[int]]:
     """
     Perform Order Crossover 1 (OX1) between two parent permutations.
 
     Args:
-        parent1 (List[int]): The first parent permutation.
-        parent2 (List[int]): The second parent permutation.
+        parent1 (list[int]): The first parent permutation.
+        parent2 (list[int]): The second parent permutation.
 
     Returns:
-        offsprings (Tuple[List[int]]): Two offspring permutations resulting from the crossover.
+        offsprings (tuple[list[int]]): Two offspring permutations resulting from the crossover.
     """
 
     # No crossover.
@@ -30,10 +29,6 @@ def ox1(parent1: List[int], parent2: List[int], probability: float) -> Tuple[Lis
         return []
 
     size = len(parent1)
-
-    # Initializes offsprings with None.
-    offspring1 = [None] * size
-    offspring2 = [None] * size
 
     # Selects two random crossover points.
     point1, point2 = sorted(random.sample(range(size), 2))

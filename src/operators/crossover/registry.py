@@ -6,7 +6,6 @@ Defines the protocol and enum for crossover operators.
 # Imports
 # =============================================================================================== #
 
-from typing import List
 from enum import Enum, member
 from typing_extensions import Protocol
 
@@ -23,10 +22,10 @@ class CrossoverOperator(Protocol): # pylint: disable=too-few-public-methods
     """
     def __call__(
         self,
-        first_parent: List[int],
-        second_parent: List[int],
+        first_parent: list[int],
+        second_parent: list[int],
         probability: float
-    ) -> List[int]:
+    ) -> list[int]:
         ...
 
 # =============================================================================================== #
@@ -43,10 +42,10 @@ class CrossoverStrategy(Enum):
 
     def __call__(
         self,
-        first_parent: List[int],
-        second_parent: List[int],
+        first_parent: list[int],
+        second_parent: list[int],
         probability: float
-    ) -> List[int]:
+    ) -> list[int]:
         return self.value(first_parent, second_parent, probability)
 
 # =============================================================================================== #

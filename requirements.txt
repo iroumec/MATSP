@@ -1,8 +1,12 @@
+certifi==2026.4.22
+charset-normalizer==3.4.7
 contourpy==1.3.3
 customtkinter==5.2.2
 cycler==0.12.1
 darkdetect==0.8.0
 fonttools==4.62.1
+idna==3.13
+jproperties==2.1.2
 kiwisolver==1.5.0
 lxml==6.0.2
 matplotlib==3.10.9
@@ -14,5 +18,8 @@ pydicom==3.0.2
 pyparsing==3.3.2
 python-dateutil==2.9.0.post0
 PyYAML==6.0.3
+requests==2.33.1
 six==1.17.0
+tomli==2.4.1
 typing_extensions==4.15.0
+urllib3==2.6.3
