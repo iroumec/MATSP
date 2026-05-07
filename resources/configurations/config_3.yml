@@ -1,0 +1,49 @@
+# Parameters related to the general execution of the algorithm.
+execution:
+  # Select one from resources/atsp-instances/cleaned-instances.
+  # Some instances: br17, ft53, p43.
+  instance: "p43"
+  executions: 10
+  population_size: 100
+  # Porcentage of random generated individuals.
+  # It is recommended to use a value of 0.8.
+  # The rest of the individuals will be generated using an heuristic.
+  random_percentage: 0.8
+
+stop-reasons:
+  generations: true
+  # It is recommended to use a value greater or equal than 1000.
+  # Ignored if the previous field is `false`.
+  max_generations: 1000
+  generations_without_improvements: false
+  # Ignored if the previous field is `false`.
+  max_generations_without_improvements: 100
+
+selection:
+  # Options: ["TOURNAMENT", "ROULETTE"]
+  operator: "TOURNAMENT"
+  # Cannot be higher than the population size!
+  selected_individuals: 10
+  tournament_size: 3 # Ommited if the operator is not tournament.
+
+crossover:
+  # Options: ["OX1", "PMX"]
+  operator: "PMX"
+  probability: 0.9
+
+mutation:
+  # Options: ["INVERTION", "SCRAMBLE", "SWAP"]
+  operator: "INVERTION"
+  # Options: ["Default" (1/population_size), float number]
+  #probability: "Default"
+  probability: 0.9
+
+improvement:
+  # Options: ["INSERTION"]
+  operator: "INSERTION"
+  probability: 0.8
+
+survivors:
+  # Options: ["REPLACE_WORST"]
+  operator: "REPLACE_WORST"
+  individuals_to_replace: 10
