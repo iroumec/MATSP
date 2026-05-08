@@ -1,17 +1,19 @@
 """
-In this file, the function for calculating the cost of an individual is defined.
+Cost calculation algorithm implementation.
 """
 
-from typing import List
+# =============================================================================================== #
+# Function
+# =============================================================================================== #
 
-def calculate_cost(individual: List[int], cost_matrix: List[List[int]]):
+def calculate_cost(individual: list[int], cost_matrix: list[list[int]]):
 
     """
     Calculates the cost of an individual based on a cost matrix.
     
     Args:
-        individual (List[int]): Sequence of locations.
-        cost_matrix (List[List[int]]): Cost matrix.
+        individual (list[int]): Sequence of locations.
+        cost_matrix (list[list[int]]): Cost matrix.
 
     Returns:
         travel_cost (float): Travel cost.
@@ -28,3 +30,5 @@ def calculate_cost(individual: List[int], cost_matrix: List[List[int]]):
     travel_cost += cost_matrix[individual[number_of_cities - 1]][individual[0]]
 
     return travel_cost
+
+# =============================================================================================== #

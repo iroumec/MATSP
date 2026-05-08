@@ -1,13 +1,24 @@
 """
-Docstring
+Instance assert implementation.
 """
 
-from typing import List
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
 from configuration.structures import Config
 
-def assert_same_instance(configurations: List[Config]) -> bool:
+# =============================================================================================== #
+# Function
+# =============================================================================================== #
+
+def assert_same_instance(configurations: list[Config]):
+
     """
-    Docstring
+    Checks that all configurations share the same instance. Otherwise, it raises an error.
+    
+    Args:
+        configurations (list[Config]): List of configurations.
     """
     if not configurations:
         raise ValueError("ERROR: No configurations.")
@@ -17,3 +28,5 @@ def assert_same_instance(configurations: List[Config]) -> bool:
     for configuration in configurations:
         if configuration.execution.instance != first_instance:
             raise ValueError("ERROR: Not all executions use the same instance.")
+
+# =============================================================================================== #

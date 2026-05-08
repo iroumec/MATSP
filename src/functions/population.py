@@ -6,8 +6,6 @@ Population general functions implementations.
 # Imports
 # =============================================================================================== #
 
-from typing import List
-
 from configuration import Config
 from operators import InitializationStrategy
 
@@ -15,17 +13,22 @@ from operators import InitializationStrategy
 # Functions
 # =============================================================================================== #
 
-def select_best_individual(actual_population, fitness_function, cost_matrix) -> List[int]:
+def select_best_individual(
+    actual_population: list[int],
+    fitness_function: callable,
+    cost_matrix: list[list[int]]
+) -> list[int]:
     """
-    Select the best performing individual of the actual generation.
+    Selects the best performing individual in the population.
 
     Args:
-        actual_population (list): List of current individuals in the population.
-        fitness_function (function): A function that takes an individual and
+        actual_population (list[int]): Population.
+        fitness_function (callable): A function that takes an individual and
             returns its fitness score.
+        cost_matrix (list[list[int]]): Necessary to calculate the fitness.
 
     Returns: 
-        best fitness of current population.
+        best_individual (list[int]): Best individual in the population.
     """
 
     # Sort actual population by fitness
@@ -38,7 +41,7 @@ def select_best_individual(actual_population, fitness_function, cost_matrix) -> 
 
 # =============================================================================================== #
 
-def generate_initial_population(config: Config, cost_matrix: List[List[int]]) -> List[int]:
+def generate_initial_population(config: Config, cost_matrix: list[list[int]]) -> list[int]:
     """
     Generates an initial population according to the configuration parameters.
     
@@ -50,7 +53,7 @@ def generate_initial_population(config: Config, cost_matrix: List[List[int]]) ->
         initial_population (List[int]): Initial population.
     """
 
-    population: List[int] = []
+    population: list[int] = []
 
     number_of_random_generated_individuals = int(
         config.execution.random_percentage * config.execution.population_size

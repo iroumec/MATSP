@@ -51,8 +51,18 @@ def get_best_fitness(
     fitness_function: callable,
     cost_matrix: list[list[int]]
 ) -> float:
+
     """
-    Docstring.
+    Given a population, it looks for the best fitness.
+
+    Args:
+        population (list[int]): Population to look for.
+        fitness_function (callable): Fitness function used to calculate the fitness of each
+            individual in the population.
+        cost_matrix (list[list[int]]): Cost matrix, necessary to calculate the fitness.
+
+    Returns:
+        best_fitness (float): The highest fitness value found in the population.
     """
 
     current_best_individual: list[int] = select_best_individual(
@@ -68,8 +78,8 @@ def get_best_fitness(
 def calculate_average_best_fitness_through_time(
     best_fitness_through_time: list[list[float]]
 ) -> tuple[list[float], list[float]]:
+
     """
-    
     The `best_fitness_through_time` saves, for each execution, the best fitness for
     each generation.
     
@@ -77,8 +87,8 @@ def calculate_average_best_fitness_through_time(
     in the graphs. For this reason, the algorithm applies a padding, which fill
     all the next values with the best previous one.
     
-    De esta forma, la curva no presenta valles. Visualmente, lo que se ve es un
-    "estancamiento" del fitness. This is an standar criteria in genetic algorithms.
+    In this way, the curve doesn't have valleys. Visually, it's seen a fitness
+    stagnation. This is an standar criteria in genetic algorithms.
     """
 
     if not best_fitness_through_time:

@@ -1,12 +1,10 @@
 """
-Docstring for data_loader
+Configuration and matrix loading algorithms.
 """
 
 # =============================================================================================== #
 # Imports
 # =============================================================================================== #
-
-from typing import List
 
 import yaml
 
@@ -20,7 +18,7 @@ INSTANCES_PATH = "resources/atsp-instances/cleaned-instances/"
 # Functions
 # =============================================================================================== #
 
-def load_matrix(instance: str) -> List[List[int]]:
+def load_matrix(instance: str) -> list[list[int]]:
 
     """
     Loads an instance's matrix.
@@ -29,7 +27,7 @@ def load_matrix(instance: str) -> List[List[int]]:
         instance (str): Instance's name.
     
     Returns:
-        matrix (List[List[int]]): Instance's cost matrix.
+        matrix (list[list[int]]): Instance's cost matrix.
     """
 
     matrix = []

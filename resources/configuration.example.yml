@@ -4,7 +4,7 @@
 
 # Parameters related to the general execution of the algorithm.
 execution:
-  # Options: {"br17", "ft54", "p43"}.
+  # Options: {"br17", "ft53", "p43"}.
   instance: "br17"
   # Recommended values: [20, 30].
   executions: 30
