@@ -1,41 +1,54 @@
 """
 Defines the protocol and enum for selection operators.
 """
-from enum import Enum, member
-from typing import List, Callable, Any
-from typing_extensions import Protocol
-from .algorithms import (
-    roulette,
-    tournament
-)
 
-class SelectionOperator(Protocol):
+# =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
+from enum import Enum, member
+from typing_extensions import Protocol
+from .algorithms import roulette, tournament
+
+# =============================================================================================== #
+# Protocol
+# =============================================================================================== #
+
+class SelectionOperator(Protocol): # pylint: disable=too-few-public-methods
+
     """
     Class (protocol) for selection operators.
     """
+
     def __call__(
         self,
-        population: List[List[int]],
-        fitness_function: Callable,
+        population: list[list[int]],
+        fitness_function: callable,
         num_selections: int,
-        cost_matrix: List[List[int]],
-        **kwargs: Any
-    ) -> List[int]:
+        cost_matrix: list[list[int]],
+        **kwargs: any
+    ) -> list[list[int]]:
         ...
 
+# =============================================================================================== #
+# Strategies
+# =============================================================================================== #
+
 class SelectionStrategy(Enum):
+
     """
     Enum for selection strategies.
     """
+
     ROULETTE: SelectionOperator = member(roulette)
     TOURNAMENT: SelectionOperator = member(tournament)
 
     def __call__(
         self,
-        population,
-        fitness_function,
-        num_selections,
-        cost_matrix,
+        population: list[list[int]],
+        fitness_function: callable,
+        num_selections: int,
+        cost_matrix: list[list[int]],
         **kwargs
     ):
         return self.value(
@@ -45,3 +58,5 @@ class SelectionStrategy(Enum):
             cost_matrix,
             **kwargs
         )
+
+# =============================================================================================== #

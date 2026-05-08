@@ -8,21 +8,29 @@
 
 import random
 
-from typing import List, Callable
-
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
 def insertion(
-    individual: List[int],
+    individual: list[int],
     probability: float,
-    fitness_function: Callable,
-    cost_matrix: List[List[int]]
-) -> List[int]:
+    fitness_function: callable,
+    cost_matrix: list[list[int]]
+) -> list[int]:
 
     """
-    Dcostring.
+    Randomly, selects a gen in the cromosome and tries to place it in another position.
+    
+    Args:
+        individual (list[int]): Individual to which apply the operator.
+        probability (float): Probability of applying the operator.
+        fitness_function (callable): Function that allows to calculate an individual fitness.
+        cost_matrix (list[list[int]]): Cost matrix. Required for the fitness function.
+    
+    Returns:
+        invidual (list[int]): Individual post operator aplication. If the expected probability
+            was not achieved, it's the same as the indiviudal in the argument.
     """
 
     best_individual = list(individual)

@@ -9,32 +9,32 @@
 import random
 import bisect
 import itertools
-from typing import List
 
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
 def roulette(
-    population: List[int],
+    population: list[int],
     fitness_function: callable,
     num_selections: int,
-    cost_matrix: List[List[int]],
+    cost_matrix: list[list[int]],
     **_kwargs
-) -> List[int]:
+) -> list[list[int]]:
+
     """
     Performs roulette wheel selection on a population.
 
     Args:
-        population (List[int]): A list of individuals in the population.
+        population (list[list[int]]): A list of individuals in the population.
         fitness_function (callable): A function that takes an individual and the cost
             matrix and returns its fitness score.
         num_selections (int): The number of individuals to select.
-        cost_matrix (List[List[int]]): The cost matrix for evaluating fitness.
+        cost_matrix (list[list[int]]): The cost matrix for evaluating fitness.
         **kwargs: Additional keyword arguments for the selection process.
 
     Returns:
-        selected_individuals (List[int]): A list of selected individuals.
+        selected_individuals (list[list[int]]): A list of selected individuals.
     """
 
     # Calculates fitness scores.

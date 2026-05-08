@@ -7,32 +7,33 @@
 # =============================================================================================== #
 
 import heapq
-from typing import List
 
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
 def replace_worst(
-    actual_population: List[int],
-    new_individuals: List[int],
+    actual_population: list[list[int]],
+    new_individuals: list[list[int]],
     number_to_replace: int,
     fitness_function: callable,
-    cost_matrix: List[List[int]],
-) -> List[int]:
+    cost_matrix: list[list[int]],
+) -> list[list[int]]:
+
     """
-    Replace the worst-performing individuals in the actual_population with the best-performing
+    Replaces the worst-performing individuals in the actual_population with the best-performing
     individuals in new_individuals.
 
     Args:
-        actual_population (List[int]): List of current individuals in the population.
-        new_individuals (List[int]): List of new individuals to be added to the population.
+        actual_population (list[list[int]]): List of current individuals in the population.
+        new_individuals (list[list[int]]): List of new individuals to be added to the population.
         number_to_replace (int): Number of worst individuals to replace.
         fitness_function (callable): A function that takes an individual and returns its fitness
             score.
+        cost_matrix (list[list[int]]): Cost matrix. Required for the fitness function.
 
     Returns:
-        updated_population (List[int]): Updated population after replacement.
+        updated_population (list[list[int]]): Updated population after replacement.
     """
 
     # Limits the number of individuals to replace to the available new individuals.

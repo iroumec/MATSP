@@ -12,16 +12,23 @@ import random
 # Functions
 # =============================================================================================== #
 
-def randomization(number_of_inviduals_to_generate, cost_matrix):
+def randomization(
+    number_of_inviduals_to_generate: int,
+    cost_matrix: list[list[int]]
+) -> list[list[int]]:
 
     """
-    Docstring for initialize
+    Generates individuals using a randomization approach.
     
-    :param number_of_inviduals_to_generate: Description
-    :param cost_matrix: Description
+    Args:
+        number_of_individuals_to_generate (int): Number of individuals to generate.
+        cost_matrix (list[list[int]]): Cost matrix.
+    
+    Returns:
+        population (list[list[int]]): A list of individuals.
     """
 
-    individuals = []
+    individuals: list[list[int]] = []
 
     number_of_cities = len(cost_matrix)
 

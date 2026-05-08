@@ -8,7 +8,6 @@ Defines the protocol and enum for initialization operators.
 
 from enum import Enum, member
 
-from typing import List
 from typing_extensions import Protocol
 
 from .algorithms import randomization, nearest_neighbour
@@ -18,14 +17,16 @@ from .algorithms import randomization, nearest_neighbour
 # =============================================================================================== #
 
 class InitializationOperator(Protocol): # pylint: disable=too-few-public-methods
+
     """
     Class (protocol) for initialization operators.
     """
+
     def __call__(
         self,
         number_of_inidivuals_to_generate: int,
-        cost_matrix: List[List[int]]
-    ) -> List[int]:
+        cost_matrix: list[list[int]]
+    ) -> list[int]:
         ...
 
 # =============================================================================================== #
@@ -33,6 +34,7 @@ class InitializationOperator(Protocol): # pylint: disable=too-few-public-methods
 # =============================================================================================== #
 
 class InitializationStrategy(Enum):
+
     """
     Enum for initialization strategies.
     """
@@ -43,8 +45,8 @@ class InitializationStrategy(Enum):
     def __call__(
         self,
         number_of_inidivuals_to_generate: int,
-        cost_matrix: List[List[int]]
-    ) -> List[int]:
+        cost_matrix: list[list[int]]
+    ) -> list[int]:
         return self.value(number_of_inidivuals_to_generate, cost_matrix)
 
 # =============================================================================================== #

@@ -12,7 +12,7 @@ import random
 # Functions
 # =============================================================================================== #
 
-def pmx(parent1: list[int], parent2: list[int], probability: float) -> list[list[int]]:
+def pmx(parent1: list[int], parent2: list[int], probability: float) -> tuple[list[int], list[int]]:
     """
     Perform Partially Mapped Crossover (PMX) between two parent permutations.
 
@@ -21,7 +21,8 @@ def pmx(parent1: list[int], parent2: list[int], probability: float) -> list[list
         parent2 (list[int]): The second parent permutation.
 
     Returns:
-        offsprings (tuple[list[int]]): Two offspring permutations resulting from the crossover.
+        offsprings (tuple[list[int], list[int]]): Two offspring permutations resulting from
+            the crossover.
     """
 
     # No crossover.

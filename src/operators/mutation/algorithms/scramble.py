@@ -7,13 +7,12 @@
 # =============================================================================================== #
 
 import random
-from typing import List
 
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
-def scramble(individual: List[int], probability: float) -> List[int]:
+def scramble(individual: list[int], probability: float) -> list[int]:
 
     """
     Randomly, scrambles the genes of an individual's cromosome.

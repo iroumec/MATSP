@@ -7,13 +7,12 @@
 # =============================================================================================== #
 
 import random
-from typing import List
 
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
-def swap(individual: List[int], probability: float) -> List[int]:
+def swap(individual: list[int], probability: float) -> list[int]:
 
     """
     Swaps two random genes from an individual's cromosome.

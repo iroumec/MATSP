@@ -106,7 +106,7 @@ def main():
     # ------------------------------------------------------------------------------------------- #
 
     assert_same_instance(configurations)
-    
+
     if len(configurations) == 0:
         raise ValueError("ERROR: No configurations.")
 

@@ -1,5 +1,5 @@
 """
-Docstring
+Package declaration for selection operators implementations.
 """
 
 # =============================================================================================== #

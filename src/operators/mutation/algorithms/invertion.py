@@ -7,13 +7,12 @@
 # =============================================================================================== #
 
 import random
-from typing import List
 
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
-def invertion(individual: List[int], probability: float) -> List[int]:
+def invertion(individual: list[int], probability: float) -> list[int]:
 
     """
     Randomly, inverts the genes of an individual's cromosome.

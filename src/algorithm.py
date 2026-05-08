@@ -29,6 +29,7 @@ from data_managers import (
 # =============================================================================================== #
 
 def run_algorithm(config: Config) -> AlgorithmResult:
+
     """
     Given a configuration, uses its parameters to run a genetic algorithm.
     

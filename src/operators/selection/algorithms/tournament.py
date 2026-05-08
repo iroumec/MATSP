@@ -13,25 +13,27 @@ import random
 # =============================================================================================== #
 
 def tournament(
-    population,
-    fitness_function,
-    num_selections,
-    cost_matrix,
-    tournament_size = 2,
+    population: list[list[int]],
+    fitness_function: callable,
+    num_selections: int,
+    cost_matrix: list[list[int]],
+    tournament_size: int = 3,
     **_kwargs
-):
+) -> list[list[int]]:
+
     """
-    Perform tournament selection on a population.
+    Performs tournament selection on a population.
 
     Args:
-        population (list): A list of individuals in the population.
-        fitness_function (function): A function that takes an individual and a cost matrix and
-        returns its fitness score.
+        population (list[list[int]]): A list of individuals in the population.
+        fitness_function (callable): A function that takes an individual and a cost matrix and
+            returns its fitness score.
         num_selections (int): The number of individuals to select.
+        cost_matrix (list[list[int]]): Cost matrix.
         tournament_size (int): The number of individuals to select for the tournament.
 
     Returns:
-        The individual with the highest fitness score from the tournament.
+        selected_individuals (list[list[int]]): A list of selected individuals.
     """
 
     # Precomputes fitness for all individuals.
