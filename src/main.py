@@ -6,7 +6,6 @@ Application's entry point.
 # Imports
 # =============================================================================================== #
 
-from typing import List
 from pathlib import Path
 from algorithm import run_algorithm
 
@@ -25,7 +24,7 @@ from functions import assert_same_instance
 # =============================================================================================== #
 
 def parse_arguments() -> Path:
-    
+
     """
     Parses the application arguments.
 
@@ -45,7 +44,7 @@ def parse_arguments() -> Path:
 
 # =============================================================================================== #
 
-def build_configurations(path: Path) -> List[Config]:
+def build_configurations(path: Path) -> list[Config]:
 
     """
     Builds a list of valid configurations.
@@ -57,7 +56,7 @@ def build_configurations(path: Path) -> List[Config]:
         configurations (List[Config]): Configuration objects.
     """
 
-    configurations: List[Config] = []
+    configurations: list[Config] = []
 
     # Just one file.
     if path.is_file():

@@ -6,15 +6,13 @@ Fitness function implementation.
 # Imports
 # =============================================================================================== #
 
-from typing import List, Tuple
-
 from functions import select_best_individual
 
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
-def calculate_fitness(individual: tuple, cost_matrix):
+def calculate_fitness(individual: list[int], cost_matrix: list[list[int]]) -> float:
     """
     Given an individual (sequence of n locations), calculates
     it fitness, which is defined as 1/travel_cost, where the travel cost
@@ -26,12 +24,12 @@ def calculate_fitness(individual: tuple, cost_matrix):
     A sequence whose cost is smaller will have a grater fitness.
 
     Args:
-        individual (list): Sequence of locations.
-        cost_matrix: Matrix containing the costs from travelling from one city
+        individual (list[list[int]]): Sequence of locations.
+        cost_matrix (list[list[int]]): Matrix containing the costs from travelling from one city
             to another.
 
     Returns:
-        float: Updated population after replacement.
+        fitness_value (float): Updated population after replacement.
     """
 
     number_of_cities = len(individual)
@@ -49,15 +47,15 @@ def calculate_fitness(individual: tuple, cost_matrix):
 # =============================================================================================== #
 
 def get_best_fitness(
-    population: List[int],
+    population: list[int],
     fitness_function: callable,
-    cost_matrix: List[List[int]]
+    cost_matrix: list[list[int]]
 ) -> float:
     """
     Docstring.
     """
 
-    current_best_individual: List[int] = select_best_individual(
+    current_best_individual: list[int] = select_best_individual(
         population,
         fitness_function,
         cost_matrix
@@ -68,8 +66,8 @@ def get_best_fitness(
 # =============================================================================================== #
 
 def calculate_average_best_fitness_through_time(
-    best_fitness_through_time: List[List[float]]
-) -> Tuple[List[float], List[float]]:
+    best_fitness_through_time: list[list[float]]
+) -> tuple[list[float], list[float]]:
     """
     
     The `best_fitness_through_time` saves, for each execution, the best fitness for

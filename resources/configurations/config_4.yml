@@ -1,49 +1,85 @@
+# =============================================================================================== #
+# General Execution Parameters
+# =============================================================================================== #
+
 # Parameters related to the general execution of the algorithm.
 execution:
-  # Select one from resources/atsp-instances/cleaned-instances.
-  # Some instances: br17, ft53, p43.
+  # Options: {"br17", "ft54", "p43"}.
   instance: "p43"
-  executions: 10
+  # Recommended values: [20, 30].
+  executions: 30
+  # Recommended value: >= 100.
   population_size: 100
   # Porcentage of random generated individuals.
-  # It is recommended to use a value of 0.8.
+  # Recommended value: 0.8.
   # The rest of the individuals will be generated using an heuristic.
   random_percentage: 0.8
+
+# =============================================================================================== #
+# Stop Reasons
+# =============================================================================================== #
 
 stop-reasons:
   generations: true
   # It is recommended to use a value greater or equal than 1000.
   # Ignored if the previous field is `false`.
+  # Recommended value: >= 1000.
   max_generations: 1000
+  # Recommended value: false.
   generations_without_improvements: false
   # Ignored if the previous field is `false`.
   max_generations_without_improvements: 100
 
+# =============================================================================================== #
+# Selection of Parents
+# =============================================================================================== #
+
 selection:
-  # Options: ["TOURNAMENT", "ROULETTE"]
+  # Options: {"TOURNAMENT", "ROULETTE"}-
   operator: "ROULETTE"
   # Cannot be higher than the population size!
   selected_individuals: 10
+  # Cannot be higher than the population size!
   tournament_size: 3 # Ommited if the operator is not tournament.
 
+# =============================================================================================== #
+# Crossover
+# =============================================================================================== #
+
 crossover:
-  # Options: ["OX1", "PMX"]
+  # Options: {"OX1", "PMX"}.
   operator: "OX1"
+  # Recommended acording to literature, a value in [0.6, 0.9].
   probability: 0.9
+
+# =============================================================================================== #
+# Mutation
+# =============================================================================================== #
 
 mutation:
-  # Options: ["INVERTION", "SCRAMBLE", "SWAP"]
+  # Options: {"INVERTION", "SCRAMBLE", "SWAP"}.
   operator: "SCRAMBLE"
-  # Options: ["Default" (1/population_size), float number]
-  #probability: "Default"
-  probability: 0.9
+  # Options: {"Default"} U {R in [0.0, 1.0]}.
+  # Recommended according to literature, a value in [0.001, 0.1],
+  probability: 0.1
+
+# =============================================================================================== #
+# Improvement (Local Search)
+# =============================================================================================== #
 
 improvement:
-  # Options: ["INSERTION"]
+  # Options: {"INSERTION"}.
   operator: "INSERTION"
   probability: 0.8
 
+# =============================================================================================== #
+# Survivors Selection
+# =============================================================================================== #
+
 survivors:
-  # Options: ["REPLACE_WORST"]
+  # Options: {"REPLACE_WORST"}.
   operator: "REPLACE_WORST"
+  # Cannot be higher than the population size!
   individuals_to_replace: 10
+
+# =============================================================================================== #

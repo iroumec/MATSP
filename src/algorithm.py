@@ -8,7 +8,6 @@ Genetic algorithm implementation.
 
 import time
 import statistics
-from typing import List
 
 from configuration import Config
 from functions import (
@@ -44,15 +43,15 @@ def run_algorithm(config: Config) -> AlgorithmResult:
     # Variable declarations and initializations
     # ------------------------------------------------------------------------------------------- #
 
-    best_individuals: List[int] = []
+    best_individuals: list[int] = []
 
-    execution_times: List[float] = []
+    execution_times: list[float] = []
 
     fitness_function = calculate_fitness
-    
-    best_fitness_through_time: List[float] = []
 
-    cost_matrix: List[List[int]] = load_matrix(config.execution.instance)
+    best_fitness_through_time: list[float] = []
+
+    cost_matrix: list[list[int]] = load_matrix(config.execution.instance)
 
     # ------------------------------------------------------------------------------------------- #
     # Algorithm execution
@@ -88,8 +87,8 @@ def run_algorithm(config: Config) -> AlgorithmResult:
 
 def _execute_algorithm(
     config: Config,
-    fitness_function,
-    cost_matrix: List[List[int]]
+    fitness_function: callable,
+    cost_matrix: list[list[int]]
 ):
 
     # ------------------------------------------------------------------------------------------- #
@@ -98,14 +97,14 @@ def _execute_algorithm(
 
     current_generation: int = 0
     last_best_fitness: float = 0.0
-    best_fitness_through_time: list = []
+    best_fitness_through_time: list[float] = []
     generations_without_improvements: int = 0
 
     # ------------------------------------------------------------------------------------------- #
     # Initial population generation
     # ------------------------------------------------------------------------------------------- #
 
-    population: List[int] = generate_initial_population(config, cost_matrix)
+    population: list[int] = generate_initial_population(config, cost_matrix)
 
     # ------------------------------------------------------------------------------------------- #
     # Timer initialization

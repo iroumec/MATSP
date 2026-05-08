@@ -8,8 +8,8 @@ execution:
   instance: "br17"
   # Recommended values: [20, 30].
   executions: 30
-  # Recommended value: > 100.
-  population_size: 40
+  # Recommended value: >= 100.
+  population_size: 100
   # Porcentage of random generated individuals.
   # Recommended value: 0.8.
   # The rest of the individuals will be generated using an heuristic.
@@ -23,6 +23,7 @@ stop-reasons:
   generations: true
   # It is recommended to use a value greater or equal than 1000.
   # Ignored if the previous field is `false`.
+  # Recommended value: >= 1000.
   max_generations: 1000
   # Recommended value: false.
   generations_without_improvements: false
@@ -38,6 +39,7 @@ selection:
   operator: "TOURNAMENT"
   # Cannot be higher than the population size!
   selected_individuals: 10
+  # Cannot be higher than the population size!
   tournament_size: 3 # Ommited if the operator is not tournament.
 
 # =============================================================================================== #
@@ -47,6 +49,7 @@ selection:
 crossover:
   # Options: {"OX1", "PMX"}.
   operator: "PMX"
+  # Recommended acording to literature, a value in [0.6, 0.9].
   probability: 0.9
 
 # =============================================================================================== #
@@ -57,6 +60,7 @@ mutation:
   # Options: {"INVERTION", "SCRAMBLE", "SWAP"}.
   operator: "SWAP"
   # Options: {"Default"} U {R in [0.0, 1.0]}.
+  # Recommended according to literature, a value in [0.001, 0.1],
   probability: 0.9
 
 # =============================================================================================== #

@@ -118,8 +118,7 @@ def _generate_summary(
     best_individual = algorithm_result.best_individual
     best_fitness = (
         algorithm_result
-            .fitness_function
-            .calculate_fitness(best_individual, cost_matrix)
+            .fitness_function(best_individual, cost_matrix)
     )
     best_cost = calculate_cost(best_individual, cost_matrix)
 
