@@ -7,6 +7,7 @@ Output (summary and graphs) generation algorithms.
 # =============================================================================================== #
 
 import os
+from tabulate import tabulate
 from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
@@ -142,66 +143,46 @@ def _generate_parameters_summary(algorithm_result: AlgorithmResult, output_file)
     config = algorithm_result.configuration
 
     output_file.write("## GENETIC ALGORITHM PARAMETERS\n\n")
-    output_file.write("| Parameter | Value |\n")
-    output_file.write("| :---------: | :-----: |\n")
 
-    output_file.write(f"| Instance | {config.execution.instance} |\n")
-    output_file.write(f"| Population Size | {config.execution.population_size} |\n")
-    output_file.write(f"| Random Percentage | {config.execution.random_percentage} |\n")
+    headers: list[str] = ["Parameter", "Value"]
+
+    rows: list[list[any]] = [
+        ["Instance", config.execution.instance],
+        ["Population Size", config.execution.population_size],
+        ["Random Percentage", config.execution.random_percentage],
+    ]
 
     if config.stop_reasons.generations:
-        output_file.write(f"| Max Generations | {config.stop_reasons.max_generations} |\n")
+        rows.append(["Max Generations", config.stop_reasons.max_generations])
 
     if config.stop_reasons.generations_without_improvements:
-        output_file.write(
-            "| Max Generations without Improvements | "
-            f"{config.stop_reasons.max_generations_without_improvements} |\n"
+        rows.append(
+            [
+                "Max Generations without Improvements",
+                config.stop_reasons.max_generations_without_improvements
+            ]
         )
 
-    output_file.write(
-        "| Selection Operator | "
-        f"{config.selection.operator.name.upper()} |\n"
-    )
-    output_file.write(
-        "| Selected Individuals | "
-        f"{config.selection.selected_individuals} |\n"
-    )
+    rows.extend([
+        ["Selection Operator", f"{config.selection.operator.name.upper()}"],
+        ["Selected Individuals", f"{config.selection.selected_individuals}"]
+    ])
 
     if config.selection.operator.name.upper() == "TOURNAMENT":
-        output_file.write(f"| Tournament Size | {config.selection.tournament_size} |\n")
+        rows.append(["Tournament Size", config.selection.tournament_size])
 
-    output_file.write(
-        "| Crossover Operator | "
-        f"{config.crossover.operator.name.upper()} |\n"
-    )
-    output_file.write(
-        "| Crossover Probability | "
-        f"{config.crossover.probability} |\n"
-    )
-    output_file.write(
-        "| Mutation Operator | "
-        f"{config.mutation.operator.name.upper()} |\n"
-    )
-    output_file.write(
-        "| Mutation Probability | "
-        f"{config.mutation.probability} |\n"
-    )
-    output_file.write(
-        "| Local Search Operator | "
-        f"{config.improvement.operator.name.upper()} |\n"
-    )
-    output_file.write(
-        "| Local Search Probability | "
-        f"{config.improvement.probability} |\n"
-    )
-    output_file.write(
-        "| Survivors Operator | "
-        f"{config.survivors.operator.name.upper().replace("_", " ")} |\n"
-    )
-    output_file.write(
-        "| Individuals to Replace | "
-        f"{config.survivors.individuals_to_replace} |\n"
-    )
+    rows.extend([
+        ["Crossover Operator", f"{config.crossover.operator.name.upper()}"],
+        ["Crossover Probability", config.crossover.probability],
+        ["Mutation Operator", f"{config.mutation.operator.name.upper()}"],
+        ["Mutation Probability", config.mutation.probability],
+        ["Local Search Operator", f"{config.improvement.operator.name.upper()}"],
+        ["Local Search Probability", config.improvement.probability],
+        ["Survivors Operator", f"{config.survivors.operator.name.upper().replace("_", " ")}"],
+        ["Individuals to Replace", config.survivors.individuals_to_replace],
+    ])
+
+    _write_markdown_table(output_file, headers, rows)
 
 # =============================================================================================== #
 
@@ -218,25 +199,35 @@ def _generate_best_solution_summary(algorithm_result: AlgorithmResult, output_fi
     best_cost = calculate_cost(best_individual, cost_matrix)
 
     output_file.write("\n## BEST SOLUTION\n\n")
-    output_file.write("| Metric | Value |\n")
-    output_file.write("| :------: | :-----: |\n")
-    output_file.write(f"| Best Solution | {best_individual} |\n")
-    output_file.write(f"| Fitness Value | {best_fitness} |\n")
-    output_file.write(f"| Cost | {best_cost} |\n")
+
+    output_file.write(f"```text\n{best_individual}\n```\n\n")
+
+    headers: list[str] = ["Metric", "Value"]
+
+    rows: list[list[any]] = [
+        ["Fitness Value", best_fitness],
+        ["Cost", best_cost]
+    ]
+
+    _write_markdown_table(output_file, headers, rows)
 
 def _generate_execution_time_summary(algorithm_result: AlgorithmResult, output_file):
 
-    multiprocessing_state = (
+    multiprocessing_state: str = (
         "ON" if algorithm_result.configuration.execution.multiprocessing
             else "OFF"
     )
     execution_time = algorithm_result.average_execution_time
 
     output_file.write("\n## EXECUTION TIME\n\n")
-    output_file.write("| Metric | Value |\n")
-    output_file.write("| :------: | :-----: |\n")
-    output_file.write(f"| Multiprocessing | {multiprocessing_state} |\n")
-    output_file.write(f"| Average Execution Time (s) | {execution_time} |\n")
+
+    headers: list[str] = ["Metric", "Value"]
+    rows: list[list[any]] = [
+        ["Multiprocessing", multiprocessing_state],
+        ["Average Execution Time (seconds)", execution_time],
+    ]
+
+    _write_markdown_table(output_file, headers, rows)
 
 # =============================================================================================== #
 
@@ -256,11 +247,27 @@ def _generate_fitness_through_time_summary(
     else:
         output_file.write(f"![convergence](./C{configuration_id+1}_convergence.png)\n\n")
 
-    output_file.write("| Generation | Fitness |\n")
-    output_file.write("| :----------: | :-------: |\n")
+    headers: list[str] = ["Generation", "Average Best Fitness"]
+    rows: list[list[any]] = []
 
     for i, fitness_value in enumerate(best_fitness_through_time):
-        output_file.write(f"| {i+1} | {fitness_value:.7f} |\n")
+        rows.append([str(i+1), f"{fitness_value:.7f}"])
+
+    _write_markdown_table(output_file, headers, rows)
+
+# =============================================================================================== #
+
+def _write_markdown_table(output_file, headers: list[str], rows: list[list[any]]):
+
+    markdown = tabulate(
+        rows,
+        headers=headers,
+        tablefmt="github",
+        colalign=("center", "center")
+    )
+
+    output_file.write(markdown)
+    output_file.write("\n")
 
 # =============================================================================================== #
 
