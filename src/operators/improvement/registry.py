@@ -27,7 +27,7 @@ class ImprovementOperator(Protocol): # pylint: disable=too-few-public-methods
         individual: list[int],
         probability: float,
         fitness_function: callable,
-        cost_matrix: list[list[int]]
+        cost_matrix: tuple[tuple[int]]
     ) -> list[int]:
         ...
 
@@ -48,7 +48,7 @@ class ImprovementStrategy(Enum):
         individual: list[int],
         probability: float,
         fitness_function: callable,
-        cost_matrix: list[list[int]]
+        cost_matrix: tuple[tuple[int]]
     ) -> list[int]:
         return self.value(
             individual,

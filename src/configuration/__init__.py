@@ -6,8 +6,8 @@ Package declaration for configuration utilities.
 # Imports
 # =============================================================================================== #
 
-from .builder import build_config
 from .structures import Config
+from .building import build_configurations
 
 # =============================================================================================== #
 # Declarations
@@ -15,7 +15,7 @@ from .structures import Config
 
 __all__ = [
     "Config",
-    "build_config"
+    "build_configurations"
 ]
 
 # =============================================================================================== #

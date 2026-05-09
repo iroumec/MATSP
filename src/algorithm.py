@@ -19,10 +19,8 @@ from functions import (
     generate_initial_population,
 )
 
-from data_managers import (
-    load_matrix,
-    AlgorithmResult,
-)
+from data_loaders import load_matrix
+from data_savers import AlgorithmResult
 
 from concurrent.futures import ProcessPoolExecutor
 

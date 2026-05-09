@@ -11,13 +11,9 @@ from algorithm import run_algorithm
 
 import argparse
 
-from configuration import Config, build_config
+from configuration import Config, build_configurations
 
-from data_managers import (
-    save_output,
-    load_config,
-)
-from functions import assert_same_instance
+from data_savers import save_output
 
 # =============================================================================================== #
 # Functions
@@ -29,57 +25,18 @@ def parse_arguments() -> Path:
     Parses the application arguments.
 
     Returns:
-        configurations_path (Path): Path where the configurations files reside.
+        configurations_path (Path): Path where the configuration files reside.
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--config",
         type=str,
         required=True,
-        help="Path to a .yml file or a directory containing .yml files"
+        help="Path to a .yml file or a directory containing .yml files."
     )
 
     args = parser.parse_args()
     return Path(args.config)
-
-# =============================================================================================== #
-
-def build_configurations(path: Path) -> list[Config]:
-
-    """
-    Builds a list of valid configurations.
-
-    Args:
-        path (Path): Path with the YAML configuration files.
-
-    Returns:
-        configurations (List[Config]): Configuration objects.
-    """
-
-    configurations: list[Config] = []
-
-    # Just one file.
-    if path.is_file():
-        configurations.append(build_config(load_config(str(path))))
-
-    # A directory with one or more paths.
-    elif path.is_dir():
-        # Only .yml and .yaml files.
-        files = sorted([
-            p for p in path.iterdir()
-            if p.suffix in (".yml", ".yaml")
-        ])
-
-        if not files:
-            raise ValueError("No .yml or .yaml files found in directory")
-
-        for file in files:
-            configurations.append(build_config(load_config(str(file))))
-
-    else:
-        raise ValueError("Invalid path: not a file or directory")
-
-    return configurations
 
 # =============================================================================================== #
 
@@ -93,22 +50,24 @@ def main():
     # Arguments Parsing
     # ------------------------------------------------------------------------------------------- #
 
-    path = parse_arguments()
+    path: Path = parse_arguments()
 
     # ------------------------------------------------------------------------------------------- #
     # Config Building
     # ------------------------------------------------------------------------------------------- #
 
-    configurations = build_configurations(path)
+    print("Building configurations...")
+
+    configurations: list[Config] = build_configurations(path)
+
+    print("All configurations have been built successfully.")
 
     # ------------------------------------------------------------------------------------------- #
     # Validations
     # ------------------------------------------------------------------------------------------- #
 
-    assert_same_instance(configurations)
-
     if len(configurations) == 0:
-        raise ValueError("ERROR: No configurations.")
+        raise ValueError("\nERROR: No configurations.")
 
     # ------------------------------------------------------------------------------------------- #
     # Algorithm Execution
@@ -116,8 +75,10 @@ def main():
 
     various_configurations: bool = len(configurations) > 1
 
+    print(f"\nTotal configurations to execute: {len(configurations)}")
+
     if various_configurations:
-        print("Executing configurations...")
+        print("\nExecuting configurations...")
 
     results = []
     for index, configuration in enumerate(configurations):
@@ -138,7 +99,7 @@ def main():
     # Output Saving
     # ------------------------------------------------------------------------------------------- #
 
-    print("\nPreparing summary...")
+    print("\nPreparing results...")
 
     output_path = save_output(results)
 

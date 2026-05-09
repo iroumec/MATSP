@@ -12,7 +12,7 @@ from functions import select_best_individual
 # Functions
 # =============================================================================================== #
 
-def calculate_fitness(individual: list[int], cost_matrix: list[list[int]]) -> float:
+def calculate_fitness(individual: list[int], cost_matrix: tuple[tuple[int]]) -> float:
     """
     Given an individual (sequence of n locations), calculates
     it fitness, which is defined as 1/travel_cost, where the travel cost
@@ -25,7 +25,7 @@ def calculate_fitness(individual: list[int], cost_matrix: list[list[int]]) -> fl
 
     Args:
         individual (list[list[int]]): Sequence of locations.
-        cost_matrix (list[list[int]]): Matrix containing the costs from travelling from one city
+        cost_matrix (tuple[tuple[int]]): Matrix containing the costs from travelling from one city
             to another.
 
     Returns:
@@ -49,7 +49,7 @@ def calculate_fitness(individual: list[int], cost_matrix: list[list[int]]) -> fl
 def get_best_fitness(
     population: list[int],
     fitness_function: callable,
-    cost_matrix: list[list[int]]
+    cost_matrix: tuple[tuple[int]]
 ) -> float:
 
     """
@@ -59,7 +59,7 @@ def get_best_fitness(
         population (list[int]): Population to look for.
         fitness_function (callable): Fitness function used to calculate the fitness of each
             individual in the population.
-        cost_matrix (list[list[int]]): Cost matrix, necessary to calculate the fitness.
+        cost_matrix (tuple[tuple[int]]): Cost matrix, necessary to calculate the fitness.
 
     Returns:
         best_fitness (float): The highest fitness value found in the population.

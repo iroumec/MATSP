@@ -28,7 +28,7 @@ class SurvivorsOperator(Protocol): # pylint: disable=too-few-public-methods
         new_individuals: list[list[int]],
         number_to_replace: int,
         fitness_function: callable,
-        cost_matrix: list[list[int]],
+        cost_matrix: tuple[tuple[int]],
     ) -> list[list[int]]:
         ...
 
@@ -50,7 +50,7 @@ class SurvivorsStrategy(Enum):
         new_individuals: list[list[int]],
         number_to_replace: int,
         fitness_function: callable,
-        cost_matrix: list[list[int]],
+        cost_matrix: tuple[tuple[int]],
     ) -> list[list[int]]:
         return self.value(
             actual_population,

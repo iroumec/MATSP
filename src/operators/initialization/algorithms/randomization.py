@@ -14,7 +14,7 @@ import random
 
 def randomization(
     number_of_inviduals_to_generate: int,
-    cost_matrix: list[list[int]]
+    cost_matrix: tuple[tuple[int]]
 ) -> list[list[int]]:
 
     """
@@ -22,7 +22,7 @@ def randomization(
     
     Args:
         number_of_individuals_to_generate (int): Number of individuals to generate.
-        cost_matrix (list[list[int]]): Cost matrix.
+        cost_matrix (tuple[tuple[int]]): Cost matrix.
     
     Returns:
         population (list[list[int]]): A list of individuals.

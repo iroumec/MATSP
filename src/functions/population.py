@@ -16,7 +16,7 @@ from operators import InitializationStrategy
 def select_best_individual(
     actual_population: list[int],
     fitness_function: callable,
-    cost_matrix: list[list[int]]
+    cost_matrix: tuple[tuple[int]]
 ) -> list[int]:
     """
     Selects the best performing individual in the population.
@@ -25,7 +25,7 @@ def select_best_individual(
         actual_population (list[int]): Population.
         fitness_function (callable): A function that takes an individual and
             returns its fitness score.
-        cost_matrix (list[list[int]]): Necessary to calculate the fitness.
+        cost_matrix (tuple[tuple[int]]): Necessary to calculate the fitness.
 
     Returns: 
         best_individual (list[int]): Best individual in the population.
@@ -41,16 +41,16 @@ def select_best_individual(
 
 # =============================================================================================== #
 
-def generate_initial_population(config: Config, cost_matrix: list[list[int]]) -> list[int]:
+def generate_initial_population(config: Config, cost_matrix: tuple[tuple[int]]) -> list[int]:
     """
     Generates an initial population according to the configuration parameters.
     
     Args:
         config (Config): Configuration parameters.
-        cost_matrix (List[List[int]]): Cost matrix.
+        cost_matrix (tuple[tuple[int]]): Cost matrix.
 
     Returns:
-        initial_population (List[int]): Initial population.
+        initial_population (list[int]): Initial population.
     """
 
     population: list[int] = []

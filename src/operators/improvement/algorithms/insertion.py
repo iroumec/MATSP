@@ -16,7 +16,7 @@ def insertion(
     individual: list[int],
     probability: float,
     fitness_function: callable,
-    cost_matrix: list[list[int]]
+    cost_matrix: tuple[tuple[int]]
 ) -> list[int]:
 
     """
@@ -26,7 +26,7 @@ def insertion(
         individual (list[int]): Individual to which apply the operator.
         probability (float): Probability of applying the operator.
         fitness_function (callable): Function that allows to calculate an individual fitness.
-        cost_matrix (list[list[int]]): Cost matrix. Required for the fitness function.
+        cost_matrix (tuple[tuple[int]]): Cost matrix. Required for the fitness function.
     
     Returns:
         invidual (list[int]): Individual post operator aplication. If the expected probability

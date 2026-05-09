@@ -17,7 +17,7 @@ def replace_worst(
     new_individuals: list[list[int]],
     number_to_replace: int,
     fitness_function: callable,
-    cost_matrix: list[list[int]],
+    cost_matrix: tuple[tuple[int]],
 ) -> list[list[int]]:
 
     """

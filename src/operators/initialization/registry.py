@@ -25,7 +25,7 @@ class InitializationOperator(Protocol): # pylint: disable=too-few-public-methods
     def __call__(
         self,
         number_of_inidivuals_to_generate: int,
-        cost_matrix: list[list[int]]
+        cost_matrix: tuple[tuple[int]]
     ) -> list[int]:
         ...
 
@@ -45,7 +45,7 @@ class InitializationStrategy(Enum):
     def __call__(
         self,
         number_of_inidivuals_to_generate: int,
-        cost_matrix: list[list[int]]
+        cost_matrix: tuple[tuple[int]]
     ) -> list[int]:
         return self.value(number_of_inidivuals_to_generate, cost_matrix)
 

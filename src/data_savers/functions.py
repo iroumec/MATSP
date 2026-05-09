@@ -11,11 +11,10 @@ from tabulate import tabulate
 from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
-from dataclasses import dataclass
 from matplotlib.lines import Line2D
 
 from functions import calculate_cost
-from configuration.structures import Config
+from .structures import AlgorithmResult
 
 # =============================================================================================== #
 # Constants
@@ -37,25 +36,6 @@ SUMMARY_FILE_NAME: str = "summary.md"
 CONVERGENCE_PLOT_X_AXIS_LABEL: str = "Generation"
 CONVERGENCE_PLOT_Y_AXIS_LABEL: str = "Average Best Fitness"
 AVERAGE_EXECUTION_TIME_PLOT_TITLE: str = "Average Execution Time (Seconds)"
-
-# =============================================================================================== #
-# Dataclass
-# =============================================================================================== #
-
-@dataclass
-class AlgorithmResult:
-
-    """
-    Dataclass for algorithm results.
-    """
-
-    configuration: Config
-    fitness_function: callable
-    best_individual: list[int]
-    cost_matrix: list[list[int]]
-    average_execution_time: float
-    average_best_fitness_through_time: list[float]
-    std_best_fitness_through_time: list[float]
 
 # =============================================================================================== #
 # Functions

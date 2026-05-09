@@ -6,14 +6,14 @@ Cost calculation algorithm implementation.
 # Function
 # =============================================================================================== #
 
-def calculate_cost(individual: list[int], cost_matrix: list[list[int]]):
+def calculate_cost(individual: list[int], cost_matrix: tuple[tuple[int]]):
 
     """
     Calculates the cost of an individual based on a cost matrix.
     
     Args:
         individual (list[int]): Sequence of locations.
-        cost_matrix (list[list[int]]): Cost matrix.
+        cost_matrix (tuple[tuple[int]]): Cost matrix.
 
     Returns:
         travel_cost (float): Travel cost.

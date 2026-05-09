@@ -16,7 +16,7 @@ def tournament(
     population: list[list[int]],
     fitness_function: callable,
     num_selections: int,
-    cost_matrix: list[list[int]],
+    cost_matrix: tuple[tuple[int]],
     tournament_size: int = 3,
     **_kwargs
 ) -> list[list[int]]:
@@ -29,7 +29,7 @@ def tournament(
         fitness_function (callable): A function that takes an individual and a cost matrix and
             returns its fitness score.
         num_selections (int): The number of individuals to select.
-        cost_matrix (list[list[int]]): Cost matrix.
+        cost_matrix (tuple[tuple[int]]): Cost matrix.
         tournament_size (int): The number of individuals to select for the tournament.
 
     Returns:

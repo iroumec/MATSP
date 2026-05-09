@@ -25,7 +25,7 @@ class SelectionOperator(Protocol): # pylint: disable=too-few-public-methods
         population: list[list[int]],
         fitness_function: callable,
         num_selections: int,
-        cost_matrix: list[list[int]],
+        cost_matrix: tuple[tuple[int]],
         **kwargs: any
     ) -> list[list[int]]:
         ...
@@ -48,7 +48,7 @@ class SelectionStrategy(Enum):
         population: list[list[int]],
         fitness_function: callable,
         num_selections: int,
-        cost_matrix: list[list[int]],
+        cost_matrix: tuple[tuple[int]],
         **kwargs
     ):
         return self.value(

@@ -18,7 +18,7 @@ def roulette(
     population: list[int],
     fitness_function: callable,
     num_selections: int,
-    cost_matrix: list[list[int]],
+    cost_matrix: tuple[tuple[int]],
     **_kwargs
 ) -> list[list[int]]:
 
@@ -30,7 +30,7 @@ def roulette(
         fitness_function (callable): A function that takes an individual and the cost
             matrix and returns its fitness score.
         num_selections (int): The number of individuals to select.
-        cost_matrix (list[list[int]]): The cost matrix for evaluating fitness.
+        cost_matrix (tuple[tuple[int]]): The cost matrix for evaluating fitness.
         **kwargs: Additional keyword arguments for the selection process.
 
     Returns:

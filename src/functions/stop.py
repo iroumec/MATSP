@@ -3,10 +3,20 @@ Stop reasons checking implementation.
 """
 
 # =============================================================================================== #
+# Imports
+# =============================================================================================== #
+
+from configuration.structures import Config
+
+# =============================================================================================== #
 # Function
 # =============================================================================================== #
 
-def must_stop(current_generation: int, generations_without_improvements: int, config) -> bool:
+def must_stop(
+    current_generation: int,
+    generations_without_improvements: int,
+    config: Config
+) -> bool:
 
     """
     Checks if the algorithm must be stopped.
@@ -21,7 +31,7 @@ def must_stop(current_generation: int, generations_without_improvements: int, co
         must_stop (bool): `True` if the algorithm must be stopped. Otherwise, `false`.
     """
 
-    stop = config.stop_reasons # Alias.
+    stop = config.stop_reasons
 
     generations_limit = stop.generations and (current_generation >= stop.max_generations)
     generations_without_improvements_limit = (

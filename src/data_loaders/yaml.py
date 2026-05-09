@@ -1,5 +1,5 @@
 """
-Configuration and matrix loading algorithms.
+YAML loading algorithm.
 """
 
 # =============================================================================================== #
@@ -9,36 +9,7 @@ Configuration and matrix loading algorithms.
 import yaml
 
 # =============================================================================================== #
-# Constants
-# =============================================================================================== #
-
-INSTANCES_PATH = "resources/atsp-instances/cleaned-instances/"
-
-# =============================================================================================== #
-# Functions
-# =============================================================================================== #
-
-def load_matrix(instance: str) -> list[list[int]]:
-
-    """
-    Loads an instance's matrix.
-
-    Args:
-        instance (str): Instance's name.
-    
-    Returns:
-        matrix (list[list[int]]): Instance's cost matrix.
-    """
-
-    matrix = []
-
-    with open(INSTANCES_PATH + instance + ".atsp", "r", encoding="UTF-8") as matrix_file:
-        for line in matrix_file:
-            row = list(map(int, line.split()))
-            matrix.append(row)
-
-    return matrix
-
+# Function
 # =============================================================================================== #
 
 def load_config(path: str) -> any:

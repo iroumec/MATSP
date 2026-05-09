@@ -6,6 +6,9 @@ Configuration building implementation.
 # Imports
 # =============================================================================================== #
 
+import itertools
+from pathlib import Path
+
 from operators import (
     SelectionStrategy,
     CrossoverStrategy,
@@ -25,13 +28,107 @@ from .structures import (
     SurvivorsConfig,
 )
 
+from data_loaders import load_config
+
+# =============================================================================================== #
+# Constants
+# =============================================================================================== #
+
+REQUIRED_SECTIONS = {
+    "execution", "stop-reasons", "selection",
+    "crossover", "mutation", "improvement", "survivors"
+}
+
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
 
-def build_config(raw: dict) -> Config:
+def build_configurations(path: Path) -> list[Config]:
+
     """
-    Given a dict of paramaters, builds a configuration.
+    Builds a list of unique valid configurations from a file or a directory.
+    If a configuration field contains a list of values, it generates the 
+    cartesian product of all possible combinations (Grid Search).
+
+    Args:
+        path (Path): Path to a YAML file or a directory containing YAML files.
+
+    Returns:
+        configurations (List[Config]): List of unique configuration objects.
+    """
+
+    configurations: list[Config] = []
+
+    # Just one file.
+    if path.is_file():
+        raw_data = load_config(str(path))
+        configurations.extend(_expand_raw_config(raw_data))
+
+    # A directory with at least one YAML file.
+    elif path.is_dir():
+        files = sorted([
+            p for p in path.iterdir()
+            if p.suffix in (".yml", ".yaml")
+        ])
+
+        if not files:
+            raise ValueError(f"ERROR: No .yml or .yaml files found in {path}")
+
+        for file in files:
+            raw_data = load_config(str(file))
+            configurations.extend(_expand_raw_config(raw_data))
+    else:
+        raise ValueError(f"ERROR: Invalid path {path}")
+
+    return configurations
+
+# =============================================================================================== #
+
+def _expand_raw_config(raw_data: dict[str, any]) -> list[Config]:
+
+    """
+    Helper function to expand YAML lists into unique valid Config objects.
+    """
+
+    missing = REQUIRED_SECTIONS - set(raw_data.keys())
+    if missing:
+        raise ValueError(f"ERROR: Missing sections in YAML: {missing}")
+
+    # Normalizes everything to lists and removes duplicates.
+    options_map: dict[str, dict[str, list[any]]] = {}
+
+    for section, parameters in raw_data.items():
+        options_map[section] = {}
+        for param_name, param_value in parameters.items():
+            if isinstance(param_value, list):
+                # Removes duplicates like ["SWAP", "SWAP"].
+                options_map[section][param_name] = list(dict.fromkeys(param_value))
+            else:
+                options_map[section][param_name] = [param_value]
+
+    # Generates all combinations per section.
+    sections = options_map.keys()
+    options_per_section = []
+    for section in sections:
+        keys = options_map[section].keys()
+        values = options_map[section].values()
+        section_combos = [dict(zip(keys, combo)) for combo in itertools.product(*values)]
+        options_per_section.append(section_combos)
+
+    # Generates global combinations and builds them.
+    expanded_configs: list[Config] = []
+    for global_combination in itertools.product(*options_per_section):
+        final_raw = dict(zip(sections, global_combination))
+        expanded_configs.append(_build_config(final_raw))
+
+    return expanded_configs
+
+# =============================================================================================== #
+
+def _build_config(raw: dict) -> Config:
+
+    """
+    Given a dict of parameters, builds a configuration.
     
     Args:
         raw (dict): Raw list of parameters.
