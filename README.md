@@ -35,6 +35,23 @@ Parses and executes all configuration YAML files in the indicated folder.
 
 The output consisten on a configuration markdown summary and an individual convergence graph for each configuration, and a combined convergence graphs, costs and average execution times comparison plot.
 
+#### Configuration Naming
+
+If you want the files to be executed and mapped in the same order you write them, do not name them like this:
+
+config_1, config_2, ..., config_10, config_11
+
+Becuase:
+
+- C1 -> config_1
+- C2 -> config_10
+
+This is cause due to the string comparison, which is done character by character.
+
+Instead, use the zero-padding convention, which is the standard convention in scientific computing, datasets, logs, simulations, rendering pipelines, backups, and so on.
+
+Examples: config_01, config_02, config_03, ..., config_10, config_11, config_12.
+
 ## AI Usage
 
 Artificial Intelligence (AI) was used in this project with the following objectives:

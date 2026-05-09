@@ -14,6 +14,10 @@ execution:
   # Recommended value: 0.8.
   # The rest of the individuals will be generated using an heuristic.
   random_percentage: 0.8
+  # Recommended for a high number of executions (> 20).
+  # If the number of executions is small, the overhead caused
+  # by the multiprocessing could slow down the overall execution.
+  multiprocessing: true
 
 # =============================================================================================== #
 # Stop Reasons
@@ -48,7 +52,7 @@ selection:
 
 crossover:
   # Options: {"OX1", "PMX"}.
-  operator: "OX1"
+  operator: "PMX"
   # Recommended acording to literature, a value in [0.6, 0.9].
   probability: 0.9
 
@@ -58,10 +62,10 @@ crossover:
 
 mutation:
   # Options: {"INVERTION", "SCRAMBLE", "SWAP"}.
-  operator: "SWAP"
+  operator: "INVERTION"
   # Options: {"Default"} U {R in [0.0, 1.0]}.
   # Recommended according to literature, a value in [0.001, 0.1],
-  probability: 0.1
+  probability: 0.9
 
 # =============================================================================================== #
 # Improvement (Local Search)

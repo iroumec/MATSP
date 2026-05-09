@@ -44,7 +44,8 @@ def build_config(raw: dict) -> Config:
         instance=raw["execution"]["instance"],
         population_size=raw["execution"]["population_size"],
         random_percentage=raw["execution"]["random_percentage"],
-        executions=raw["execution"]["executions"]
+        executions=raw["execution"]["executions"],
+        multiprocessing=raw["execution"]["multiprocessing"]
     )
 
     if exec_cfg.population_size <= 0:

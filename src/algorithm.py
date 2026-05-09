@@ -24,6 +24,8 @@ from data_managers import (
     AlgorithmResult,
 )
 
+from concurrent.futures import ProcessPoolExecutor
+
 # =============================================================================================== #
 # Public Functions
 # =============================================================================================== #
@@ -58,13 +60,31 @@ def run_algorithm(config: Config) -> AlgorithmResult:
     # Algorithm execution
     # ------------------------------------------------------------------------------------------- #
 
-    for _ in range(config.execution.executions):
-        current_best_individual, current_execution_time, current_best_fitness_through_time = (
-            _execute_algorithm(config, fitness_function, cost_matrix)
-        )
-        execution_times.append(current_execution_time)
-        best_individuals.append(current_best_individual)
-        best_fitness_through_time.append(current_best_fitness_through_time)
+    if config.execution.multiprocessing:
+        tasks = [
+            (config, fitness_function, cost_matrix)
+            for _ in range(config.execution.executions)
+        ]
+
+        with ProcessPoolExecutor() as executor:
+            results = executor.map(_execute_algorithm_multiprocessing, tasks)
+
+        for (
+            current_best_individual,
+            current_execution_time,
+            current_best_fitness_through_time,
+        ) in results:
+            execution_times.append(current_execution_time)
+            best_individuals.append(current_best_individual)
+            best_fitness_through_time.append(current_best_fitness_through_time)
+    else: # Single process execution.
+        for _ in range(config.execution.executions):
+            current_best_individual, current_execution_time, current_best_fitness_through_time = (
+                _execute_algorithm(config, fitness_function, cost_matrix)
+            )
+            execution_times.append(current_execution_time)
+            best_individuals.append(current_best_individual)
+            best_fitness_through_time.append(current_best_fitness_through_time)
 
     # ------------------------------------------------------------------------------------------- #
     # Output saving
@@ -84,6 +104,17 @@ def run_algorithm(config: Config) -> AlgorithmResult:
 
 # =============================================================================================== #
 # Private Functions
+# =============================================================================================== #
+
+def _execute_algorithm_multiprocessing(args):
+
+    """
+    Mediator required by Python because of position arguments.
+    """
+
+    config, fitness_function, cost_matrix = args
+    return _execute_algorithm(config, fitness_function, cost_matrix)
+
 # =============================================================================================== #
 
 def _execute_algorithm(

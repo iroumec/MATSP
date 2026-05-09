@@ -29,6 +29,7 @@ class ExecutionConfig:
     population_size: int
     random_percentage: float
     executions: int
+    multiprocessing: bool
 
 # =============================================================================================== #
 

@@ -226,11 +226,16 @@ def _generate_best_solution_summary(algorithm_result: AlgorithmResult, output_fi
 
 def _generate_execution_time_summary(algorithm_result: AlgorithmResult, output_file):
 
+    multiprocessing_state = (
+        "ON" if algorithm_result.configuration.execution.multiprocessing
+            else "OFF"
+    )
     execution_time = algorithm_result.average_execution_time
 
     output_file.write("\n## EXECUTION TIME\n\n")
     output_file.write("| Metric | Value |\n")
     output_file.write("| :------: | :-----: |\n")
+    output_file.write(f"| Multiprocessing | {multiprocessing_state} |\n")
     output_file.write(f"| Average Execution Time (s) | {execution_time} |\n")
 
 # =============================================================================================== #
