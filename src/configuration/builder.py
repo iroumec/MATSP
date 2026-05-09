@@ -52,10 +52,7 @@ def build_config(raw: dict) -> Config:
         raise ValueError("ERROR: The population size must be greater than zero.")
 
     if exec_cfg.random_percentage < 0 or exec_cfg.random_percentage > 1:
-        raise ValueError(
-            "ERROR: The random percentage must be greater or equal than zero, "
-            "or less or equal than one"
-        )
+        raise ValueError("ERROR: The random percentage must be a number in [0.0, 1.0].")
 
     if exec_cfg.executions < 1:
         raise ValueError("ERROR: The number of executions must be greater or equal than 1")
@@ -78,14 +75,33 @@ def build_config(raw: dict) -> Config:
         tournament_size=raw["selection"]["tournament_size"],
     )
 
+    if sel_cfg.selected_individuals > exec_cfg.population_size:
+        raise ValueError(
+            "ERROR: The number of individuals selected in the selection process "
+            "cannot be greater than the population size"
+        )
+
+    if raw["selection"]["operator"] == "TOURNAMENT":
+        if sel_cfg.tournament_size > exec_cfg.population_size:
+            raise ValueError(
+                "ERROR: The number of individuals participating in the tournament process "
+                "cannot be greater than the population size"
+            )
+
     cross_cfg = CrossoverConfig(
         operator=CrossoverStrategy[raw["crossover"]["operator"]],
         probability=raw["crossover"]["probability"],
     )
 
+    if cross_cfg.probability < 0 or cross_cfg.probability > 1:
+        raise ValueError("ERROR: The crossover probability must be a number in [0.0, 1.0].")
+
     mut_prob = raw["mutation"]["probability"]
     if mut_prob == "Default":
         mut_prob = 1 / exec_cfg.population_size
+
+    if mut_prob < 0 or mut_prob > 1:
+        raise ValueError("ERROR: The mutation probability must be a number in [0.0, 1.0].")
 
     mut_cfg = MutationConfig(
         operator=MutationStrategy[raw["mutation"]["operator"]],
@@ -98,10 +114,7 @@ def build_config(raw: dict) -> Config:
     )
 
     if imp_cfg.probability < 0 or imp_cfg.probability > 1:
-        raise ValueError(
-            "ERROR: The improvement (local search) probability cannot be "
-            "smaller than 0 nor greater than 1."
-        )
+        raise ValueError("ERROR: The improvement (local search) must be a number in [0.0, 1.0].")
 
     surv_cfg = SurvivorsConfig(
         operator=SurvivorsStrategy[raw["survivors"]["operator"]],
@@ -110,7 +123,7 @@ def build_config(raw: dict) -> Config:
 
     if surv_cfg.individuals_to_replace > exec_cfg.population_size:
         raise ValueError(
-            "ERROR: The individuals to replace in the survivors selection "
+            "ERROR: The number of individuals to replace in the survivors selection "
             "cannot be greater than the population size"
         )
 
