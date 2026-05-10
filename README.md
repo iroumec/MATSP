@@ -22,7 +22,7 @@ The output consists on a configuration markdown summary and an individual conver
 
 ### Configuration Naming
 
-In case of running a directory of multuple files, if you want the files to be executed and mapped in the same order you write them, do not name them like this:
+In case of running a directory of multiple files, if you want the files to be executed and mapped in the same order you write them, do not name them like this:
 
 ```text
 config_1, config_2, ..., config_10, config_11
@@ -54,8 +54,8 @@ Artificial Intelligence (AI) was used in this project with the following objecti
   - to build the YAML expansion algorithm for building different configuration from a single file.
 
 - Once finished the project:
-  - to check for inconsistences and typos; and
-  - to apply minor optimizations to the algorithms.
+  - to apply optimize the algorithms; and
+  - to check for inconsistences and typos.
 
 ## Disclaimer
 

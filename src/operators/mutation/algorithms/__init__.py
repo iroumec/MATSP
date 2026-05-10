@@ -8,7 +8,7 @@ Package declaration for mutation operators implementations.
 
 from .swap import swap
 from .scramble import scramble
-from .invertion import invertion
+from .inversion import inversion
 
 # =============================================================================================== #
 # Declarations
@@ -17,7 +17,7 @@ from .invertion import invertion
 __all__ = [
     "swap",
     "scramble",
-    "invertion",
+    "inversion",
 ]
 
 # =============================================================================================== #

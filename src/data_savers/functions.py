@@ -102,7 +102,7 @@ def _generate_summary(
             file is named 'summary.md'; otherwise it is named 'C{idx+1}_summary.md'.
         base_path (str): Directory path where the summary file will be saved.
     """
-    
+
     if unique_summary:
         file_path = os.path.join(base_path, SUMMARY_FILE_NAME)
     else:
@@ -115,7 +115,7 @@ def _generate_summary(
         else:
             output_file.write(f"# Configuration C{idx+1} Summary\n\n")
 
-        # Paramters summary.
+        # Parameters summary.
         _generate_parameters_summary(algorithm_result, output_file)
 
         # Best solution summary.

@@ -10,7 +10,8 @@
 
 # Parameters related to the general execution of the algorithm.
 execution:
-  # Options: {"br17", "ft53", "p43"}.
+  # Options: {"br17", "ft53", "p43", ...}.
+  # See "resources/atsp-instances" for more instances.
   instance: "br17"
   # Recommended values: [20, 30].
   executions: 30
@@ -67,8 +68,8 @@ crossover:
 # =============================================================================================== #
 
 mutation:
-  # Options: {"SWAP", "SCRAMBLE", "INVERTION"}.
-  operator: ["SWAP", "SCRAMBLE", "INVERTION"]
+  # Options: {"SWAP", "SCRAMBLE", "INVERSION"}.
+  operator: ["SWAP", "SCRAMBLE", "INVERSION"]
   # Options: {"Default"} U {R in [0.0, 1.0]}.
   # Recommended according to literature, a value in [0.001, 0.1],
   probability: 0.9

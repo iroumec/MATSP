@@ -4,6 +4,9 @@ SHELL := /bin/bash
 
 CONFIG ?= resources/configuration.example.yml
 
+create-venv:
+	@python3 -m venv venv
+
 run: ## Use examples: make run CONFIG="resources/configurations/".
 	@source venv/bin/activate && python3 -u src/main.py --config $(CONFIG)
 

@@ -9,7 +9,7 @@ Defines the protocol and enum for mutation operators.
 from enum import Enum, member
 from typing_extensions import Protocol
 
-from .algorithms import swap, scramble, invertion
+from .algorithms import swap, scramble, inversion
 
 # =============================================================================================== #
 # Protocol
@@ -40,7 +40,7 @@ class MutationStrategy(Enum):
 
     SWAP: MutationOperator = member(swap)
     SCRAMBLE: MutationOperator = member(scramble)
-    INVERTION: MutationOperator = member(invertion)
+    INVERSION: MutationOperator = member(inversion)
 
     def __call__(
         self,

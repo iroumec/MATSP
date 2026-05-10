@@ -1,5 +1,5 @@
 """
-"INVERTION" mutation operator implementation.
+"INVERSION" mutation operator implementation.
 """
 
 # =============================================================================================== #
@@ -12,7 +12,7 @@ import random
 # Functions
 # =============================================================================================== #
 
-def invertion(individual: list[int], probability: float) -> list[int]:
+def inversion(individual: list[int], probability: float) -> list[int]:
 
     """
     Randomly, inverts a contiguous segment of genes of an individual's chromosome.
@@ -22,31 +22,26 @@ def invertion(individual: list[int], probability: float) -> list[int]:
     returns an unmodified copy of the individual.
 
     Args:
-        individual (List[int]): Individual whose genes will be inverted.
+        individual (list[int]): Individual whose genes will be inverted.
         probability (float): Probability required to apply the invertion.
 
     Returns:
-        mutated_individual (List[int]): Mutated individual.
+        mutated_individual (list[int]): Mutated individual.
     """
 
     # Applies the mutation only with the given probability.
     if random.random() >= probability:
-        return individual.copy()
+        return list(individual)
 
     # Creates a copy to avoid modifying the original individual.
-    mutated_individual = individual.copy()
+    mutated_individual = list(individual)
 
-    number_of_elements = len(mutated_individual)
-
-    # Selects a random start index.
-    start_index = random.randint(0, number_of_elements - 1)
-
-    # Selects a random end index greater than or equal to the start index.
-    end_index = random.randint(start_index, number_of_elements)
+    # Selects a random start index and a random end index.
+    # sorted() ensures start is before end.
+    start_index, end_index = sorted(random.sample(range(len(mutated_individual)), 2))
 
     # Slices the original array and assign the reversed slice back to the same location.
-    # It doesn't include the end index.
-    mutated_individual[start_index:end_index] = reversed(mutated_individual[start_index:end_index])
+    mutated_individual[start_index:end_index+1] = mutated_individual[start_index:end_index+1][::-1]
 
     return mutated_individual
 
