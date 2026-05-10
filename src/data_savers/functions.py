@@ -68,8 +68,19 @@ def save_output(algorithm_results: list[AlgorithmResult]):
     if unique_file:
         _generate_individual_plot(algorithm_results[0], run_dir)
     elif algorithm_results:
-        plot_path = os.path.join(run_dir, "comparison.png")
-        _generate_combined_and_individuals_plots(algorithm_results, plot_path)
+        plot_path = os.path.join(run_dir, "comparison")
+
+        _generate_combined_and_individuals_plots(
+            algorithm_results,
+            f"{plot_path}_with_std.png",
+            show_std=True
+        )
+
+        _generate_combined_and_individuals_plots(
+            algorithm_results,
+            f"{plot_path}_without_std.png",
+            show_std=False
+        )
 
     # Generates TXT per configuration.
     for idx, algorithm_result in enumerate(algorithm_results):
@@ -311,7 +322,11 @@ def _write_markdown_table(output_file, headers: list[str], rows: list[list[any]]
 
 # =============================================================================================== #
 
-def _generate_combined_and_individuals_plots(algorithm_results: list[AlgorithmResult], path: str):
+def _generate_combined_and_individuals_plots(
+    algorithm_results: list[AlgorithmResult],
+    path: str,
+    show_std: bool,
+):
 
     """
     Generates and saves a combined comparison figure containing convergence curves
@@ -350,10 +365,10 @@ def _generate_combined_and_individuals_plots(algorithm_results: list[AlgorithmRe
         lower = [m - s for m, s in zip(best_fitness_through_time, std)]
         upper = [m + s for m, s in zip(best_fitness_through_time, std)]
 
-        if FILL_STD_LINES:
+        if show_std and FILL_STD_LINES:
             ax1.fill_between(generations, lower, upper, color=line.get_color(), alpha=0.1)
 
-        if DRAW_STD_LINES:
+        if show_std and DRAW_STD_LINES:
             ax1.plot(generations, lower, linestyle="--", linewidth=0.5, color=line.get_color())
             ax1.plot(generations, upper, linestyle="--", linewidth=0.5, color=line.get_color())
 
@@ -438,7 +453,13 @@ def _generate_best_cost_graph(
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_title("Best Cost per Configuration")
-    ax.bar_label(ax.containers[0])
+    ax.bar_label(
+        ax.containers[0],
+        fontsize=8,
+        padding=3,
+        rotation=45
+    )
+    ax.margins(y=0.15)
     ax.grid(True, linestyle='--', alpha=0.7)
 
 # =============================================================================================== #
@@ -465,7 +486,14 @@ def _generate_average_execution_time_graph(
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_title(AVERAGE_EXECUTION_TIME_PLOT_TITLE)
-    ax.bar_label(ax.containers[0], fmt="%.2f")
+    ax.bar_label(
+        ax.containers[0],
+        fmt="%.2f",
+        fontsize=8,
+        padding=3,
+        rotation=45
+    )
+    ax.margins(y=0.15)
     ax.grid(True, linestyle='--', alpha=0.7)
 
 # =============================================================================================== #
@@ -543,7 +571,7 @@ def _generate_individual_plot_optimized_for_combined_context(
         upper: Per-generation upper standard deviation bound.
         path (str): Directory path where 'C{idx+1}_convergence.png' will be saved.
     """
-    
+
     fig_i, ax_i = plt.subplots(figsize=(8, 5))
 
     ax_i.plot(generations, best_fitness_through_time, linewidth=3, color=line.get_color())

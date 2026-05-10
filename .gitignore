@@ -175,9 +175,6 @@ pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 
-# Momentánemaente:
-outputs/
-
 # SonarQube
 .sonar
 .sonar/

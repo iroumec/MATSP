@@ -1,67 +1,82 @@
 # What is this?
 
-MATSP is an ATSP instances solver that uses a memetic algorithm (MA) approach.
+MATSP is an ATSP instance solver based on a Memetic Algorithm (MA) approach.
 
 ## Usage Examples
 
-One file:
+Running a single configuration file:
 
 ```sh
 make run CONFIG="resources/configuration.example.yml"
 ```
 
-A directory:
+Running all configuration files inside a directory:
 
 ```sh
 make run CONFIG="resources/configurations/"
 ```
 
-Parses and executes all configurations in the YAML files. A file can contain more than one configuration.
+All YAML configurations are parsed and executed automatically. A single YAML file may contain multiple configurations.
 
-The output consists on a configuration markdown summary and an individual convergence graph for each configuration, and a combined convergence graphs, costs and average execution times comparison plot, in case the number of configuration is greater than one.
+The output includes:
 
-### Configuration Naming
+- a Markdown summary for each configuration;
+- an individual convergence plot for each configuration; and
+- a combined comparison plot containing:
+  - convergence curves;
+  - best costs; and
+  - average execution times.
 
-In case of running a directory of multiple files, if you want the files to be executed and mapped in the same order you write them, do not name them like this:
+The combined comparison plot is generated only when more than one configuration is executed.
+
+## Configuration Naming
+
+When executing multiple configuration files from a directory, file ordering matters.
+
+Avoid naming files like this:
 
 ```text
 config_1, config_2, ..., config_10, config_11
 ```
 
-They will be mapped in this order:
+They will be ordered lexicographically:
 
 ```text
 config_1, config_10, config_11, config_2, ...
 ```
 
-This is cause due to the string comparison, which is done character by character.
+This happens because filenames are compared character by character.
 
-Instead, use the zero-padding convention, which is the standard convention in scientific computing, datasets, logs, simulations, rendering pipelines, backups, and so on.
+Instead, use zero-padded numbering, which is the standard convention in scientific computing, datasets, simulation pipelines, rendering systems, logging infrastructures, and backup systems.
 
 ```text
-config_01, config_02, config_03, ..., config_10, config_11, config_12.
+config_01, config_02, config_03, ..., config_10, config_11, config_12
 ```
 
 ## Transparency Commitment
 
-Artificial Intelligence (AI) was used in this project with the following objectives:
+Artificial Intelligence (AI) tools were used during the development of this project for the following purposes:
 
-- During the project development:
-  - to evaluate different solutions;
-  - to solve bugs whose solution was unknown;
-  - to build the matrix extraction algorithm;
-  - to learn about some standard solutions for faced problems, like Protocol (PEP 544); and
-  - to build the YAML expansion algorithm for building different configuration from a single file.
+### During development
 
-- Once finished the project:
-  - to apply optimize the algorithms; and
-  - to check for inconsistences and typos.
+- evaluating alternative implementations and designs;
+- debugging problems with unknown solutions;
+- designing the matrix extraction algorithm;
+- learning standard solutions and Python practices, such as Protocols (PEP 544); and
+- designing the YAML configuration expansion system.
+
+### After development
+
+- optimizing some algorithms and implementations; and
+- reviewing the project for inconsistencies and typographical errors.
 
 ## Disclaimer
 
-Quinki has an educational purpose: it's not expected to be used in real environments nor be extremely efficient for real-scale problems.
+MATSP is an educational project.
+
+It is not intended for production environments, nor is it expected to provide state-of-the-art performance for large-scale industrial ATSP instances.
 
 ## Credits
 
-- González, Joaquín Tesoro.
-- Roumec, Iñaki.
+- Joaquín Tesoro González
+- Iñaki Roumec

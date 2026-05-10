@@ -39,6 +39,37 @@ REQUIRED_SECTIONS = {
     "crossover", "mutation", "improvement", "survivors"
 }
 
+# Rules controlling whether a parameter actively participates in the
+# combinatorial expansion process.
+#
+# Key format:
+#     "<section>.<parameter>"
+#
+# Rule semantics:
+#     True  -> parameter expands combinations normally.
+#     False -> parameter keeps only its first/default value and does not
+#              increase the number of generated configurations.
+#
+# This mechanism prevents the creation of redundant configurations while
+# preserving a consistent configuration structure.
+#
+# Example:
+#     If the selection operator is not TOURNAMENT, tournament_size keeps
+#     only its first value and does not generate extra combinations.
+DEPENDENCY_RULES = {
+    "selection.tournament_size": lambda config: (
+        config["selection"]["operator"] == "TOURNAMENT"
+    ),
+
+    "stop-reasons.max_generations": lambda config: (
+        config["stop-reasons"]["generations"]
+    ),
+
+    "stop-reasons.max_generations_without_improvements": lambda config: (
+        config["stop-reasons"]["generations_without_improvements"]
+    ),
+}
+
 # =============================================================================================== #
 # Functions
 # =============================================================================================== #
@@ -110,9 +141,10 @@ def _expand_raw_config(raw_data: dict[str, any]) -> list[Config]:
     sections = options_map.keys()
     options_per_section = []
     for section in sections:
-        keys = options_map[section].keys()
-        values = options_map[section].values()
-        section_combos = [dict(zip(keys, combo)) for combo in itertools.product(*values)]
+        section_combos = _generate_section_combinations(
+            section,
+            options_map[section]
+        )
         options_per_section.append(section_combos)
 
     # Generates global combinations and builds them.
@@ -122,6 +154,141 @@ def _expand_raw_config(raw_data: dict[str, any]) -> list[Config]:
         expanded_configs.append(_build_config(final_raw))
 
     return expanded_configs
+
+# =============================================================================================== #
+
+def _generate_section_combinations(
+    section: str,
+    parameters: dict[str, list[any]]
+) -> list[dict[str, any]]:
+
+    """
+    Generates all valid parameter combinations for a configuration section.
+
+    Parameters whose dependency rules are active participate normally in the
+    cartesian expansion process.
+
+    Parameters whose dependency rules are inactive do not expand the number
+    of generated combinations. Instead, they are assigned only their first
+    available value, which acts as a default/fallback value.
+
+    This prevents the generation of redundant configurations while preserving
+    a consistent structure across all generated configurations.
+
+    Example:
+        operator = [TOURNAMENT, ROULETTE]
+        tournament_size = [3, 5, 10]
+
+    Generates:
+        TOURNAMENT + 3
+        TOURNAMENT + 5
+        TOURNAMENT + 10
+        ROULETTE + 3
+
+    instead of:
+        ROULETTE + 3
+        ROULETTE + 5
+        ROULETTE + 10
+
+    Args:
+        section (str):
+            Name of the configuration section being expanded
+            (e.g. "selection", "stop-reasons").
+
+        parameters (dict[str, list[any]]):
+            Mapping between parameter names and their possible values.
+
+    Returns:
+        list[dict[str, any]]:
+            List of valid parameter combinations for the section.
+    """
+
+    combinations = [{}]
+
+    for parameter, values in parameters.items():
+
+        new_combinations = []
+
+        for current_config in combinations:
+
+            partial_config = {
+                section: current_config
+            }
+
+            parameter_is_active = _is_parameter_active(
+                section,
+                parameter,
+                partial_config
+            )
+
+            # ACTIVE -> Parameter is expanded.
+            if parameter_is_active:
+
+                for value in values:
+                    new_config = current_config.copy()
+                    new_config[parameter] = value
+                    new_combinations.append(new_config)
+
+            # INACTIVE -> Keeps parameter with ONLY first/default value.
+            # Does not expand combinations.
+            else:
+
+                new_config = current_config.copy()
+                new_config[parameter] = values[0]
+                new_combinations.append(new_config)
+
+        combinations = new_combinations
+
+    return combinations
+
+# =============================================================================================== #
+
+def _is_parameter_active(
+    section: str,
+    parameter: str,
+    partial_config: dict[str, any]
+) -> bool:
+
+    """
+    Determines whether a parameter should actively participate in the
+    combinatorial expansion process.
+
+    If a dependency rule exists for the parameter, the corresponding rule
+    is evaluated using the current partial configuration.
+
+    If no dependency rule exists, the parameter is considered active by
+    default.
+
+    Active parameters:
+        - participate in cartesian expansion;
+        - generate multiple configurations.
+
+    Inactive parameters:
+        - do not expand combinations;
+        - keep only their first/default value.
+
+    Args:
+        section (str):
+            Name of the configuration section containing the parameter.
+
+        parameter (str):
+            Name of the parameter to evaluate.
+
+        partial_config (dict[str, any]):
+            Partial configuration built so far for the current section.
+
+    Returns:
+        bool:
+            True if the parameter should expand combinations,
+            False otherwise.
+    """
+
+    rule_key = f"{section}.{parameter}"
+
+    if rule_key not in DEPENDENCY_RULES:
+        return True
+
+    return DEPENDENCY_RULES[rule_key](partial_config)
 
 # =============================================================================================== #
 
