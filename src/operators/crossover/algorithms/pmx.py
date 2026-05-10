@@ -16,9 +16,17 @@ def pmx(parent1: list[int], parent2: list[int], probability: float) -> tuple[lis
     """
     Perform Partially Mapped Crossover (PMX) between two parent permutations.
 
+    Selects a random segment from each parent and copies it directly into the
+    corresponding offspring. Conflicting genes outside the segment are placed
+    using a mapping derived from the segment: each conflicting gene is
+    repeatedly remapped through the segment until a free position is found.
+    Any remaining unplaced genes are filled left to right.
+
     Args:
         parent1 (list[int]): The first parent permutation.
         parent2 (list[int]): The second parent permutation.
+        probability (float): Probability of crossover occurring. If not triggered,
+            returns an empty list.
 
     Returns:
         offsprings (tuple[list[int], list[int]]): Two offspring permutations resulting from

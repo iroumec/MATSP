@@ -15,7 +15,9 @@ import random
 def swap(individual: list[int], probability: float) -> list[int]:
 
     """
-    Swaps two random genes from an individual's cromosome.
+    Swaps two random genes from an individual's chromosome.
+
+    If the mutation is not triggered, returns an unmodified copy of the individual.
     
     Args:
         individual (List[int]): Individual whose genes will be inverted.

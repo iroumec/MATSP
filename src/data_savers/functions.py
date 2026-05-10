@@ -91,7 +91,18 @@ def _generate_summary(
     unique_summary: bool,
     base_path: str,
 ):
+    """
+    Generates a markdown summary file for a single algorithm configuration.
 
+    Args:
+        idx (int): Index of the configuration (used for file naming when multiple configs exist).
+        algorithm_result (AlgorithmResult): Result object containing the configuration,
+            best individual, cost matrix, and fitness data.
+        unique_summary (bool): If True, a single configuration is being summarized and the
+            file is named 'summary.md'; otherwise it is named 'C{idx+1}_summary.md'.
+        base_path (str): Directory path where the summary file will be saved.
+    """
+    
     if unique_summary:
         file_path = os.path.join(base_path, SUMMARY_FILE_NAME)
     else:
@@ -119,6 +130,14 @@ def _generate_summary(
 # =============================================================================================== #
 
 def _generate_parameters_summary(algorithm_result: AlgorithmResult, output_file):
+
+    """
+    Writes the genetic algorithm parameters section to the summary file.
+
+    Args:
+        algorithm_result (AlgorithmResult): Result object containing the algorithm configuration.
+        output_file: Writable file object where the markdown content will be written.
+    """
 
     config = algorithm_result.configuration
 
@@ -168,6 +187,16 @@ def _generate_parameters_summary(algorithm_result: AlgorithmResult, output_file)
 
 def _generate_best_solution_summary(algorithm_result: AlgorithmResult, output_file):
 
+    """
+    Writes the best solution section to the summary file, including the individual
+    representation, its fitness value, and its cost.
+
+    Args:
+        algorithm_result (AlgorithmResult): Result object containing the best individual,
+            cost matrix, and fitness function.
+        output_file: Writable file object where the markdown content will be written.
+    """
+
     cost_matrix = algorithm_result.cost_matrix
 
     # Precalculation of values to keep f-strings clean.
@@ -193,6 +222,16 @@ def _generate_best_solution_summary(algorithm_result: AlgorithmResult, output_fi
 
 def _generate_execution_time_summary(algorithm_result: AlgorithmResult, output_file):
 
+    """
+    Writes the execution time section to the summary file, including the
+    multiprocessing state and the average execution time.
+
+    Args:
+        algorithm_result (AlgorithmResult): Result object containing execution configuration
+            and timing data.
+        output_file: Writable file object where the markdown content will be written.
+    """
+
     multiprocessing_state: str = (
         "ON" if algorithm_result.configuration.execution.multiprocessing
             else "OFF"
@@ -217,6 +256,18 @@ def _generate_fitness_through_time_summary(
     configuration_id: int,
     output_file
 ):
+    """
+    Writes the average best fitness through time section to the summary file,
+    including a reference to the convergence plot and a table of per-generation values.
+
+    Args:
+        algorithm_result (AlgorithmResult): Result object containing the fitness history.
+        unique_summary (bool): If True, references 'convergence.png'; otherwise references
+            'C{configuration_id+1}_convergence.png'.
+        configuration_id (int): Index of the configuration, used to build the image reference
+            when multiple configurations exist.
+        output_file: Writable file object where the markdown content will be written.
+    """
 
     best_fitness_through_time = algorithm_result.average_best_fitness_through_time
 
@@ -239,6 +290,15 @@ def _generate_fitness_through_time_summary(
 
 def _write_markdown_table(output_file, headers: list[str], rows: list[list[any]]):
 
+    """
+    Formats and writes a markdown table to the output file.
+
+    Args:
+        output_file: Writable file object where the table will be written.
+        headers (list[str]): Column header labels.
+        rows (list[list[any]]): Table rows.
+    """
+
     markdown = tabulate(
         rows,
         headers=headers,
@@ -252,6 +312,16 @@ def _write_markdown_table(output_file, headers: list[str], rows: list[list[any]]
 # =============================================================================================== #
 
 def _generate_combined_and_individuals_plots(algorithm_results: list[AlgorithmResult], path: str):
+
+    """
+    Generates and saves a combined comparison figure containing convergence curves
+    for all configurations, a best cost bar chart, and an average execution time bar chart.
+    Also saves an individual convergence plot for each configuration.
+
+    Args:
+        algorithm_results (list[AlgorithmResult]): List of results for each configuration.
+        path (str): Full file path where the combined comparison figure will be saved.
+    """
 
     fig = plt.figure(figsize=(12, 10))
     gs = fig.add_gridspec(2, 2)
@@ -353,6 +423,16 @@ def _generate_best_cost_graph(
     colours: list[str],
     x: list[int]
 ):
+    """
+    Renders a bar chart of the best cost per configuration onto the given axes.
+
+    Args:
+        ax (Axes): Matplotlib axes object where the chart will be drawn.
+        labels (list[str]): Configuration labels for the x-axis ticks (e.g. ['C1', 'C2']).
+        costs (list[str]): Best cost value for each configuration.
+        colours (list[str]): Bar colours, one per configuration.
+        x (list[int]): Numeric x positions for each bar.
+    """
 
     ax.bar(x, costs, color=colours)
     ax.set_xticks(x)
@@ -370,6 +450,16 @@ def _generate_average_execution_time_graph(
     colours: list[str],
     x: list[int]
 ):
+    """
+    Renders a bar chart of the average execution time per configuration onto the given axes.
+
+    Args:
+        ax (Axes): Matplotlib axes object where the chart will be drawn.
+        times (list[float]): Average execution time in seconds for each configuration.
+        labels (list[str]): Configuration labels for the x-axis ticks (e.g. ['C1', 'C2']).
+        colours (list[str]): Bar colours, one per configuration.
+        x (list[int]): Numeric x positions for each bar.
+    """
 
     ax.bar(x, times, color=colours)
     ax.set_xticks(x)
@@ -381,6 +471,16 @@ def _generate_average_execution_time_graph(
 # =============================================================================================== #
 
 def _generate_individual_plot(algorithm_result: AlgorithmResult, path: str):
+
+    """
+    Generates and saves a convergence plot for a single algorithm configuration,
+    including standard deviation bands.
+
+    Args:
+        algorithm_result (AlgorithmResult): Result object containing the fitness history
+            and standard deviation data.
+        path (str): Directory path where 'convergence.png' will be saved.
+    """
 
     fig, ax = plt.subplots(figsize=(8, 5))
     instance = algorithm_result.configuration.execution.instance
@@ -429,7 +529,21 @@ def _generate_individual_plot_optimized_for_combined_context(
     upper,
     path: str,
 ):
+    """
+    Generates and saves an individual convergence plot for a single configuration,
+    reusing precomputed data from a combined plotting context to avoid redundant computation.
 
+    Args:
+        idx (int): Configuration index, used for the plot title and output filename.
+        instance (str): Problem instance name, included in the plot title.
+        line (Line2D): The line object from the combined plot, used to match the colour.
+        best_fitness_through_time (list[float]): Average best fitness at each generation.
+        generations: Sequence of generation indices for the x-axis.
+        lower: Per-generation lower standard deviation bound.
+        upper: Per-generation upper standard deviation bound.
+        path (str): Directory path where 'C{idx+1}_convergence.png' will be saved.
+    """
+    
     fig_i, ax_i = plt.subplots(figsize=(8, 5))
 
     ax_i.plot(generations, best_fitness_through_time, linewidth=3, color=line.get_color())

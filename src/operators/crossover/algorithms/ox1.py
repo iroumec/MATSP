@@ -16,9 +16,15 @@ def ox1(parent1: list[int], parent2: list[int], probability: float) -> tuple[lis
     """
     Perform Order Crossover 1 (OX1) between two parent permutations.
 
+    Selects a random segment from each parent and preserves it in the corresponding
+    offspring. The remaining positions are filled in order with the genes from the
+    other parent, skipping duplicates to maintain a valid permutation.
+
     Args:
         parent1 (list[int]): The first parent permutation.
         parent2 (list[int]): The second parent permutation.
+        probability (float): Probability of crossover occurring. If not triggered,
+            returns an empty list.
 
     Returns:
         offsprings (tuple[list[int], list[int]]): Two offspring permutations resulting from

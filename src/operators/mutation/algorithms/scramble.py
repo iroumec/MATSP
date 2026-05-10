@@ -1,5 +1,5 @@
 """
-"SCRAMBLE" mutation operator implemention.
+"SCRAMBLE" mutation operator implementation.
 """
 
 # =============================================================================================== #
@@ -15,7 +15,11 @@ import random
 def scramble(individual: list[int], probability: float) -> list[int]:
 
     """
-    Randomly, scrambles the genes of an individual's cromosome.
+    Randomly, scrambles a contiguous segment of an individual's chromosome.
+
+    Selects two random indices and shuffles the genes between them in place,
+    preserving all genes while randomizing their order within the segment. If
+    the mutation is not triggered, returns an unmodified copy of the individual.
     
     Args:
         individual (List[int]): Individual whose genes will be inverted.

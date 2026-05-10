@@ -120,6 +120,25 @@ def _execute_algorithm(
     fitness_function: callable,
     cost_matrix: list[list[int]]
 ):
+    """
+    Executes a single run of the genetic algorithm with the given configuration.
+
+    Initializes the population, then iteratively applies selection, crossover,
+    mutation, local search, and survivor selection until a stop condition is met.
+    Returns the best individual found along with fitness history and execution time.
+
+    Args:
+        config (Config): Full algorithm configuration, including operator choices,
+            probabilities, population size, and stop conditions.
+        fitness_function (callable): Function used to evaluate individuals.
+            Expected signature: (individual: list[int], cost_matrix: list[list[int]]) -> float.
+        cost_matrix (list[list[int]]): Square matrix of travel costs between nodes,
+            used by the fitness function and for final cost calculation.
+
+    Returns:
+        AlgorithmResult: Object containing the best individual found, its fitness
+            history across generations, and the total execution time.
+    """
 
     # ------------------------------------------------------------------------------------------- #
     # Variable declaration and initializations
