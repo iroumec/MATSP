@@ -31,13 +31,10 @@ def select_best_individual(
         best_individual (list[int]): Best individual in the population.
     """
 
-    # Sort actual population by fitness
-    actual_population_fitness_scores = [
-        (ind, fitness_function(ind, cost_matrix)) for ind in actual_population
-    ]
-    actual_population_fitness_scores.sort(reverse=True, key=lambda x: x[1])
-
-    return actual_population_fitness_scores[0][0]
+    return max(
+        actual_population,
+        key=lambda ind: fitness_function(ind, cost_matrix)
+    )
 
 # =============================================================================================== #
 

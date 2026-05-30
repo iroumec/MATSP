@@ -345,6 +345,13 @@ def _build_config(raw: dict) -> Config:
             "cannot be greater than the population size"
         )
 
+    if sel_cfg.selected_individuals % 2 != 0:
+        raise ValueError(
+            "ERROR: 'selected_individuals' must be an even number. "
+            "The crossover operator pairs parents in groups of two; an odd number "
+            "leaves the last parent without a partner and excludes it from crossover."
+        )
+
     if raw["selection"]["operator"] == "TOURNAMENT":
         if sel_cfg.tournament_size > exec_cfg.population_size:
             raise ValueError(

@@ -22,8 +22,8 @@ def scramble(individual: list[int], probability: float) -> list[int]:
     the mutation is not triggered, returns an unmodified copy of the individual.
     
     Args:
-        individual (List[int]): Individual whose genes will be inverted.
-        probability (float): Probability required to apply the invertion.
+        individual (List[int]): Individual whose genes will be scrambled.
+        probability (float): Probability required to apply the scramble.
 
     Returns:
         mutated_individual (List[int]): Mutated individual.

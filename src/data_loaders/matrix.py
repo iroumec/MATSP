@@ -26,6 +26,9 @@ def load_matrix(instance: str) -> tuple[tuple[int]]:
     
     Returns:
         matrix (tuple[tuple[int]]): Cost matrix as an immutable structure.
+    
+    Raises:
+        ValueError: If the matrix is not square.
     """
 
     raw_numbers = []
@@ -66,6 +69,20 @@ def load_matrix(instance: str) -> tuple[tuple[int]]:
         for i in range(0, len(raw_numbers), dimension)
         if i + dimension <= len(raw_numbers)
     )
+    
+    # Verifies that the matriz is square.
+    if len(matrix) != dimension:
+        raise ValueError(
+            f"ERROR: Instance '{instance}' has an invalid matrix: "
+            f"expected {dimension} rows, got {len(matrix)}."
+        )
+
+    for row_index, row in enumerate(matrix):
+        if len(row) != dimension:
+            raise ValueError(
+                f"ERROR: Instance '{instance}' has an invalid matrix: "
+                f"row {row_index} has {len(row)} columns, expected {dimension}."
+            )
 
     return matrix
 

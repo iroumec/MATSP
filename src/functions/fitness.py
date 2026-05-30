@@ -6,7 +6,7 @@ Fitness function implementation.
 # Imports
 # =============================================================================================== #
 
-from functions import select_best_individual
+from functions import calculate_cost
 
 # =============================================================================================== #
 # Functions
@@ -32,17 +32,7 @@ def calculate_fitness(individual: list[int], cost_matrix: tuple[tuple[int]]) -> 
         fitness_value (float): Updated population after replacement.
     """
 
-    number_of_cities = len(individual)
-
-    travel_cost = 0
-
-    for city in range(number_of_cities - 1):
-
-        travel_cost += cost_matrix[individual[city]][individual[city+1]]
-
-    travel_cost += cost_matrix[individual[number_of_cities - 1]][individual[0]]
-
-    return 1/travel_cost
+    return 1/calculate_cost(individual, cost_matrix)
 
 # =============================================================================================== #
 
@@ -65,13 +55,7 @@ def get_best_fitness(
         best_fitness (float): The highest fitness value found in the population.
     """
 
-    current_best_individual: list[int] = select_best_individual(
-        population,
-        fitness_function,
-        cost_matrix
-    )
-
-    return fitness_function(current_best_individual, cost_matrix)
+    return max(fitness_function(ind, cost_matrix) for ind in population)
 
 # =============================================================================================== #
 

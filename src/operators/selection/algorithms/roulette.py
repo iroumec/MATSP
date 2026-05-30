@@ -48,9 +48,10 @@ def roulette(
 
     # Performs selection.
     selected_individuals = []
+    last_index = len(population) - 1
     for _ in range(num_selections):
         r = random.random()
-        index = bisect.bisect_left(cumulative_probs, r)
+        index = min(bisect.bisect_left(cumulative_probs, r), last_index)
         selected_individuals.append(population[index])
 
     return selected_individuals
