@@ -7,11 +7,11 @@ MATSP is an ATSP instance solver based on a Memetic Algorithm (MA) approach.
 Before executing the application, you must create a Python environment and install the requirements.
 
 ```sh
-# Using the simplified commands provided with Make.
+# (First Option) Using the simplified commands provided with Make.
 make create-venv
 make install-requirements
 
-# Using the standard Python commands.
+# (Second Option) Using the standard Python commands.
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -22,17 +22,21 @@ pip install -r requirements.txt
 Running a single configuration file:
 
 ```sh
-# Using the simplified commands provided with Make.
+# (First Option) Using the simplified commands provided with Make.
 make run CONFIG="resources/configuration.example.yml"
 
-# Using the standard Python commands.
+# (Second Option) Using the standard Python commands.
 source venv/bin/activate && python3 -u src/main.py --config "resources/configuration.example.yml"
 ```
 
 Running all configuration files in a directory:
 
 ```sh
+# (First Option) Using the simplified commands provided with Make.
 make run CONFIG="resources/configurations/"
+
+# (Second Option) Using the standard Python commands.
+source venv/bin/activate && python3 -u src/main.py --config "resources/configurations/"
 ```
 
 All YAML configuration files are parsed and executed automatically. A single YAML file may contain multiple configurations.
