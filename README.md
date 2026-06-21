@@ -1,22 +1,41 @@
-# What is this?
+# MATSP
 
 MATSP is an ATSP instance solver based on a Memetic Algorithm (MA) approach.
+
+## Environment Creation
+
+Before executing the application, you must create a Python environment and install the requirements.
+
+```sh
+# Using the simplified commands provided with Make.
+make create-venv
+make install-requirements
+
+# Using the standard Python commands.
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
 ## Usage Examples
 
 Running a single configuration file:
 
 ```sh
+# Using the simplified commands provided with Make.
 make run CONFIG="resources/configuration.example.yml"
+
+# Using the standard Python commands.
+source venv/bin/activate && python3 -u src/main.py --config "resources/configuration.example.yml"
 ```
 
-Running all configuration files inside a directory:
+Running all configuration files in a directory:
 
 ```sh
 make run CONFIG="resources/configurations/"
 ```
 
-All YAML configurations are parsed and executed automatically. A single YAML file may contain multiple configurations.
+All YAML configuration files are parsed and executed automatically. A single YAML file may contain multiple configurations.
 
 The output includes:
 
@@ -62,7 +81,7 @@ Artificial Intelligence (AI) tools were used during the development of this proj
 - evaluating alternative implementations and designs;
 - debugging problems with unknown solutions;
 - designing the matrix extraction algorithm;
-- learning standard solutions and Python practices, such as Protocols (PEP 544); and
+- learning standard solutions and Python practices, such as protocols (PEP 544); and
 - designing the YAML configuration expansion system.
 
 ### After development
@@ -78,5 +97,5 @@ It is not intended for production environments, nor is it expected to provide st
 
 ## Credits
 
-- Joaquín Tesoro González
-- Iñaki Roumec
+- González Tesoro, Joaquín
+- Roumec, Iñaki
