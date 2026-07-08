@@ -46,9 +46,11 @@ The output includes:
 - a Markdown summary for each configuration;
 - an individual convergence plot for each configuration; and
 - a combined comparison plot containing:
-  - convergence curves;
+  - convergence curves (with and without standard deviation);
   - best costs; and
   - average execution times.
+
+![Example of comparison plot without standard deviation](outputs/experiment04/comparison_without_std.png)
 
 The combined comparison plot is generated only when more than one configuration is executed.
 
